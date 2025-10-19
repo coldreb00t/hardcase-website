@@ -18,8 +18,8 @@ export default function ContactSection() {
     {
       icon: Mail,
       title: 'Email',
-      value: 'info@hardcase.tilda.ws',
-      link: 'mailto:info@hardcase.tilda.ws',
+      value: 'info@hardcase.training',
+      link: 'mailto:info@hardcase.training',
     },
     {
       icon: Phone,
@@ -50,8 +50,8 @@ export default function ContactSection() {
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Посетите наш официальный сайт{' '}
-            <a href="https://hardcase.tilda.ws" target="_blank" rel="noopener noreferrer" className="text-primary-500 hover:text-primary-600 font-semibold underline">
-              hardcase.tilda.ws
+            <a href="https://hardcase.training" target="_blank" rel="noopener noreferrer" className="text-primary-500 hover:text-primary-600 font-semibold underline">
+              hardcase.training
             </a>
             {' '}для получения подробной информации о наших услугах и записи на индивидуальную консультацию
           </p>
@@ -229,7 +229,7 @@ export default function ContactSection() {
               Начните свою трансформацию уже сегодня!
             </p>
             <motion.a
-              href="https://hardcase.tilda.ws"
+              href="https://hardcase.training"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block bg-primary-500 text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-primary-600 transition-colors shadow-lg"

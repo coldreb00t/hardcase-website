@@ -110,11 +110,11 @@ export default function Footer() {
               <ul className="space-y-3">
                 <li>
                   <a
-                    href="mailto:info@hardcase.tilda.ws"
+                    href="mailto:info@hardcase.training"
                     className="flex items-center text-gray-400 hover:text-primary-400 transition-colors text-sm"
                   >
                     <Mail size={16} className="mr-2" />
-                    info@hardcase.tilda.ws
+                    info@hardcase.training
                   </a>
                 </li>
                 <li>
@@ -128,13 +128,13 @@ export default function Footer() {
                 </li>
                 <li>
                   <a
-                    href="https://hardcase.tilda.ws"
+                    href="https://hardcase.training"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center text-gray-400 hover:text-primary-400 transition-colors text-sm"
                   >
                     <Globe size={16} className="mr-2" />
-                    hardcase.tilda.ws
+                    hardcase.training
                   </a>
                 </li>
               </ul>

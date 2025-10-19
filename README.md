@@ -123,8 +123,8 @@ colors: {
 
 ## 🤝 Контакты
 
-- **Сайт**: [hardcase.tilda.ws](https://hardcase.tilda.ws)
-- **Email**: info@hardcase.tilda.ws
+- **Сайт**: [hardcase.training](https://hardcase.training)
+- **Email**: info@hardcase.training
 
 ---
 
