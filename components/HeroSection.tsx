@@ -39,7 +39,7 @@ export default function HeroSection() {
               <img
                 src="/images/hardcase-logo.png"
                 alt="HARD CASE"
-                className="w-full max-w-md h-auto"
+                className="w-full max-w-2xl h-auto"
               />
             </div>
           </motion.div>
