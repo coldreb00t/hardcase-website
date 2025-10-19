@@ -1,49 +1,105 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
 
 export default function HeroSection() {
   const videoRef = useRef<HTMLVideoElement>(null)
+  const [isMobile, setIsMobile] = useState(false)
+
+  // Определение мобильного устройства
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobile = window.innerWidth <= 768
+      setIsMobile(mobile)
+      console.log('📱 Устройство:', mobile ? 'Мобильное' : 'Десктоп')
+    }
+    
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   useEffect(() => {
     const video = videoRef.current
     if (!video) return
 
-    // Set video properties before load
+    // МАКСИМАЛЬНО агрессивная настройка для iOS
     video.muted = true
     video.playsInline = true
     video.defaultMuted = true
     video.volume = 0
     video.autoplay = true
+    ;(video as any).webkitPlaysInline = true
+    ;(video as any)['x-webkit-airplay'] = 'allow'
+    ;(video as any)['x5-video-player-type'] = 'h5'
 
-    // Aggressive video autoplay for iOS
+    // Функция принудительного воспроизведения
     const forcePlay = async () => {
       try {
-        await video.play()
+        video.load() // Перезагрузить видео
+        const playPromise = video.play()
+        if (playPromise !== undefined) {
+          await playPromise
+          console.log('✅ Видео запущено')
+        }
       } catch (error) {
-        console.log('Video play attempt:', error)
+        console.log('⚠️ Попытка запуска:', error)
       }
     }
 
-    // Try to play on load
-    video.addEventListener('loadeddata', forcePlay, { once: true })
-    video.addEventListener('canplay', forcePlay, { once: true })
+    // 1. Попытка при загрузке метаданных
+    video.addEventListener('loadedmetadata', forcePlay, { once: true })
     
-    // Load the video
-    video.load()
+    // 2. Попытка при готовности данных
+    video.addEventListener('loadeddata', forcePlay, { once: true })
+    
+    // 3. Попытка при возможности воспроизведения
+    video.addEventListener('canplay', forcePlay, { once: true })
+    video.addEventListener('canplaythrough', forcePlay, { once: true })
 
-    // Retry with delays
-    const timer1 = setTimeout(() => forcePlay(), 500)
-    const timer2 = setTimeout(() => forcePlay(), 1500)
+    // 4. Немедленная попытка
+    forcePlay()
+
+    // 5. Попытки с задержками (множественные для iOS)
+    const timers = [
+      setTimeout(() => forcePlay(), 100),
+      setTimeout(() => forcePlay(), 300),
+      setTimeout(() => forcePlay(), 500),
+      setTimeout(() => forcePlay(), 1000),
+      setTimeout(() => forcePlay(), 2000),
+      setTimeout(() => forcePlay(), 3000),
+    ]
+
+    // 6. IntersectionObserver для запуска при появлении в viewport
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            forcePlay()
+          }
+        })
+      },
+      { threshold: 0.1 }
+    )
+    observer.observe(video)
+
+    // 7. Попытка при любом взаимодействии с документом (на случай если iOS требует жест)
+    const playOnInteraction = () => {
+      forcePlay()
+      document.removeEventListener('touchstart', playOnInteraction)
+      document.removeEventListener('click', playOnInteraction)
+    }
+    document.addEventListener('touchstart', playOnInteraction, { once: true, passive: true })
+    document.addEventListener('click', playOnInteraction, { once: true })
 
     // Cleanup
     return () => {
-      clearTimeout(timer1)
-      clearTimeout(timer2)
+      timers.forEach(clearTimeout)
+      observer.disconnect()
     }
-  }, [])
+  }, [isMobile])
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -57,33 +113,29 @@ export default function HeroSection() {
           muted
           playsInline
           preload="auto"
+          poster="/images/hero-background.png"
           className="absolute inset-0 w-full h-full object-cover"
-          style={{ backgroundColor: 'transparent' }}
+          style={{ backgroundColor: '#000' }}
+          // iOS-специфичные атрибуты
+          webkit-playsinline="true"
+          x-webkit-airplay="allow"
+          x5-video-player-type="h5"
+          x5-video-player-fullscreen="true"
+          disablePictureInPicture
+          disableRemotePlayback
         >
-          {/* Mobile versions - loaded on small screens */}
-          <source 
-            src="/videos/hero-background-mobile.webm" 
-            type="video/webm"
-            media="(max-width: 768px)"
-          />
-          <source 
-            src="/videos/hero-background-mobile.mp4" 
-            type="video/mp4"
-            media="(max-width: 768px)"
-          />
-          {/* Desktop versions - loaded on large screens */}
-          <source 
-            src="/videos/hero-background.webm" 
-            type="video/webm"
-            media="(min-width: 769px)"
-          />
-          <source 
-            src="/videos/hero-background.mp4" 
-            type="video/mp4"
-            media="(min-width: 769px)"
-          />
-          {/* Fallback for browsers that don't support media queries in source */}
-          <source src="/videos/hero-background-mobile.mp4" type="video/mp4" />
+          {/* Динамическая загрузка видео в зависимости от размера экрана */}
+          {isMobile ? (
+            <>
+              <source src="/videos/hero-background-mobile.webm" type="video/webm" />
+              <source src="/videos/hero-background-mobile.mp4" type="video/mp4" />
+            </>
+          ) : (
+            <>
+              <source src="/videos/hero-background.webm" type="video/webm" />
+              <source src="/videos/hero-background.mp4" type="video/mp4" />
+            </>
+          )}
         </video>
         {/* Dark Overlay for text readability */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/70"></div>
