@@ -51,7 +51,7 @@ export default function TeamSection() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            О нас: <span className="text-primary-500">Профессиональная команда специалистов</span>
+            О нас: <span className="text-primary-500">Команда экспертов</span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Команда Hardcase объединяет профессионалов с глубокими знаниями в сфере здоровья, спорта и физической реабилитации
