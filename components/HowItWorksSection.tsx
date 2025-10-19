@@ -32,8 +32,18 @@ export default function HowItWorksSection() {
   ]
 
   return (
-    <section id="how-it-works" className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="how-it-works" className="relative py-20 overflow-hidden">
+      {/* Background Image */}
+      <div className="absolute inset-0">
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: "url('/images/hero-background.png')" }}
+        />
+        {/* Dark Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/75 to-black/80"></div>
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -41,10 +51,10 @@ export default function HowItWorksSection() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Как это <span className="text-primary-500">работает</span>
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            Как это <span className="text-primary-400">работает</span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-white/90 max-w-3xl mx-auto">
             Простой и понятный процесс от первой консультации до достижения ваших целей
           </p>
         </motion.div>
@@ -65,7 +75,7 @@ export default function HowItWorksSection() {
                 className="relative"
               >
                 {/* Step Card */}
-                <div className="relative bg-gradient-to-br from-gray-50 to-white p-8 rounded-2xl border-2 border-gray-100 hover:border-primary-300 transition-all duration-300 hover:shadow-xl group">
+                <div className="relative bg-white/10 backdrop-blur-md p-8 rounded-2xl border-2 border-white/20 hover:border-primary-400 transition-all duration-300 hover:shadow-2xl group">
                   {/* Number Circle */}
                   <div className="relative z-10 flex justify-center -mt-16 mb-6">
                     <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary-500 to-orange-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
@@ -75,22 +85,22 @@ export default function HowItWorksSection() {
 
                   {/* Icon */}
                   <div className="flex justify-center mb-4">
-                    <div className="p-3 rounded-xl bg-primary-100 group-hover:bg-primary-200 transition-colors">
-                      <step.icon className="text-primary-600" size={32} />
+                    <div className="p-3 rounded-xl bg-primary-500/20 group-hover:bg-primary-500/30 transition-colors">
+                      <step.icon className="text-primary-300" size={32} />
                     </div>
                   </div>
 
                   {/* Content */}
                   <div className="text-center">
-                    <h3 className="text-xl font-bold text-gray-900 mb-3">{step.title}</h3>
-                    <p className="text-gray-600 text-sm leading-relaxed">{step.description}</p>
+                    <h3 className="text-xl font-bold text-white mb-3">{step.title}</h3>
+                    <p className="text-white/80 text-sm leading-relaxed">{step.description}</p>
                   </div>
                 </div>
 
                 {/* Arrow Connector (desktop only) */}
                 {index < steps.length - 1 && (
                   <div className="hidden lg:block absolute top-16 -right-6 z-20">
-                    <div className="w-12 h-12 rounded-full bg-white border-2 border-primary-300 flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm border-2 border-primary-400 flex items-center justify-center">
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                         <path d="M5 12h14M12 5l7 7-7 7" stroke="#f97316" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
