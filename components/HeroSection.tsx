@@ -1,83 +1,49 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
 
 export default function HeroSection() {
   const videoRef = useRef<HTMLVideoElement>(null)
-  const [isMobile, setIsMobile] = useState(false)
-
-  useEffect(() => {
-    // Detect mobile device
-    const checkMobile = () => {
-      const isMobileDevice = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || window.innerWidth < 768
-      setIsMobile(isMobileDevice)
-    }
-    
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [])
 
   useEffect(() => {
     const video = videoRef.current
     if (!video) return
 
+    // Set video properties before load
+    video.muted = true
+    video.playsInline = true
+    video.defaultMuted = true
+    video.volume = 0
+    video.autoplay = true
+
     // Aggressive video autoplay for iOS
     const forcePlay = async () => {
       try {
-        video.muted = true
-        video.playsInline = true
-        video.defaultMuted = true
-        video.volume = 0
-        
-        // Load video
-        await video.load()
-        
-        // Try to play
-        const playPromise = video.play()
-        if (playPromise !== undefined) {
-          await playPromise
-        }
+        await video.play()
       } catch (error) {
         console.log('Video play attempt:', error)
       }
     }
 
-    // Try to play immediately
-    forcePlay()
-
-    // Retry with delays for iOS
-    const timeouts = [100, 300, 500, 1000, 2000]
-    const timers = timeouts.map(delay => 
-      setTimeout(() => forcePlay(), delay)
-    )
-
-    // Try on various video events
-    const events = ['loadstart', 'loadedmetadata', 'loadeddata', 'canplay', 'canplaythrough']
-    events.forEach(event => {
-      video.addEventListener(event, forcePlay, { once: true })
-    })
-
-    // Use Intersection Observer to play when visible
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          forcePlay()
-        }
-      })
-    }, { threshold: 0.1 })
+    // Try to play on load
+    video.addEventListener('loadeddata', forcePlay, { once: true })
+    video.addEventListener('canplay', forcePlay, { once: true })
     
-    observer.observe(video)
+    // Load the video
+    video.load()
+
+    // Retry with delays
+    const timer1 = setTimeout(() => forcePlay(), 500)
+    const timer2 = setTimeout(() => forcePlay(), 1500)
 
     // Cleanup
     return () => {
-      timers.forEach(timer => clearTimeout(timer))
-      observer.disconnect()
+      clearTimeout(timer1)
+      clearTimeout(timer2)
     }
-  }, [isMobile])
+  }, [])
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -91,26 +57,33 @@ export default function HeroSection() {
           muted
           playsInline
           preload="auto"
-          poster="/images/hero-background.png"
           className="absolute inset-0 w-full h-full object-cover"
-          webkit-playsinline="true"
-          x-webkit-airplay="allow"
-          x5-video-player-type="h5"
-          x5-video-player-fullscreen="true"
-          disablePictureInPicture
-          disableRemotePlayback
+          style={{ backgroundColor: 'transparent' }}
         >
-          {isMobile ? (
-            <>
-              <source src="/videos/hero-background-mobile.webm" type="video/webm" />
-              <source src="/videos/hero-background-mobile.mp4" type="video/mp4" />
-            </>
-          ) : (
-            <>
-              <source src="/videos/hero-background.webm" type="video/webm" />
-              <source src="/videos/hero-background.mp4" type="video/mp4" />
-            </>
-          )}
+          {/* Mobile versions - loaded on small screens */}
+          <source 
+            src="/videos/hero-background-mobile.webm" 
+            type="video/webm"
+            media="(max-width: 768px)"
+          />
+          <source 
+            src="/videos/hero-background-mobile.mp4" 
+            type="video/mp4"
+            media="(max-width: 768px)"
+          />
+          {/* Desktop versions - loaded on large screens */}
+          <source 
+            src="/videos/hero-background.webm" 
+            type="video/webm"
+            media="(min-width: 769px)"
+          />
+          <source 
+            src="/videos/hero-background.mp4" 
+            type="video/mp4"
+            media="(min-width: 769px)"
+          />
+          {/* Fallback for browsers that don't support media queries in source */}
+          <source src="/videos/hero-background-mobile.mp4" type="video/mp4" />
         </video>
         {/* Dark Overlay for text readability */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/70"></div>
