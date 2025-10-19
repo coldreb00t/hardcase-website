@@ -63,13 +63,12 @@ export default function HeroSection() {
           </motion.h2>
 
           <motion.p
-            className="text-lg sm:text-xl text-white/80 max-w-3xl mx-auto mb-12 leading-relaxed"
+            className="text-xl sm:text-2xl text-white/90 max-w-3xl mx-auto mb-12 font-light leading-relaxed"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.8 }}
           >
-            Команда Hardcase объединяет профессионалов с глубокими знаниями в сфере здоровья, спорта и физической реабилитации.
-            Наши специалисты обладают не только обширными теоретическими знаниями, но и многолетним практическим опытом.
+            Превращаем цели в результаты через науку, опыт и силу.
           </motion.p>
 
           <motion.div
