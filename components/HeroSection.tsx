@@ -44,23 +44,9 @@ export default function HeroSection() {
           loop
           preload="auto"
         >
-          {/* Мобильная версия для экранов ≤ 768px */}
-          <source 
-            src="/videos/hero-background-mobile.mp4" 
-            type="video/mp4"
-            media="all and (max-width: 768px)"
-          />
-          {/* Десктопная версия для экранов > 768px */}
-          <source 
-            src="/videos/hero-background.mp4" 
-            type="video/mp4"
-            media="all and (min-width: 769px)"
-          />
-          {/* Fallback для всех */}
-          <source 
-            src="/videos/hero-background-mobile.mp4" 
-            type="video/mp4"
-          />
+          {/* Используем десктопную версию для всех - object-cover правильно адаптирует */}
+          <source src="/videos/hero-background.webm" type="video/webm" />
+          <source src="/videos/hero-background.mp4" type="video/mp4" />
         </video>
         {/* Dark Overlay for text readability */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/70"></div>
