@@ -1,0 +1,29 @@
+{
+	"folders": [
+		{
+			"name": "HCS",
+			"path": "../.."
+		},
+		{
+			"name": "Pattern",
+			"path": "../../../Library/Mobile Documents/com~apple~CloudDocs/Desktop/Desktop - MacBook Air — Eugene/Hardcase/Pattern"
+		},
+		{
+			"name": "SocNetwork",
+			"path": "../../../Library/Mobile Documents/com~apple~CloudDocs/Desktop/Desktop - MacBook Air — Eugene/Hardcase/SocNetwork"
+		},
+		{
+			"name": "Logo",
+			"path": "../../../Library/Mobile Documents/com~apple~CloudDocs/Desktop/Desktop - MacBook Air — Eugene/Hardcase/Logo"
+		},
+		{
+			"name": "Motivations",
+			"path": "../../../Library/Mobile Documents/com~apple~CloudDocs/Desktop/Desktop - MacBook Air — Eugene/Hardcase/Motivations"
+		},
+		{
+			"name": "Photostyle",
+			"path": "../../../Library/Mobile Documents/com~apple~CloudDocs/Desktop/Desktop - MacBook Air — Eugene/Hardcase/Photostyle"
+		}
+	],
+	"settings": {}
+}

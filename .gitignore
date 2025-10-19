@@ -1,0 +1,43 @@
+# Зависимости
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# Next.js
+.next/
+out/
+dist/
+build/
+
+# Production
+*.tsbuildinfo
+
+# Разное
+.DS_Store
+*.pem
+
+# Отладка
+.vscode/
+.idea/
+
+# Локальные env файлы
+.env
+.env*.local
+
+# Vercel
+.vercel
+
+# TypeScript
+next-env.d.ts
+
+# Архивы для ручного деплоя (не нужны в Git)
+*.tar.gz
+*.zip
+
+# Временные файлы
+jkifaM7IJrrr0Sj16hG8F.png
+
+# Документы (оставляем только основные)
+# DEPLOY_*.md уже созданы, оставим их

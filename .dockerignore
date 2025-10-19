@@ -1,0 +1,62 @@
+# Зависимости
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Next.js
+.next
+out
+dist
+
+# Production
+build
+
+# Разное
+.DS_Store
+*.pem
+
+# Отладка
+.vscode
+.idea
+
+# Локальные env файлы
+.env*.local
+.env
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Git
+.git
+.gitignore
+
+# Документация и инструкции (не нужны в образе)
+README.md
+DEPLOY*.md
+SETUP.md
+COPY_ASSETS.md
+INTEGRATION_GUIDE.md
+
+# Исходные файлы дизайна (не нужны в production)
+Logo
+Pattern
+Photostyle
+SocNetwork
+Motivations
+T-shirts
+*.pdf
+jkifaM7IJrrr0Sj16hG8F.png
+
+# Скрипты (не нужны в production)
+copy-*.sh
+copy-*.js
+
+# Архивы
+*.tar.gz
+*.zip
+
