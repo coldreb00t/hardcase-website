@@ -7,6 +7,7 @@ export default function TeamSection() {
   const team = [
     {
       name: 'Мария Мостовая',
+      photo: '/images/team/maria.jpg',
       achievements: [
         'Высшее образование тренера-преподавателя по физической культуре',
         'Сертификаты FISAF (персональный тренер, реабилитация)',
@@ -19,6 +20,7 @@ export default function TeamSection() {
     },
     {
       name: 'Артём Белов',
+      photo: '/images/team/artem.jpg',
       achievements: [
         'Сертифицированный персональный тренер «Europe Active»',
         'FPA Элит-тренер («Ассоциация Профессионалов Фитнеса»)',
@@ -67,7 +69,18 @@ export default function TeamSection() {
               transition={{ duration: 0.6, delay: index * 0.2 }}
               className="bg-gradient-to-br from-primary-50 to-white p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-shadow"
             >
-              <div className="flex items-center mb-6">
+              {/* Photo */}
+              <div className="flex justify-center mb-6">
+                <div className="relative w-48 h-48 rounded-full overflow-hidden border-4 border-primary-500 shadow-xl">
+                  <img
+                    src={member.photo}
+                    alt={member.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              </div>
+              
+              <div className="flex items-center justify-center mb-6">
                 <Trophy className="text-primary-500 mr-3" size={32} />
                 <h3 className="text-2xl font-bold text-gray-900">{member.name}</h3>
               </div>
