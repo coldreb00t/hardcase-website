@@ -1,16 +1,15 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
-import { Menu, X, ChevronDown, Activity, Users, Zap, TrendingUp, Mail, Phone, MapPin } from 'lucide-react'
-
 import Navigation from '@/components/Navigation'
 import HeroSection from '@/components/HeroSection'
+import SocialProofSection from '@/components/SocialProofSection'
+import TransformationsSection from '@/components/TransformationsSection'
 import TeamSection from '@/components/TeamSection'
-import AudienceSection from '@/components/AudienceSection'
-import TechnologySection from '@/components/TechnologySection'
+import HowItWorksSection from '@/components/HowItWorksSection'
 import AdvantagesSection from '@/components/AdvantagesSection'
 import ServicesSection from '@/components/ServicesSection'
+import TestimonialsSection from '@/components/TestimonialsSection'
+import DemoCTASection from '@/components/DemoCTASection'
 import ContactSection from '@/components/ContactSection'
 import Footer from '@/components/Footer'
 
@@ -19,11 +18,14 @@ export default function Home() {
     <main className="min-h-screen">
       <Navigation />
       <HeroSection />
+      <SocialProofSection />
+      <TransformationsSection />
       <TeamSection />
-      <AudienceSection />
-      <TechnologySection />
+      <HowItWorksSection />
       <AdvantagesSection />
       <ServicesSection />
+      <TestimonialsSection />
+      <DemoCTASection />
       <ContactSection />
       <Footer />
     </main>
