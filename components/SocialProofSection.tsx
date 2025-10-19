@@ -5,12 +5,12 @@ import { Award, Users, Trophy } from 'lucide-react'
 
 export default function SocialProofSection() {
   const partners = [
-    { name: 'FISAF', image: '/images/partners/fisaf.png' },
-    { name: 'Europe Active', image: '/images/partners/europe-active.png' },
-    { name: 'FPA', image: '/images/partners/fpa.png' },
-    { name: 'Harvard Medical School', image: '/images/partners/harvard.png' },
-    { name: 'World Class', image: '/images/partners/world-class.png' },
-    { name: 'Reebok', image: '/images/partners/reebok.png' },
+    { name: 'FISAF', fullName: 'International Fitness Association' },
+    { name: 'Europe Active', fullName: 'European Health & Fitness' },
+    { name: 'FPA', fullName: 'Fitness Professionals Association' },
+    { name: 'Harvard', fullName: 'Harvard Medical School' },
+    { name: 'World Class', fullName: 'World Class Fitness' },
+    { name: 'Reebok', fullName: 'Reebok Sports Club' },
   ]
 
   const stats = [
@@ -58,18 +58,32 @@ export default function SocialProofSection() {
           <p className="text-center text-gray-500 text-sm uppercase tracking-wide mb-8">
             Сертификаты и партнёры
           </p>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 items-center">
             {partners.map((partner, index) => (
               <motion.div
                 key={partner.name}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: index * 0.1 }}
-                className="flex items-center justify-center h-24 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow p-4"
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="group"
               >
-                <div className="text-gray-400 text-center text-sm font-semibold">
-                  {partner.name}
+                <div className="flex flex-col items-center justify-center h-28 bg-white rounded-2xl border-2 border-gray-100 hover:border-primary-300 transition-all duration-300 hover:shadow-lg p-4 cursor-pointer">
+                  {/* Logo placeholder with first letter */}
+                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary-500 to-orange-500 flex items-center justify-center mb-2 group-hover:scale-110 transition-transform">
+                    <span className="text-white font-bold text-xl">
+                      {partner.name.charAt(0)}
+                    </span>
+                  </div>
+                  {/* Partner name */}
+                  <div className="text-center">
+                    <div className="text-gray-900 font-bold text-sm group-hover:text-primary-600 transition-colors">
+                      {partner.name}
+                    </div>
+                    <div className="text-gray-400 text-xs mt-0.5">
+                      {partner.fullName}
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             ))}
