@@ -75,7 +75,7 @@ export default function HowItWorksSection() {
                 className="relative"
               >
                 {/* Step Card */}
-                <div className="relative bg-white/10 backdrop-blur-md p-8 rounded-2xl border-2 border-white/20 hover:border-primary-400 transition-all duration-300 hover:shadow-2xl group">
+                <div className="relative bg-white/10 backdrop-blur-md p-8 rounded-2xl border-2 border-white/20 hover:border-primary-400 transition-all duration-300 hover:shadow-2xl group h-full flex flex-col">
                   {/* Number Circle */}
                   <div className="relative z-10 flex justify-center -mt-16 mb-6">
                     <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary-500 to-orange-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
@@ -84,15 +84,15 @@ export default function HowItWorksSection() {
                   </div>
 
                   {/* Icon */}
-                  <div className="flex justify-center mb-4">
+                  <div className="flex justify-center mb-6">
                     <div className="p-3 rounded-xl bg-primary-500/20 group-hover:bg-primary-500/30 transition-colors">
                       <step.icon className="text-primary-300" size={32} />
                     </div>
                   </div>
 
                   {/* Content */}
-                  <div className="text-center">
-                    <h3 className="text-xl font-bold text-white mb-3">{step.title}</h3>
+                  <div className="text-center flex-1 flex flex-col">
+                    <h3 className="text-xl font-bold text-white mb-4 min-h-[2rem]">{step.title}</h3>
                     <p className="text-white/80 text-sm leading-relaxed">{step.description}</p>
                   </div>
                 </div>
