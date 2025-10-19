@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Heart, Mail, Phone, Globe } from 'lucide-react'
+import { Heart, Mail, Phone, Globe, Youtube, Send } from 'lucide-react'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
@@ -135,6 +135,28 @@ export default function Footer() {
                   >
                     <Globe size={16} className="mr-2" />
                     hardcase.training
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://www.youtube.com/@hardcasetraining"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center text-gray-400 hover:text-primary-400 transition-colors text-sm"
+                  >
+                    <Youtube size={16} className="mr-2" />
+                    YouTube
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://t.me/HardCaseTraining"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center text-gray-400 hover:text-primary-400 transition-colors text-sm"
+                  >
+                    <Send size={16} className="mr-2" />
+                    Telegram
                   </a>
                 </li>
               </ul>
