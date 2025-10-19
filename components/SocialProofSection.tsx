@@ -6,8 +6,8 @@ import { Award, Users, Trophy } from 'lucide-react'
 export default function SocialProofSection() {
   const partners = [
     { name: 'FISAF', fullName: 'International Fitness Association', logo: '/images/partners/fisaf.png' },
-    { name: 'Europe Active', fullName: 'European Health & Fitness', logo: '/images/partners/europe-active.jpg' },
-    { name: 'FPA', fullName: 'Fitness Professionals Association', logo: '/images/partners/fpa.png' },
+    { name: 'Europe Active', fullName: 'European Health & Fitness', logo: '/images/partners/fpa.png' },
+    { name: 'FPA', fullName: 'Fitness Professionals Association', logo: '/images/partners/europe-active.jpg' },
     { name: 'Harvard', fullName: 'Harvard Medical School', logo: null },
     { name: 'World Class', fullName: 'World Class Fitness', logo: null },
     { name: 'Reebok', fullName: 'Reebok Sports Club', logo: null },
