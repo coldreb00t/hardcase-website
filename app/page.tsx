@@ -20,9 +20,9 @@ export default function Home() {
       <SocialProofSection />
       <TransformationsSection />
       <TeamSection />
+      <ServicesSection />
       <HowItWorksSection />
       <AdvantagesSection />
-      <ServicesSection />
       <DemoCTASection />
       <ContactSection />
       <Footer />
