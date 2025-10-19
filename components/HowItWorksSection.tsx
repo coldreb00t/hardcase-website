@@ -10,33 +10,29 @@ export default function HowItWorksSection() {
       icon: ClipboardCheck,
       title: 'Консультация',
       description: 'Бесплатная первая встреча для оценки вашего текущего состояния, целей и особенностей здоровья',
-      color: 'from-primary-500 to-orange-500',
     },
     {
       number: '02',
       icon: Target,
       title: 'Индивидуальный план',
       description: 'Разработка персонализированной программы тренировок и питания на основе ваших данных',
-      color: 'from-orange-500 to-primary-600',
     },
     {
       number: '03',
       icon: Dumbbell,
       title: 'Тренировки',
       description: 'Регулярные тренировки с контролем техники и постоянной поддержкой вашего тренера',
-      color: 'from-primary-600 to-orange-600',
     },
     {
       number: '04',
       icon: TrendingUp,
       title: 'Результат',
       description: 'Достижение поставленных целей с отслеживанием прогресса и корректировкой программы',
-      color: 'from-orange-600 to-primary-500',
     },
   ]
 
   return (
-    <section id="how-it-works" className="py-20 bg-gradient-to-b from-gray-50 to-white">
+    <section id="how-it-works" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -53,44 +49,57 @@ export default function HowItWorksSection() {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {steps.map((step, index) => (
-            <motion.div
-              key={step.number}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="relative"
-            >
-              <div className="bg-white p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 h-full">
-                {/* Number Badge */}
-                <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r ${step.color} text-white font-bold text-2xl mb-6`}>
-                  {step.number}
+        {/* Timeline Style */}
+        <div className="relative">
+          {/* Connecting Line (desktop only) */}
+          <div className="hidden lg:block absolute top-24 left-0 right-0 h-1 bg-gradient-to-r from-primary-500 via-orange-500 to-primary-500"></div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-4">
+            {steps.map((step, index) => (
+              <motion.div
+                key={step.number}
+                initial={{ opacity: 0, y: 50 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.15 }}
+                className="relative"
+              >
+                {/* Step Card */}
+                <div className="relative bg-gradient-to-br from-gray-50 to-white p-8 rounded-2xl border-2 border-gray-100 hover:border-primary-300 transition-all duration-300 hover:shadow-xl group">
+                  {/* Number Circle */}
+                  <div className="relative z-10 flex justify-center -mt-16 mb-6">
+                    <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary-500 to-orange-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                      <span className="text-white font-bold text-2xl">{step.number}</span>
+                    </div>
+                  </div>
+
+                  {/* Icon */}
+                  <div className="flex justify-center mb-4">
+                    <div className="p-3 rounded-xl bg-primary-100 group-hover:bg-primary-200 transition-colors">
+                      <step.icon className="text-primary-600" size={32} />
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="text-center">
+                    <h3 className="text-xl font-bold text-gray-900 mb-3">{step.title}</h3>
+                    <p className="text-gray-600 text-sm leading-relaxed">{step.description}</p>
+                  </div>
                 </div>
 
-                {/* Icon */}
-                <div className="mb-4">
-                  <step.icon className="text-primary-500" size={40} />
-                </div>
-
-                {/* Title */}
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">{step.title}</h3>
-
-                {/* Description */}
-                <p className="text-gray-600 leading-relaxed">{step.description}</p>
-              </div>
-
-              {/* Arrow (desktop only) */}
-              {index < steps.length - 1 && (
-                <div className="hidden lg:block absolute top-1/2 -right-4 transform -translate-y-1/2 z-10">
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M5 12h14M12 5l7 7-7 7" stroke="#fb923c" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </div>
-              )}
-            </motion.div>
-          ))}
+                {/* Arrow Connector (desktop only) */}
+                {index < steps.length - 1 && (
+                  <div className="hidden lg:block absolute top-16 -right-6 z-20">
+                    <div className="w-12 h-12 rounded-full bg-white border-2 border-primary-300 flex items-center justify-center">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M5 12h14M12 5l7 7-7 7" stroke="#f97316" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
+                  </div>
+                )}
+              </motion.div>
+            ))}
+          </div>
         </div>
 
         {/* CTA */}
@@ -98,14 +107,14 @@ export default function HowItWorksSection() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.4 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
           className="mt-16 text-center"
         >
           <a
             href="#contact"
-            className="inline-block bg-gradient-to-r from-primary-500 to-orange-500 text-white px-8 py-4 rounded-full font-semibold text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+            className="inline-block bg-gradient-to-r from-primary-500 to-orange-500 text-white px-10 py-5 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
           >
-            Записаться на консультацию
+            Записаться на бесплатную консультацию
           </a>
         </motion.div>
       </div>
