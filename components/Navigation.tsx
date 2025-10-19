@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
-import Image from 'next/image'
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
@@ -41,13 +40,10 @@ export default function Navigation() {
             className="flex items-center"
             whileHover={{ scale: 1.05 }}
           >
-            <Image
+            <img
               src="/images/hardcase-logo.png"
               alt="HARD CASE Logo"
-              width={180}
-              height={60}
               className="h-12 w-auto"
-              priority
             />
           </motion.a>
 

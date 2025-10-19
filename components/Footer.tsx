@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion'
 import { Heart, Mail, Phone, Globe } from 'lucide-react'
-import Image from 'next/image'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
@@ -35,11 +34,9 @@ export default function Footer() {
               transition={{ duration: 0.5 }}
             >
               <div className="mb-4">
-                <Image
+                <img
                   src="/images/hardcase-logo.png"
                   alt="HARD CASE"
-                  width={180}
-                  height={60}
                   className="h-10 w-auto"
                 />
               </div>

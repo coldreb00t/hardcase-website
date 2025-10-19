@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
-import Image from 'next/image'
 
 export default function HeroSection() {
   return (
@@ -50,13 +49,10 @@ export default function HeroSection() {
             transition={{ delay: 0.2, duration: 0.8 }}
           >
             <div className="flex justify-center">
-              <Image
+              <img
                 src="/images/hardcase-logo.png"
                 alt="HARD CASE"
-                width={500}
-                height={150}
                 className="w-full max-w-md h-auto"
-                priority
               />
             </div>
           </motion.div>
