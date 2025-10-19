@@ -37,7 +37,7 @@ export default function Footer() {
                 <img
                   src="/images/hardcase-logo.png"
                   alt="HARD CASE"
-                  className="h-10 w-auto"
+                  className="h-14 w-auto"
                 />
               </div>
               <p className="text-gray-400 mb-4 leading-relaxed">
