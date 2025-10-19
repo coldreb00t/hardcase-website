@@ -37,12 +37,6 @@ export default function AdvantagesSection() {
     },
   ]
 
-  const comparison = [
-    { metric: 'Достижение целей', hardcase: 120, market: 75 },
-    { metric: 'Удержание клиентов', hardcase: 95, market: 65 },
-    { metric: 'Удовлетворенность', hardcase: 110, market: 85 },
-  ]
-
   return (
     <section id="advantages" className="py-20 bg-gradient-to-b from-gray-50 to-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -86,48 +80,6 @@ export default function AdvantagesSection() {
             </motion.div>
           ))}
         </div>
-
-        {/* Comparison Chart */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.4 }}
-          className="bg-white p-8 md:p-12 rounded-3xl shadow-lg"
-        >
-          <h3 className="text-2xl font-bold text-gray-900 mb-8 text-center">
-            Hardcase vs Средний рынок
-          </h3>
-          <div className="space-y-8">
-            {comparison.map((item, index) => (
-              <div key={item.metric}>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="font-semibold text-gray-700">{item.metric}</span>
-                  <div className="flex items-center space-x-4">
-                    <span className="text-sm text-gray-500">Hardcase: {item.hardcase}%</span>
-                    <span className="text-sm text-gray-400">Рынок: {item.market}%</span>
-                  </div>
-                </div>
-                <div className="relative h-8 bg-gray-200 rounded-full overflow-hidden">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    whileInView={{ width: `${item.hardcase}%` }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, ease: "easeOut" }}
-                    className="absolute top-0 left-0 h-full bg-gradient-to-r from-primary-500 to-orange-500 rounded-full"
-                  />
-                  <div
-                    style={{ width: `${item.market}%` }}
-                    className="absolute top-0 left-0 h-full bg-gray-400 rounded-full opacity-40"
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-          <p className="text-center text-gray-600 mt-8 leading-relaxed">
-            Цифры основаны на реальных показателях наших клиентов за последние 12 месяцев работы
-          </p>
-        </motion.div>
       </div>
     </section>
   )
