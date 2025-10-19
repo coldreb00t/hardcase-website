@@ -1,123 +1,66 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
 
 export default function HeroSection() {
   const videoRef = useRef<HTMLVideoElement>(null)
-  const [isMobile, setIsMobile] = useState(false)
-
-  // Определение мобильного устройства
-  useEffect(() => {
-    const checkMobile = () => {
-      const mobile = window.innerWidth <= 768
-      setIsMobile(mobile)
-      console.log('📱 Устройство:', mobile ? 'Мобильное' : 'Десктоп')
-    }
-    
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [])
 
   useEffect(() => {
     const video = videoRef.current
     if (!video) return
 
-    // Установка src напрямую через JavaScript (обход iOS ограничений)
-    const videoSrc = isMobile 
-      ? '/videos/hero-background-mobile.mp4'
-      : '/videos/hero-background.mp4'
-    
-    video.src = videoSrc
-    video.muted = true
-    video.playsInline = true
-    video.defaultMuted = true
-    video.volume = 0
-    video.loop = true
-    ;(video as any).webkitPlaysInline = true
-
-    let hasPlayed = false
-
-    // Функция автоплея
-    const attemptPlay = async () => {
-      if (hasPlayed) return
-      
-      try {
-        await video.play()
-        hasPlayed = true
-        console.log('✅ Видео запущено')
-      } catch (err) {
-        console.log('⚠️ Ожидание взаимодействия пользователя')
+    // Простой обработчик для попытки запуска при взаимодействии (fallback для Low Power Mode)
+    const playOnInteraction = () => {
+      if (video.paused) {
+        video.play().catch(() => {
+          console.log('📱 Требуется взаимодействие пользователя')
+        })
       }
     }
 
-    // Множественные попытки при разных событиях
-    video.addEventListener('loadedmetadata', attemptPlay)
-    video.addEventListener('loadeddata', attemptPlay)
-    video.addEventListener('canplay', attemptPlay)
-    
-    // Отложенные попытки
-    const timers = [
-      setTimeout(attemptPlay, 100),
-      setTimeout(attemptPlay, 500),
-      setTimeout(attemptPlay, 1000),
-    ]
-
-    // IntersectionObserver - запуск когда видео в зоне видимости
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0]?.isIntersecting) {
-          attemptPlay()
-        }
-      },
-      { threshold: 0.25 }
-    )
-    observer.observe(video)
-
-    // Запуск при ЛЮБОМ взаимодействии с документом (скролл, тап, клик)
-    const playOnAnyInteraction = () => {
-      attemptPlay()
-    }
-    
-    // Слушаем все возможные события взаимодействия
-    document.addEventListener('touchstart', playOnAnyInteraction, { once: true, passive: true })
-    document.addEventListener('touchmove', playOnAnyInteraction, { once: true, passive: true })
-    document.addEventListener('scroll', playOnAnyInteraction, { once: true, passive: true })
-    document.addEventListener('click', playOnAnyInteraction, { once: true })
+    // Слушаем первое взаимодействие для запуска видео (если автоплей не сработал)
+    document.addEventListener('touchstart', playOnInteraction, { once: true, passive: true })
+    document.addEventListener('click', playOnInteraction, { once: true })
 
     return () => {
-      video.removeEventListener('loadedmetadata', attemptPlay)
-      video.removeEventListener('loadeddata', attemptPlay)
-      video.removeEventListener('canplay', attemptPlay)
-      timers.forEach(clearTimeout)
-      observer.disconnect()
-      document.removeEventListener('touchstart', playOnAnyInteraction)
-      document.removeEventListener('touchmove', playOnAnyInteraction)
-      document.removeEventListener('scroll', playOnAnyInteraction)
-      document.removeEventListener('click', playOnAnyInteraction)
+      document.removeEventListener('touchstart', playOnInteraction)
+      document.removeEventListener('click', playOnInteraction)
     }
-  }, [isMobile])
+  }, [])
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Hero Background Video */}
       <div className="absolute inset-0">
-        {/* Background Video */}
+        {/* Background Video - статические source теги для iOS автоплея */}
         <video
           ref={videoRef}
           className="absolute inset-0 w-full h-full object-cover"
-          style={{ backgroundColor: '#000' }}
           autoPlay
           muted
           playsInline
           loop
           preload="auto"
-          webkit-playsinline="true"
-          disablePictureInPicture
         >
-          {/* Src устанавливается динамически через JavaScript в useEffect */}
+          {/* Мобильная версия для экранов ≤ 768px */}
+          <source 
+            src="/videos/hero-background-mobile.mp4" 
+            type="video/mp4"
+            media="all and (max-width: 768px)"
+          />
+          {/* Десктопная версия для экранов > 768px */}
+          <source 
+            src="/videos/hero-background.mp4" 
+            type="video/mp4"
+            media="all and (min-width: 769px)"
+          />
+          {/* Fallback для всех */}
+          <source 
+            src="/videos/hero-background-mobile.mp4" 
+            type="video/mp4"
+          />
         </video>
         {/* Dark Overlay for text readability */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/70"></div>
