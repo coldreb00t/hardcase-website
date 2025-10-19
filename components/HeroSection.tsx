@@ -5,34 +5,21 @@ import { ChevronDown } from 'lucide-react'
 
 export default function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-primary-900">
-      {/* Animated Background */}
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Hero Background Image */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
-        <motion.div
-          className="absolute top-20 left-10 w-72 h-72 bg-primary-500/20 rounded-full blur-3xl"
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: 'easeInOut',
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: "url('/images/hero-background.png')",
+            backgroundPosition: 'center center',
           }}
         />
-        <motion.div
-          className="absolute bottom-20 right-10 w-96 h-96 bg-primary-400/20 rounded-full blur-3xl"
-          animate={{
-            scale: [1.2, 1, 1.2],
-            opacity: [0.5, 0.3, 0.5],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
+        {/* Dark Overlay for text readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/70"></div>
+        {/* Optional accent overlay */}
+        <div className="absolute inset-0 bg-primary-900/20"></div>
       </div>
 
       {/* Content */}
