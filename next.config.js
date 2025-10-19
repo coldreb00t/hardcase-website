@@ -1,8 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // Standalone output для Docker оптимизации
-  output: 'standalone',
+  // Static export для простого хостинга
+  output: 'export',
+  images: {
+    unoptimized: true,
+  },
 }
 
 module.exports = nextConfig
