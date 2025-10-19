@@ -25,79 +25,78 @@ export default function HeroSection() {
     const video = videoRef.current
     if (!video) return
 
-    // МАКСИМАЛЬНО агрессивная настройка для iOS
+    // Установка src напрямую через JavaScript (обход iOS ограничений)
+    const videoSrc = isMobile 
+      ? '/videos/hero-background-mobile.mp4'
+      : '/videos/hero-background.mp4'
+    
+    video.src = videoSrc
     video.muted = true
     video.playsInline = true
     video.defaultMuted = true
     video.volume = 0
-    video.autoplay = true
+    video.loop = true
     ;(video as any).webkitPlaysInline = true
-    ;(video as any)['x-webkit-airplay'] = 'allow'
-    ;(video as any)['x5-video-player-type'] = 'h5'
 
-    // Функция принудительного воспроизведения
-    const forcePlay = async () => {
+    let hasPlayed = false
+
+    // Функция автоплея
+    const attemptPlay = async () => {
+      if (hasPlayed) return
+      
       try {
-        video.load() // Перезагрузить видео
-        const playPromise = video.play()
-        if (playPromise !== undefined) {
-          await playPromise
-          console.log('✅ Видео запущено')
-        }
-      } catch (error) {
-        console.log('⚠️ Попытка запуска:', error)
+        await video.play()
+        hasPlayed = true
+        console.log('✅ Видео запущено')
+      } catch (err) {
+        console.log('⚠️ Ожидание взаимодействия пользователя')
       }
     }
 
-    // 1. Попытка при загрузке метаданных
-    video.addEventListener('loadedmetadata', forcePlay, { once: true })
+    // Множественные попытки при разных событиях
+    video.addEventListener('loadedmetadata', attemptPlay)
+    video.addEventListener('loadeddata', attemptPlay)
+    video.addEventListener('canplay', attemptPlay)
     
-    // 2. Попытка при готовности данных
-    video.addEventListener('loadeddata', forcePlay, { once: true })
-    
-    // 3. Попытка при возможности воспроизведения
-    video.addEventListener('canplay', forcePlay, { once: true })
-    video.addEventListener('canplaythrough', forcePlay, { once: true })
-
-    // 4. Немедленная попытка
-    forcePlay()
-
-    // 5. Попытки с задержками (множественные для iOS)
+    // Отложенные попытки
     const timers = [
-      setTimeout(() => forcePlay(), 100),
-      setTimeout(() => forcePlay(), 300),
-      setTimeout(() => forcePlay(), 500),
-      setTimeout(() => forcePlay(), 1000),
-      setTimeout(() => forcePlay(), 2000),
-      setTimeout(() => forcePlay(), 3000),
+      setTimeout(attemptPlay, 100),
+      setTimeout(attemptPlay, 500),
+      setTimeout(attemptPlay, 1000),
     ]
 
-    // 6. IntersectionObserver для запуска при появлении в viewport
+    // IntersectionObserver - запуск когда видео в зоне видимости
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            forcePlay()
-          }
-        })
+        if (entries[0]?.isIntersecting) {
+          attemptPlay()
+        }
       },
-      { threshold: 0.1 }
+      { threshold: 0.25 }
     )
     observer.observe(video)
 
-    // 7. Попытка при любом взаимодействии с документом (на случай если iOS требует жест)
-    const playOnInteraction = () => {
-      forcePlay()
-      document.removeEventListener('touchstart', playOnInteraction)
-      document.removeEventListener('click', playOnInteraction)
+    // Запуск при ЛЮБОМ взаимодействии с документом (скролл, тап, клик)
+    const playOnAnyInteraction = () => {
+      attemptPlay()
     }
-    document.addEventListener('touchstart', playOnInteraction, { once: true, passive: true })
-    document.addEventListener('click', playOnInteraction, { once: true })
+    
+    // Слушаем все возможные события взаимодействия
+    document.addEventListener('touchstart', playOnAnyInteraction, { once: true, passive: true })
+    document.addEventListener('touchmove', playOnAnyInteraction, { once: true, passive: true })
+    document.addEventListener('scroll', playOnAnyInteraction, { once: true, passive: true })
+    document.addEventListener('click', playOnAnyInteraction, { once: true })
 
-    // Cleanup
     return () => {
+      video.removeEventListener('loadedmetadata', attemptPlay)
+      video.removeEventListener('loadeddata', attemptPlay)
+      video.removeEventListener('canplay', attemptPlay)
       timers.forEach(clearTimeout)
       observer.disconnect()
+      document.removeEventListener('touchstart', playOnAnyInteraction)
+      document.removeEventListener('touchmove', playOnAnyInteraction)
+      document.removeEventListener('scroll', playOnAnyInteraction)
+      document.removeEventListener('click', playOnAnyInteraction)
     }
   }, [isMobile])
 
@@ -108,34 +107,17 @@ export default function HeroSection() {
         {/* Background Video */}
         <video
           ref={videoRef}
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="auto"
-          poster="/images/hero-background.png"
           className="absolute inset-0 w-full h-full object-cover"
           style={{ backgroundColor: '#000' }}
-          // iOS-специфичные атрибуты
+          autoPlay
+          muted
+          playsInline
+          loop
+          preload="auto"
           webkit-playsinline="true"
-          x-webkit-airplay="allow"
-          x5-video-player-type="h5"
-          x5-video-player-fullscreen="true"
           disablePictureInPicture
-          disableRemotePlayback
         >
-          {/* Динамическая загрузка видео в зависимости от размера экрана */}
-          {isMobile ? (
-            <>
-              <source src="/videos/hero-background-mobile.webm" type="video/webm" />
-              <source src="/videos/hero-background-mobile.mp4" type="video/mp4" />
-            </>
-          ) : (
-            <>
-              <source src="/videos/hero-background.webm" type="video/webm" />
-              <source src="/videos/hero-background.mp4" type="video/mp4" />
-            </>
-          )}
+          {/* Src устанавливается динамически через JavaScript в useEffect */}
         </video>
         {/* Dark Overlay for text readability */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/70"></div>
