@@ -11,37 +11,57 @@ export default function HeroSection() {
     const video = videoRef.current
     if (!video) return
 
-    // Multiple attempts to play video for iOS
-    const playVideo = () => {
-      video.muted = true
-      video.playsInline = true
-      video.play().catch((error) => {
-        console.log('Video autoplay failed:', error)
-      })
+    // Aggressive video autoplay for iOS
+    const forcePlay = async () => {
+      try {
+        video.muted = true
+        video.playsInline = true
+        video.defaultMuted = true
+        video.volume = 0
+        
+        // Load video
+        await video.load()
+        
+        // Try to play
+        const playPromise = video.play()
+        if (playPromise !== undefined) {
+          await playPromise
+        }
+      } catch (error) {
+        console.log('Video play attempt:', error)
+      }
     }
 
     // Try to play immediately
-    playVideo()
+    forcePlay()
 
-    // Try again on various events
-    const events = ['loadedmetadata', 'loadeddata', 'canplay', 'canplaythrough']
+    // Retry with delays for iOS
+    const timeouts = [100, 300, 500, 1000, 2000]
+    const timers = timeouts.map(delay => 
+      setTimeout(() => forcePlay(), delay)
+    )
+
+    // Try on various video events
+    const events = ['loadstart', 'loadedmetadata', 'loadeddata', 'canplay', 'canplaythrough']
     events.forEach(event => {
-      video.addEventListener(event, playVideo)
+      video.addEventListener(event, forcePlay, { once: true })
     })
 
-    // Try to play on user interaction (iOS fallback)
-    const handleInteraction = () => {
-      playVideo()
-      document.removeEventListener('touchstart', handleInteraction)
-      document.removeEventListener('click', handleInteraction)
-    }
-    document.addEventListener('touchstart', handleInteraction, { once: true })
-    document.addEventListener('click', handleInteraction, { once: true })
-
-    return () => {
-      events.forEach(event => {
-        video.removeEventListener(event, playVideo)
+    // Use Intersection Observer to play when visible
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          forcePlay()
+        }
       })
+    }, { threshold: 0.1 })
+    
+    observer.observe(video)
+
+    // Cleanup
+    return () => {
+      timers.forEach(timer => clearTimeout(timer))
+      observer.disconnect()
     }
   }, [])
 
@@ -63,6 +83,8 @@ export default function HeroSection() {
           x-webkit-airplay="allow"
           x5-video-player-type="h5"
           x5-video-player-fullscreen="true"
+          disablePictureInPicture
+          disableRemotePlayback
         >
           <source src="/videos/hero-background.webm" type="video/webm" />
           <source src="/videos/hero-background.mp4" type="video/mp4" />
