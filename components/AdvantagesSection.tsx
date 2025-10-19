@@ -37,12 +37,6 @@ export default function AdvantagesSection() {
     },
   ]
 
-  const stats = [
-    { value: '120+', label: 'Достижение целей', color: 'from-primary-500 to-orange-500' },
-    { value: '95+', label: 'Удержание клиентов', color: 'from-orange-500 to-primary-600' },
-    { value: '110+', label: 'Удовлетворенность', color: 'from-primary-600 to-orange-600' },
-  ]
-
   const comparison = [
     { metric: 'Достижение целей', hardcase: 120, market: 75 },
     { metric: 'Удержание клиентов', hardcase: 95, market: 65 },
@@ -92,34 +86,6 @@ export default function AdvantagesSection() {
             </motion.div>
           ))}
         </div>
-
-        {/* Stats Section */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.4 }}
-          className="mb-20"
-        >
-          <h3 className="text-3xl font-bold text-center text-gray-900 mb-12">
-            Результаты говорят сами за себя
-          </h3>
-          <div className="grid md:grid-cols-3 gap-6">
-            {stats.map((stat, index) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4 }}
-                className={`bg-gradient-to-br ${stat.color} p-8 rounded-3xl text-white text-center shadow-lg`}
-              >
-                <div className="text-5xl md:text-6xl font-bold mb-2">{stat.value}</div>
-                <div className="text-lg text-white/90">{stat.label}</div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
 
         {/* Comparison Chart */}
         <motion.div
