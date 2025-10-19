@@ -53,10 +53,10 @@ export default function AdvantagesSection() {
     <section id="advantages" className="py-20 bg-gradient-to-b from-gray-50 to-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.4 }}
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
@@ -73,12 +73,11 @@ export default function AdvantagesSection() {
           {advantages.map((advantage, index) => (
             <motion.div
               key={advantage.number}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{ y: -5 }}
-              className="relative bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border-t-4 border-primary-500"
+              transition={{ duration: 0.4 }}
+              className="relative bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 border-t-4 border-primary-500"
             >
               <div className="absolute top-4 right-4 text-5xl font-bold text-primary-100">
                 {advantage.number}
@@ -96,10 +95,10 @@ export default function AdvantagesSection() {
 
         {/* Stats Section */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.4 }}
           className="mb-20"
         >
           <h3 className="text-3xl font-bold text-center text-gray-900 mb-12">
@@ -109,11 +108,11 @@ export default function AdvantagesSection() {
             {stats.map((stat, index) => (
               <motion.div
                 key={stat.label}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className={`bg-gradient-to-br ${stat.color} p-8 rounded-3xl text-white text-center shadow-lg hover:shadow-2xl transition-shadow`}
+                transition={{ duration: 0.4 }}
+                className={`bg-gradient-to-br ${stat.color} p-8 rounded-3xl text-white text-center shadow-lg`}
               >
                 <div className="text-5xl md:text-6xl font-bold mb-2">{stat.value}</div>
                 <div className="text-lg text-white/90">{stat.label}</div>
@@ -124,10 +123,10 @@ export default function AdvantagesSection() {
 
         {/* Comparison Chart */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.4 }}
           className="bg-white p-8 md:p-12 rounded-3xl shadow-lg"
         >
           <h3 className="text-2xl font-bold text-gray-900 mb-8 text-center">
@@ -135,13 +134,7 @@ export default function AdvantagesSection() {
           </h3>
           <div className="space-y-8">
             {comparison.map((item, index) => (
-              <motion.div
-                key={item.metric}
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
+              <div key={item.metric}>
                 <div className="flex items-center justify-between mb-2">
                   <span className="font-semibold text-gray-700">{item.metric}</span>
                   <div className="flex items-center space-x-4">
@@ -154,18 +147,15 @@ export default function AdvantagesSection() {
                     initial={{ width: 0 }}
                     whileInView={{ width: `${item.hardcase}%` }}
                     viewport={{ once: true }}
-                    transition={{ duration: 1, delay: index * 0.2 }}
+                    transition={{ duration: 0.6, ease: "easeOut" }}
                     className="absolute top-0 left-0 h-full bg-gradient-to-r from-primary-500 to-orange-500 rounded-full"
                   />
-                  <motion.div
-                    initial={{ width: 0 }}
-                    whileInView={{ width: `${item.market}%` }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 1, delay: index * 0.2 + 0.2 }}
+                  <div
+                    style={{ width: `${item.market}%` }}
                     className="absolute top-0 left-0 h-full bg-gray-400 rounded-full opacity-40"
                   />
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
           <p className="text-center text-gray-600 mt-8 leading-relaxed">
