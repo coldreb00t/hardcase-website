@@ -59,7 +59,7 @@ export default function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
           >
-            Профессиональная команда специалистов
+            Эксперты в силовом тренинге
           </motion.h2>
 
           <motion.p
