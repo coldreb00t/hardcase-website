@@ -8,10 +8,39 @@ export default function HeroSection() {
   const videoRef = useRef<HTMLVideoElement>(null)
 
   useEffect(() => {
-    // Force play video on mobile devices
-    if (videoRef.current) {
-      videoRef.current.play().catch((error) => {
+    const video = videoRef.current
+    if (!video) return
+
+    // Multiple attempts to play video for iOS
+    const playVideo = () => {
+      video.muted = true
+      video.playsInline = true
+      video.play().catch((error) => {
         console.log('Video autoplay failed:', error)
+      })
+    }
+
+    // Try to play immediately
+    playVideo()
+
+    // Try again on various events
+    const events = ['loadedmetadata', 'loadeddata', 'canplay', 'canplaythrough']
+    events.forEach(event => {
+      video.addEventListener(event, playVideo)
+    })
+
+    // Try to play on user interaction (iOS fallback)
+    const handleInteraction = () => {
+      playVideo()
+      document.removeEventListener('touchstart', handleInteraction)
+      document.removeEventListener('click', handleInteraction)
+    }
+    document.addEventListener('touchstart', handleInteraction, { once: true })
+    document.addEventListener('click', handleInteraction, { once: true })
+
+    return () => {
+      events.forEach(event => {
+        video.removeEventListener(event, playVideo)
       })
     }
   }, [])
@@ -30,6 +59,10 @@ export default function HeroSection() {
           preload="auto"
           poster="/images/hero-background.png"
           className="absolute inset-0 w-full h-full object-cover"
+          webkit-playsinline="true"
+          x-webkit-airplay="allow"
+          x5-video-player-type="h5"
+          x5-video-player-fullscreen="true"
         >
           <source src="/videos/hero-background.webm" type="video/webm" />
           <source src="/videos/hero-background.mp4" type="video/mp4" />
