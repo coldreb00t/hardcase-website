@@ -81,11 +81,11 @@ export default function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.8 }}
           >
-            <div className="flex justify-center">
+            <div className="flex justify-center px-4">
               <img
                 src="/images/hardcase-logo.png"
                 alt="HARD CASE"
-                className="w-full max-w-2xl h-auto"
+                className="w-full max-w-xs sm:max-w-md md:max-w-xl lg:max-w-2xl h-auto"
               />
             </div>
           </motion.div>
@@ -109,7 +109,7 @@ export default function HeroSection() {
           </motion.h2>
 
           <motion.p
-            className="text-xl sm:text-2xl text-white/90 max-w-3xl mx-auto mb-12 font-light leading-relaxed"
+            className="text-xl sm:text-2xl text-white/90 max-w-md sm:max-w-2xl md:max-w-3xl mx-auto mb-12 font-light leading-relaxed px-4"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.8 }}
@@ -118,7 +118,7 @@ export default function HeroSection() {
           </motion.p>
 
           <motion.div
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center px-4"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8, duration: 0.8 }}
