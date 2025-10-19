@@ -1,11 +1,25 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
 
 export default function HeroSection() {
   const videoRef = useRef<HTMLVideoElement>(null)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    // Detect mobile device
+    const checkMobile = () => {
+      const isMobileDevice = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || window.innerWidth < 768
+      setIsMobile(isMobileDevice)
+    }
+    
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   useEffect(() => {
     const video = videoRef.current
@@ -63,7 +77,7 @@ export default function HeroSection() {
       timers.forEach(timer => clearTimeout(timer))
       observer.disconnect()
     }
-  }, [])
+  }, [isMobile])
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -86,8 +100,17 @@ export default function HeroSection() {
           disablePictureInPicture
           disableRemotePlayback
         >
-          <source src="/videos/hero-background.webm" type="video/webm" />
-          <source src="/videos/hero-background.mp4" type="video/mp4" />
+          {isMobile ? (
+            <>
+              <source src="/videos/hero-background-mobile.webm" type="video/webm" />
+              <source src="/videos/hero-background-mobile.mp4" type="video/mp4" />
+            </>
+          ) : (
+            <>
+              <source src="/videos/hero-background.webm" type="video/webm" />
+              <source src="/videos/hero-background.mp4" type="video/mp4" />
+            </>
+          )}
         </video>
         {/* Dark Overlay for text readability */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/70"></div>
