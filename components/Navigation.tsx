@@ -43,7 +43,7 @@ export default function Navigation() {
             <img
               src="/images/hardcase-logo.png"
               alt="HARD CASE Logo"
-              className="h-12 w-auto"
+              className="h-16 w-auto"
             />
           </motion.a>
 
