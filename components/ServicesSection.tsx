@@ -59,8 +59,8 @@ export default function ServicesSection() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Услуги: <span className="text-primary-500">Персонализированные программы и модули</span>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+            <span className="text-gray-900">Персонализированные</span> <span className="text-primary-500">программы и модули</span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Модульная система позволяет выбрать именно те услуги, которые вам нужны, и получать постоянную поддержку на всех этапах достижения целей
@@ -77,17 +77,17 @@ export default function ServicesSection() {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               whileHover={{ y: -10, scale: 1.02 }}
-              className="relative group"
+              className="relative group flex"
             >
               <div className="absolute inset-0 bg-gradient-to-r opacity-0 group-hover:opacity-20 transition-opacity duration-300 rounded-3xl blur-xl"
                 style={{ background: `linear-gradient(to right, var(--tw-gradient-stops))` }}
               />
-              <div className="relative bg-white border-2 border-gray-100 hover:border-primary-200 p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300">
-                <div className={`inline-flex p-4 rounded-2xl bg-gradient-to-r ${service.gradient} mb-6`}>
+              <div className="relative bg-white border-2 border-gray-100 hover:border-primary-200 p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col w-full">
+                <div className={`inline-flex p-4 rounded-2xl bg-gradient-to-r ${service.gradient} mb-6 self-start`}>
                   <service.icon className="text-white" size={32} />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-4">{service.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{service.description}</p>
+                <p className="text-gray-600 leading-relaxed flex-grow">{service.description}</p>
               </div>
             </motion.div>
           ))}

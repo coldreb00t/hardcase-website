@@ -50,8 +50,8 @@ export default function TeamSection() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            О нас: <span className="text-primary-500">Команда экспертов</span>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+            <span className="text-gray-900">Команда</span> <span className="text-primary-500">экспертов</span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Команда Hardcase объединяет профессионалов с глубокими знаниями в сфере здоровья, спорта и физической реабилитации
@@ -116,7 +116,11 @@ export default function TeamSection() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: index * 0.1 }}
-                className="flex items-start bg-white/10 backdrop-blur-sm p-4 rounded-xl"
+                className={`flex items-start bg-white/10 backdrop-blur-sm p-4 rounded-xl ${
+                  index === highlights.length - 1 && highlights.length % 2 !== 0
+                    ? 'md:col-span-2 md:max-w-2xl md:mx-auto'
+                    : ''
+                }`}
               >
                 <Award className="mr-3 mt-1 flex-shrink-0" size={20} />
                 <span className="text-white/90">{highlight}</span>

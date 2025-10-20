@@ -17,7 +17,7 @@ export default function Navigation() {
   }, [])
 
   const navItems = [
-    { name: 'О нас', href: '#team' },
+    { name: 'Команда экспертов', href: '#team' },
     { name: 'Услуги', href: '#services' },
     { name: 'Технологии', href: '#technology' },
     { name: 'Преимущества', href: '#advantages' },
