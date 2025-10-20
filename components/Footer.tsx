@@ -23,7 +23,7 @@ export default function Footer() {
                 <img
                   src="/images/hardcase-logo.png"
                   alt="HARD CASE"
-                  className="h-20 w-auto"
+                  className="h-40 w-auto"
                 />
               </div>
               <div className="flex items-center text-gray-400">

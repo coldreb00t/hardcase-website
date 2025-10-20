@@ -225,19 +225,9 @@ export default function ContactSection() {
               HARDCASE — это инвестиция в ваше здоровье, которая окупается качеством жизни,<br />
               энергией и уверенностью в себе
             </h3>
-            <p className="text-xl text-white/80 mb-8">
+            <p className="text-xl text-white/80">
               Начните свою трансформацию уже сегодня!
             </p>
-            <motion.a
-              href="https://hardcase.training"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block bg-primary-500 text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-primary-600 transition-colors shadow-lg"
-              whileHover={{ scale: 1.05, boxShadow: '0 20px 60px rgba(251, 146, 60, 0.4)' }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Перейти на официальный сайт
-            </motion.a>
           </div>
         </motion.div>
       </div>
