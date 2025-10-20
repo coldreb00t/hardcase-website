@@ -57,14 +57,14 @@ export default function ContactSection() {
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12 mb-16">
+        <div className="grid lg:grid-cols-2 gap-12 mb-16 lg:items-end">
           {/* Contact Info */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="space-y-8"
+            className="flex flex-col space-y-8"
           >
             <div className="bg-gradient-to-br from-primary-500 to-orange-600 p-8 rounded-3xl text-white">
               <h3 className="text-2xl font-bold mb-4">Начните прямо сейчас</h3>
