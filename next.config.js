@@ -6,6 +6,8 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  // Ensure static assets are properly exported
+  trailingSlash: true,
 }
 
 module.exports = nextConfig
