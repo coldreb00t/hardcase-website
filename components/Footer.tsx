@@ -54,11 +54,11 @@ export default function Footer() {
                 </li>
                 <li>
                   <a
-                    href="tel:+7XXXXXXXXXX"
+                    href="tel:+79854545000"
                     className="flex items-center text-gray-400 hover:text-primary-400 transition-colors text-sm"
                   >
                     <Phone size={18} className="mr-3" />
-                    +7 (XXX) XXX-XX-XX
+                    +7 (985) 454-50-00
                   </a>
                 </li>
                 <li>

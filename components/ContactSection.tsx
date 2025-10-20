@@ -24,8 +24,8 @@ export default function ContactSection() {
     {
       icon: Phone,
       title: 'Телефон',
-      value: '+7 (XXX) XXX-XX-XX',
-      link: 'tel:+7XXXXXXXXXX',
+      value: '+7 (985) 454-50-00',
+      link: 'tel:+79854545000',
     },
     {
       icon: MapPin,
@@ -57,14 +57,14 @@ export default function ContactSection() {
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12 mb-16 lg:items-end">
+        <div className="grid lg:grid-cols-2 gap-12 mb-16">
           {/* Contact Info */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="flex flex-col space-y-8"
+            className="flex flex-col space-y-8 h-full"
           >
             <div className="bg-gradient-to-br from-primary-500 to-orange-600 p-8 rounded-3xl text-white">
               <h3 className="text-2xl font-bold mb-4">Начните прямо сейчас</h3>
@@ -126,8 +126,9 @@ export default function ContactSection() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
+            className="flex flex-col h-full"
           >
-            <div className="bg-white p-8 rounded-3xl shadow-lg border-2 border-gray-100">
+            <div className="bg-white p-8 rounded-3xl shadow-lg border-2 border-gray-100 flex-1 flex flex-col">
               <h3 className="text-2xl font-bold text-gray-900 mb-6">Оставьте заявку</h3>
               
               {formStatus === 'success' ? (
@@ -143,7 +144,7 @@ export default function ContactSection() {
                   <p className="text-gray-600">Мы свяжемся с вами в ближайшее время</p>
                 </motion.div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} className="flex-1 flex flex-col space-y-6">
                   <div>
                     <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-2">
                       Имя *
@@ -178,18 +179,17 @@ export default function ContactSection() {
                       type="tel"
                       id="phone"
                       className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none transition-colors"
-                      placeholder="+7 (XXX) XXX-XX-XX"
+                      placeholder="+7 (985) 454-50-00"
                     />
                   </div>
 
-                  <div>
+                  <div className="flex-1 flex flex-col">
                     <label htmlFor="message" className="block text-sm font-semibold text-gray-700 mb-2">
                       Сообщение
                     </label>
                     <textarea
                       id="message"
-                      rows={4}
-                      className="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none transition-colors resize-none"
+                      className="w-full flex-1 px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary-500 focus:outline-none transition-colors resize-none"
                       placeholder="Расскажите о ваших целях и пожеланиях..."
                     />
                   </div>

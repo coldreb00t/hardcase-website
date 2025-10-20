@@ -16,7 +16,7 @@ export default function StructuredData() {
       "height": "200"
     },
     "image": "https://hardcase.training/images/hardcase-logo.png",
-    "telephone": "+7-XXX-XXX-XX-XX",
+    "telephone": "+79854545000",
     "email": "info@hardcase.training",
     "address": {
       "@type": "PostalAddress",
