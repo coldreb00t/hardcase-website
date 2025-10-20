@@ -6,105 +6,40 @@ import { Heart, Mail, Phone, Globe, Youtube, Send } from 'lucide-react'
 export default function Footer() {
   const currentYear = new Date().getFullYear()
 
-  const links = {
-    services: [
-      { name: 'Тестирование и анамнез', href: '#services' },
-      { name: 'Программы тренировок', href: '#services' },
-      { name: 'Расчет КБЖУ', href: '#services' },
-      { name: 'Мониторинг прогресса', href: '#services' },
-    ],
-    company: [
-      { name: 'О команде', href: '#team' },
-      { name: 'Наши технологии', href: '#technology' },
-      { name: 'Преимущества', href: '#advantages' },
-      { name: 'Контакты', href: '#contact' },
-    ],
-  }
-
   return (
     <footer className="bg-gray-900 text-white pt-16 pb-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid md:grid-cols-4 gap-8 mb-12">
+        <div className="grid md:grid-cols-3 gap-12 mb-12">
           {/* Brand */}
-          <div className="md:col-span-1">
+          <div className="flex flex-col items-start">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
+              className="w-full"
             >
-              <div className="mb-4">
+              <div className="mb-6">
                 <img
                   src="/images/hardcase-logo.png"
                   alt="HARD CASE"
-                  className="h-14 w-auto"
+                  className="h-20 w-auto"
                 />
               </div>
-              <p className="text-gray-400 mb-4 leading-relaxed">
-                Профессиональная команда специалистов в сфере здоровья, спорта и физической реабилитации
-              </p>
               <div className="flex items-center text-gray-400">
-                <Heart className="text-primary-500 mr-2" size={18} />
-                <span className="text-sm">Создано с любовью к здоровью</span>
+                <Heart className="text-primary-500 mr-2" size={20} />
+                <span className="text-base">Создано с любовью к здоровью</span>
               </div>
             </motion.div>
           </div>
 
-          {/* Services */}
+          {/* Contacts */}
           <div>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.1 }}
-            >
-              <h4 className="text-lg font-semibold mb-4 text-primary-400">Услуги</h4>
-              <ul className="space-y-2">
-                {links.services.map((link) => (
-                  <li key={link.name}>
-                    <a
-                      href={link.href}
-                      className="text-gray-400 hover:text-primary-400 transition-colors text-sm"
-                    >
-                      {link.name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          </div>
-
-          {/* Company */}
-          <div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              <h4 className="text-lg font-semibold mb-4 text-primary-400">Компания</h4>
-              <ul className="space-y-2">
-                {links.company.map((link) => (
-                  <li key={link.name}>
-                    <a
-                      href={link.href}
-                      className="text-gray-400 hover:text-primary-400 transition-colors text-sm"
-                    >
-                      {link.name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          </div>
-
-          {/* Contact */}
-          <div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.3 }}
             >
               <h4 className="text-lg font-semibold mb-4 text-primary-400">Контакты</h4>
               <ul className="space-y-3">
@@ -113,7 +48,7 @@ export default function Footer() {
                     href="mailto:info@hardcase.training"
                     className="flex items-center text-gray-400 hover:text-primary-400 transition-colors text-sm"
                   >
-                    <Mail size={16} className="mr-2" />
+                    <Mail size={18} className="mr-3" />
                     info@hardcase.training
                   </a>
                 </li>
@@ -122,7 +57,7 @@ export default function Footer() {
                     href="tel:+7XXXXXXXXXX"
                     className="flex items-center text-gray-400 hover:text-primary-400 transition-colors text-sm"
                   >
-                    <Phone size={16} className="mr-2" />
+                    <Phone size={18} className="mr-3" />
                     +7 (XXX) XXX-XX-XX
                   </a>
                 </li>
@@ -133,18 +68,32 @@ export default function Footer() {
                     rel="noopener noreferrer"
                     className="flex items-center text-gray-400 hover:text-primary-400 transition-colors text-sm"
                   >
-                    <Globe size={16} className="mr-2" />
+                    <Globe size={18} className="mr-3" />
                     hardcase.training
                   </a>
                 </li>
+              </ul>
+            </motion.div>
+          </div>
+
+          {/* Social Networks */}
+          <div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <h4 className="text-lg font-semibold mb-4 text-primary-400">Социальные сети</h4>
+              <ul className="space-y-3">
                 <li>
                   <a
                     href="https://www.youtube.com/@hardcasetraining"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center text-gray-400 hover:text-primary-400 transition-colors text-sm"
+                    className="flex items-center text-gray-400 hover:text-primary-400 transition-colors text-sm group"
                   >
-                    <Youtube size={16} className="mr-2" />
+                    <Youtube size={18} className="mr-3 group-hover:scale-110 transition-transform" />
                     YouTube
                   </a>
                 </li>
@@ -153,9 +102,9 @@ export default function Footer() {
                     href="https://t.me/HardCaseTraining"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center text-gray-400 hover:text-primary-400 transition-colors text-sm"
+                    className="flex items-center text-gray-400 hover:text-primary-400 transition-colors text-sm group"
                   >
-                    <Send size={16} className="mr-2" />
+                    <Send size={18} className="mr-3 group-hover:scale-110 transition-transform" />
                     Telegram
                   </a>
                 </li>
