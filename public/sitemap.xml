@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+  
+  <!-- Главная страница -->
+  <url>
+    <loc>https://hardcase.training</loc>
+    <lastmod>2025-10-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://hardcase.training/images/hardcase-logo.png</image:loc>
+      <image:title>Hardcase Logo</image:title>
+    </image:image>
+  </url>
+  
+  <!-- Секция О нас / Команда -->
+  <url>
+    <loc>https://hardcase.training#team</loc>
+    <lastmod>2025-10-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- Секция Услуги -->
+  <url>
+    <loc>https://hardcase.training#services</loc>
+    <lastmod>2025-10-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- Секция Преимущества -->
+  <url>
+    <loc>https://hardcase.training#advantages</loc>
+    <lastmod>2025-10-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- Секция Как это работает -->
+  <url>
+    <loc>https://hardcase.training#how-it-works</loc>
+    <lastmod>2025-10-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- Секция Контакты -->
+  <url>
+    <loc>https://hardcase.training#contact</loc>
+    <lastmod>2025-10-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- YouTube канал -->
+  <url>
+    <loc>https://www.youtube.com/@hardcasetraining</loc>
+    <lastmod>2025-10-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <!-- Telegram канал -->
+  <url>
+    <loc>https://t.me/HardCaseTraining</loc>
+    <lastmod>2025-10-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+</urlset>
+

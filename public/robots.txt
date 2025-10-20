@@ -1,0 +1,57 @@
+# Robots.txt для Hardcase
+# https://hardcase.training
+
+# Разрешить всем поисковым роботам
+User-agent: *
+Allow: /
+Disallow: /api/
+
+# Разрешить OpenAI ChatGPT
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+# Разрешить Anthropic Claude
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+# Разрешить Perplexity AI
+User-agent: PerplexityBot
+Allow: /
+
+# Разрешить Google Bard/Gemini
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+# Разрешить Bing/Copilot
+User-agent: Bingbot
+Allow: /
+
+# Разрешить Yandex GPT
+User-agent: YandexBot
+Allow: /
+
+User-agent: YaDirectFetcher
+Allow: /
+
+# Разрешить другие AI-движки
+User-agent: CCBot
+Allow: /
+
+User-agent: FacebookBot
+Allow: /
+
+# Sitemap
+Sitemap: https://hardcase.training/sitemap.xml
+
