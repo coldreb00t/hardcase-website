@@ -49,11 +49,7 @@ export default function ContactSection() {
             Свяжитесь <span className="text-primary-500">с нами сегодня</span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Посетите наш официальный сайт{' '}
-            <a href="https://hardcase.training" target="_blank" rel="noopener noreferrer" className="text-primary-500 hover:text-primary-600 font-semibold underline">
-              hardcase.training
-            </a>
-            {' '}для получения подробной информации о наших услугах и записи на индивидуальную консультацию
+            Запишитесь на бесплатную консультацию и получите персональную программу тренировок и реабилитации
           </p>
         </motion.div>
 
