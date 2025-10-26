@@ -202,6 +202,26 @@ RETURNS UUID AS $$
   LIMIT 1;
 $$ LANGUAGE sql STABLE;
 
+-- Function to handle new user signup - auto-create profile
+CREATE OR REPLACE FUNCTION handle_new_user()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO public.profiles (user_id, full_name, role)
+  VALUES (
+    NEW.id,
+    COALESCE(NEW.raw_user_meta_data->>'full_name', 'New User'),
+    COALESCE(NEW.raw_user_meta_data->>'role', 'client')
+  );
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Trigger to auto-create profile on user signup
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW
+  EXECUTE FUNCTION handle_new_user();
+
 -- ============================================================================
 -- COMMENTS
 -- ============================================================================
