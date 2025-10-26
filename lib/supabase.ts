@@ -19,12 +19,27 @@ function getSupabaseClient(): SupabaseClient<Database> {
     return supabaseInstance
   }
 
-  // Use hardcoded values as fallback (safe for public anon key)
-  // Environment variables take precedence if available
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://waatdpjvzacdfnebskhf.supabase.co'
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndhYXRkcGp2emFjZGZuZWJza2hmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE0NDQ0NzEsImV4cCI6MjA3NzAyMDQ3MX0.-h6DXM8Ck6O7AksK-kcnwm7OXEro6dlobv0DVFx9ndw'
+  // During static export build, process.env may not have runtime values
+  // Use placeholder values during build, real values in browser
+  const isBrowser = typeof window !== 'undefined'
 
-  supabaseInstance = createClient<Database>(supabaseUrl, supabaseAnonKey, {
+  let supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  let supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+  // During build (not in browser), use placeholder values
+  if (!isBrowser) {
+    supabaseUrl = supabaseUrl || 'https://placeholder.supabase.co'
+    supabaseAnonKey = supabaseAnonKey || 'placeholder-anon-key'
+  }
+
+  // In browser, throw error if missing (should never happen with proper deployment)
+  if (isBrowser && (!supabaseUrl || !supabaseAnonKey)) {
+    throw new Error(
+      'Missing Supabase environment variables. Please add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to your deployment environment.'
+    )
+  }
+
+  supabaseInstance = createClient<Database>(supabaseUrl!, supabaseAnonKey!, {
     auth: {
       persistSession: true,
       autoRefreshToken: true,
