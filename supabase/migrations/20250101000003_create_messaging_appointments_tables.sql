@@ -164,12 +164,12 @@ CREATE INDEX idx_appointments_trainer ON appointments(trainer_id);
 CREATE INDEX idx_appointments_client ON appointments(client_id);
 CREATE INDEX idx_appointments_scheduled ON appointments(scheduled_at DESC);
 CREATE INDEX idx_appointments_status ON appointments(status);
-CREATE INDEX idx_appointments_upcoming ON appointments(scheduled_at)
-  WHERE status IN ('scheduled', 'confirmed') AND scheduled_at > NOW();
-CREATE INDEX idx_appointments_trainer_upcoming ON appointments(trainer_id, scheduled_at)
-  WHERE status IN ('scheduled', 'confirmed') AND scheduled_at > NOW();
-CREATE INDEX idx_appointments_client_upcoming ON appointments(client_id, scheduled_at)
-  WHERE status IN ('scheduled', 'confirmed') AND scheduled_at > NOW();
+CREATE INDEX idx_appointments_upcoming ON appointments(scheduled_at, status)
+  WHERE status IN ('scheduled', 'confirmed');
+CREATE INDEX idx_appointments_trainer_upcoming ON appointments(trainer_id, scheduled_at, status)
+  WHERE status IN ('scheduled', 'confirmed');
+CREATE INDEX idx_appointments_client_upcoming ON appointments(client_id, scheduled_at, status)
+  WHERE status IN ('scheduled', 'confirmed');
 
 -- ============================================================================
 -- NOTIFICATIONS TABLE
