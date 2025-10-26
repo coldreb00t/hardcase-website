@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
-import { getCurrentUser, getCurrentProfile, supabase } from '@/lib/supabase'
 import { User, Mail, Calendar, LogOut, Loader2 } from 'lucide-react'
 import type { Database } from '@/supabase/types/database.types'
 
@@ -21,6 +20,9 @@ export default function DashboardPage() {
 
   const checkUser = async () => {
     try {
+      // Dynamic import - load Supabase only when needed
+      const { getCurrentUser, getCurrentProfile } = await import('@/lib/supabase')
+
       const user = await getCurrentUser()
       if (!user) {
         router.push('/login')
@@ -40,6 +42,8 @@ export default function DashboardPage() {
   }
 
   const handleLogout = async () => {
+    // Dynamic import for logout
+    const { supabase } = await import('@/lib/supabase')
     await supabase.auth.signOut()
     router.push('/')
   }
