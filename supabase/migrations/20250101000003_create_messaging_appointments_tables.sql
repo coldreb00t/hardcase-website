@@ -119,7 +119,7 @@ CREATE TABLE appointments (
   -- Scheduling
   scheduled_at TIMESTAMPTZ NOT NULL,
   duration_minutes INTEGER DEFAULT 60 NOT NULL,
-  ends_at TIMESTAMPTZ GENERATED ALWAYS AS (scheduled_at + (duration_minutes * INTERVAL '1 minute')) STORED,
+  ends_at TIMESTAMPTZ,
 
   -- Title and description
   title TEXT NOT NULL,
@@ -230,6 +230,20 @@ CREATE TRIGGER update_appointments_updated_at
   BEFORE UPDATE ON appointments
   FOR EACH ROW
   EXECUTE FUNCTION update_updated_at_column();
+
+-- Auto-calculate appointment end time
+CREATE OR REPLACE FUNCTION calculate_appointment_end_time()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.ends_at = NEW.scheduled_at + (NEW.duration_minutes || ' minutes')::INTERVAL;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER set_appointment_end_time
+  BEFORE INSERT OR UPDATE ON appointments
+  FOR EACH ROW
+  EXECUTE FUNCTION calculate_appointment_end_time();
 
 -- ============================================================================
 -- TRIGGER FUNCTIONS FOR REALTIME
