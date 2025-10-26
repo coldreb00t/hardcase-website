@@ -65,8 +65,7 @@ CREATE TABLE nutrition_targets (
 -- Indexes
 CREATE INDEX idx_nutrition_targets_client ON nutrition_targets(client_id);
 CREATE INDEX idx_nutrition_targets_dates ON nutrition_targets(valid_from, valid_until);
-CREATE INDEX idx_nutrition_targets_client_active ON nutrition_targets(client_id, valid_from, valid_until)
-  WHERE valid_until IS NULL OR valid_until >= CURRENT_DATE;
+CREATE INDEX idx_nutrition_targets_client_dates ON nutrition_targets(client_id, valid_from, valid_until);
 
 -- ============================================================================
 -- NUTRITION LOGS TABLE
