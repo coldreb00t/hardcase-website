@@ -308,7 +308,7 @@ CREATE TRIGGER update_device_tokens_updated_at
 -- Get active workout program for client
 CREATE OR REPLACE FUNCTION get_active_program(client_user_id UUID)
 RETURNS UUID AS $$
-  SELECT id
+  SELECT wp.id
   FROM workout_programs wp
   JOIN profiles p ON p.id = wp.client_id
   WHERE p.user_id = client_user_id

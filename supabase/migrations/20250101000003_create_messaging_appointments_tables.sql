@@ -397,7 +397,7 @@ RETURNS TABLE (
     a.duration_minutes,
     a.title,
     CASE
-      WHEN p.user_id = p_user_id THEN p2.full_name
+      WHEN a.trainer_id = p.id THEN p2.full_name
       ELSE p.full_name
     END,
     a.status
