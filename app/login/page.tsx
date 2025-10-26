@@ -27,16 +27,11 @@ export default function LoginPage() {
 
     try {
       if (mode === 'login') {
-        const { error } = await signIn(email, password)
-        if (error) throw error
+        await signIn(email, password)
         router.push('/dashboard')
       } else {
         // Registration
-        const { error } = await signUp(email, password, {
-          full_name: fullName,
-          role: 'client', // Default role
-        })
-        if (error) throw error
+        await signUp(email, password, fullName)
 
         // Show success message
         setError('Проверьте вашу почту для подтверждения регистрации')
