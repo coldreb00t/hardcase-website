@@ -119,6 +119,7 @@ export default function LoginPage() {
                         onChange={(e) => setFullName(e.target.value)}
                         className="w-full pl-11 pr-4 py-3 bg-gray-900/50 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
                         placeholder="Иван Иванов"
+                        autoComplete="name"
                         required={mode === 'register'}
                       />
                     </div>
@@ -139,6 +140,7 @@ export default function LoginPage() {
                     onChange={(e) => setEmail(e.target.value)}
                     className="w-full pl-11 pr-4 py-3 bg-gray-900/50 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
                     placeholder="your@email.com"
+                    autoComplete="email"
                     required
                   />
                 </div>
@@ -157,6 +159,7 @@ export default function LoginPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     className="w-full pl-11 pr-4 py-3 bg-gray-900/50 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"
                     placeholder="••••••••"
+                    autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
                     required
                     minLength={6}
                   />
