@@ -7,9 +7,6 @@ import { supabase, signIn, signUp } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
-// Force dynamic rendering - don't pre-render at build time
-export const dynamic = 'force-dynamic'
-
 type AuthMode = 'login' | 'register'
 
 export default function LoginPage() {

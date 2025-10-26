@@ -7,9 +7,6 @@ import { getCurrentUser, getCurrentProfile, supabase } from '@/lib/supabase'
 import { User, Mail, Calendar, LogOut, Loader2 } from 'lucide-react'
 import type { Database } from '@/supabase/types/database.types'
 
-// Force dynamic rendering - don't pre-render at build time
-export const dynamic = 'force-dynamic'
-
 type Profile = Database['public']['Tables']['profiles']['Row']
 
 export default function DashboardPage() {
