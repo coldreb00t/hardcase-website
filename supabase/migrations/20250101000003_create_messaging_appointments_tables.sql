@@ -119,7 +119,7 @@ CREATE TABLE appointments (
   -- Scheduling
   scheduled_at TIMESTAMPTZ NOT NULL,
   duration_minutes INTEGER DEFAULT 60 NOT NULL,
-  ends_at TIMESTAMPTZ GENERATED ALWAYS AS (scheduled_at + (duration_minutes || ' minutes')::INTERVAL) STORED,
+  ends_at TIMESTAMPTZ GENERATED ALWAYS AS (scheduled_at + (duration_minutes * INTERVAL '1 minute')) STORED,
 
   -- Title and description
   title TEXT NOT NULL,
