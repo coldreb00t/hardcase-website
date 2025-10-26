@@ -13,6 +13,7 @@ export default function DashboardPage() {
   const router = useRouter()
   const [loading, setLoading] = useState(true)
   const [profile, setProfile] = useState<Profile | null>(null)
+  const [email, setEmail] = useState<string>('')
 
   useEffect(() => {
     checkUser()
@@ -25,6 +26,8 @@ export default function DashboardPage() {
         router.push('/login')
         return
       }
+
+      setEmail(user.email || '')
 
       const userProfile = await getCurrentProfile()
       setProfile(userProfile)
@@ -107,7 +110,7 @@ export default function DashboardPage() {
                 </div>
                 <div>
                   <p className="text-gray-400 text-sm">Email</p>
-                  <p className="text-white font-medium">{profile?.email || 'Не указано'}</p>
+                  <p className="text-white font-medium">{email || 'Не указано'}</p>
                 </div>
                 <div>
                   <p className="text-gray-400 text-sm">Роль</p>
