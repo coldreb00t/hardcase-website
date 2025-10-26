@@ -11,20 +11,40 @@ export default function HeroSection() {
     const video = videoRef.current
     if (!video) return
 
-    // Простой обработчик для попытки запуска при взаимодействии (fallback для Low Power Mode)
+    // Lazy load video when visible
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Load and play video when visible
+            video.load()
+            video.play().catch(() => {
+              console.log('📱 Требуется взаимодействие пользователя')
+            })
+            observer.disconnect()
+          }
+        })
+      },
+      { threshold: 0.25 }
+    )
+
+    observer.observe(video)
+
+    // Fallback: play on first interaction
     const playOnInteraction = () => {
       if (video.paused) {
+        video.load()
         video.play().catch(() => {
           console.log('📱 Требуется взаимодействие пользователя')
         })
       }
     }
 
-    // Слушаем первое взаимодействие для запуска видео (если автоплей не сработал)
     document.addEventListener('touchstart', playOnInteraction, { once: true, passive: true })
     document.addEventListener('click', playOnInteraction, { once: true })
 
     return () => {
+      observer.disconnect()
       document.removeEventListener('touchstart', playOnInteraction)
       document.removeEventListener('click', playOnInteraction)
     }
@@ -38,11 +58,11 @@ export default function HeroSection() {
         <video
           ref={videoRef}
           className="absolute inset-0 w-full h-full object-cover"
-          autoPlay
           muted
           playsInline
           loop
-          preload="auto"
+          preload="none"
+          poster="/images/hero-background.png"
         >
           {/* Используем десктопную версию для всех - object-cover правильно адаптирует */}
           <source src="/videos/hero-background.webm" type="video/webm" />
