@@ -1,12 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // Static export для простого хостинга
-  output: 'export',
+  // Removed 'output: export' to support dynamic pages (/login, /dashboard)
+  // with Supabase authentication and runtime features
   images: {
     unoptimized: true,
   },
-  // Ensure static assets are properly exported
   trailingSlash: true,
 }
 
