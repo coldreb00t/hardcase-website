@@ -54,11 +54,15 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   // Inline runtime configuration for static export
-  // This must be loaded before any component that uses Supabase
+  // For production: Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY
+  // as environment variables in your CI/CD or hosting platform
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://waatdpjvzacdfnebskhf.supabase.co'
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndhYXRkcGp2emFjZGZuZWJza2hmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE0NDQ0NzEsImV4cCI6MjA3NzAyMDQ3MX0.-h6DXM8Ck6O7AksK-kcnwm7OXEro6dlobv0DVFx9ndw'
+
   const envConfigScript = `
     window.__ENV__ = {
-      NEXT_PUBLIC_SUPABASE_URL: 'https://waatdpjvzacdfnebskhf.supabase.co',
-      NEXT_PUBLIC_SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndhYXRkcGp2emFjZGZuZWJza2hmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE0NDQ0NzEsImV4cCI6MjA3NzAyMDQ3MX0.-h6DXM8Ck6O7AksK-kcnwm7OXEro6dlobv0DVFx9ndw'
+      NEXT_PUBLIC_SUPABASE_URL: '${supabaseUrl}',
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: '${supabaseKey}'
     };
   `
 
