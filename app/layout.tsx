@@ -53,11 +53,20 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  // Inline runtime configuration for static export
+  // This must be loaded before any component that uses Supabase
+  const envConfigScript = `
+    window.__ENV__ = {
+      NEXT_PUBLIC_SUPABASE_URL: 'https://waatdpjvzacdfnebskhf.supabase.co',
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndhYXRkcGp2emFjZGZuZWJza2hmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE0NDQ0NzEsImV4cCI6MjA3NzAyMDQ3MX0.-h6DXM8Ck6O7AksK-kcnwm7OXEro6dlobv0DVFx9ndw'
+    };
+  `
+
   return (
     <html lang="ru">
       <head>
-        {/* Load environment config first for static export */}
-        <script src="/env-config.js" />
+        {/* Inline runtime config - loaded before any React hydration */}
+        <script dangerouslySetInnerHTML={{ __html: envConfigScript }} />
         <StructuredData />
       </head>
       <body>{children}</body>
