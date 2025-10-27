@@ -31,16 +31,27 @@ function getSupabaseClient(): SupabaseClient<Database> {
   if (isBrowser) {
     // In browser: check window.__ENV__ first (runtime config)
     const windowEnv = (window as any).__ENV__
+
+    // Debug logging (remove in production if needed)
+    console.log('[Supabase] Checking configuration...')
+    console.log('[Supabase] window.__ENV__ exists:', !!windowEnv)
+    console.log('[Supabase] window.__ENV__.URL:', windowEnv?.NEXT_PUBLIC_SUPABASE_URL ? 'Set' : 'Missing')
+    console.log('[Supabase] process.env.URL:', process.env.NEXT_PUBLIC_SUPABASE_URL ? 'Set' : 'Missing')
+
     supabaseUrl = windowEnv?.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL
     supabaseAnonKey = windowEnv?.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
     // If still missing, throw error with helpful message
     if (!supabaseUrl || !supabaseAnonKey) {
+      console.error('[Supabase] Configuration missing!')
+      console.error('[Supabase] URL:', supabaseUrl)
+      console.error('[Supabase] Key:', supabaseAnonKey ? 'Set' : 'Missing')
       throw new Error(
-        'Missing Supabase configuration. Please ensure /public/env-config.js exists with valid credentials. ' +
-        'See /public/env-config.example.js for template.'
+        'Missing Supabase configuration. Check console logs for details.'
       )
     }
+
+    console.log('[Supabase] Configuration loaded successfully')
   } else {
     // During build: use placeholders
     supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co'
