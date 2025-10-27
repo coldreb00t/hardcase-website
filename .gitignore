@@ -26,6 +26,9 @@ build/
 .env
 .env*.local
 
+# Runtime env config (contains secrets)
+/public/env-config.js
+
 # Vercel
 .vercel
 

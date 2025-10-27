@@ -56,6 +56,8 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <head>
+        {/* Load environment config first for static export */}
+        <script src="/env-config.js" />
         <StructuredData />
       </head>
       <body>{children}</body>

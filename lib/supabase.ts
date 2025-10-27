@@ -12,34 +12,42 @@ let supabaseInstance: SupabaseClient<Database> | null = null
 /**
  * Get Supabase client instance (lazy initialization)
  * Creates client only when first accessed, not at import time
- * Safe for static export - uses placeholder values during build
+ * Safe for static export - uses runtime configuration from window.__ENV__
  */
 function getSupabaseClient(): SupabaseClient<Database> {
   if (supabaseInstance) {
     return supabaseInstance
   }
 
-  // During static export build, process.env may not have runtime values
-  // Use placeholder values during build, real values in browser
   const isBrowser = typeof window !== 'undefined'
 
-  let supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  let supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  let supabaseUrl: string | undefined
+  let supabaseAnonKey: string | undefined
 
-  // During build (not in browser), use placeholder values
-  if (!isBrowser) {
-    supabaseUrl = supabaseUrl || 'https://placeholder.supabase.co'
-    supabaseAnonKey = supabaseAnonKey || 'placeholder-anon-key'
+  // Priority 1: Runtime config from window.__ENV__ (for static export on Timeweb.cloud)
+  // Priority 2: Build-time process.env (for local development)
+  // Priority 3: Placeholder values (for build process)
+
+  if (isBrowser) {
+    // In browser: check window.__ENV__ first (runtime config)
+    const windowEnv = (window as any).__ENV__
+    supabaseUrl = windowEnv?.NEXT_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL
+    supabaseAnonKey = windowEnv?.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+    // If still missing, throw error with helpful message
+    if (!supabaseUrl || !supabaseAnonKey) {
+      throw new Error(
+        'Missing Supabase configuration. Please ensure /public/env-config.js exists with valid credentials. ' +
+        'See /public/env-config.example.js for template.'
+      )
+    }
+  } else {
+    // During build: use placeholders
+    supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co'
+    supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-anon-key'
   }
 
-  // In browser, throw error if missing (should never happen with proper deployment)
-  if (isBrowser && (!supabaseUrl || !supabaseAnonKey)) {
-    throw new Error(
-      'Missing Supabase environment variables. Please add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to your deployment environment.'
-    )
-  }
-
-  supabaseInstance = createClient<Database>(supabaseUrl!, supabaseAnonKey!, {
+  supabaseInstance = createClient<Database>(supabaseUrl, supabaseAnonKey, {
     auth: {
       persistSession: true,
       autoRefreshToken: true,
