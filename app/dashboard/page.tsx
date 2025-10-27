@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import { User, Mail, Calendar, LogOut, Loader2 } from 'lucide-react'
 import type { Database } from '@/supabase/types/database.types'
@@ -79,12 +78,7 @@ export default function DashboardPage() {
 
       {/* Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="space-y-8"
-        >
+        <div className="space-y-8 animate-fade-in">
           {/* Welcome Card */}
           <div className="bg-gradient-to-r from-primary-500 to-primary-600 rounded-2xl p-8 text-white shadow-2xl">
             <h2 className="text-3xl font-bold mb-2">
@@ -97,12 +91,7 @@ export default function DashboardPage() {
 
           {/* Profile Info */}
           <div className="grid md:grid-cols-2 gap-6">
-            <motion.div
-              className="bg-gray-800/50 backdrop-blur-lg rounded-2xl p-6 border border-gray-700/50"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.1, duration: 0.5 }}
-            >
+            <div className="bg-gray-800/50 backdrop-blur-lg rounded-2xl p-6 border border-gray-700/50 animate-slide-in-left">
               <div className="flex items-center gap-3 mb-4">
                 <User className="text-primary-500" size={24} />
                 <h3 className="text-xl font-semibold text-white">Профиль</h3>
@@ -131,15 +120,10 @@ export default function DashboardPage() {
                   </div>
                 )}
               </div>
-            </motion.div>
+            </div>
 
             {/* Quick Stats */}
-            <motion.div
-              className="bg-gray-800/50 backdrop-blur-lg rounded-2xl p-6 border border-gray-700/50"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
-            >
+            <div className="bg-gray-800/50 backdrop-blur-lg rounded-2xl p-6 border border-gray-700/50 animate-slide-in-right">
               <div className="flex items-center gap-3 mb-4">
                 <Calendar className="text-primary-500" size={24} />
                 <h3 className="text-xl font-semibold text-white">Статистика</h3>
@@ -160,7 +144,7 @@ export default function DashboardPage() {
                   </span>
                 </div>
               </div>
-            </motion.div>
+            </div>
           </div>
 
           {/* Coming Soon Sections */}
@@ -170,12 +154,10 @@ export default function DashboardPage() {
               { title: 'Питание', icon: '🥗', description: 'Рацион и калории' },
               { title: 'Прогресс', icon: '📊', description: 'Статистика и фото' },
             ].map((item, index) => (
-              <motion.div
+              <div
                 key={item.title}
-                className="bg-gray-800/30 backdrop-blur-lg rounded-2xl p-6 border border-gray-700/30 text-center"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 + index * 0.1, duration: 0.5 }}
+                className="bg-gray-800/30 backdrop-blur-lg rounded-2xl p-6 border border-gray-700/30 text-center animate-fade-in-up"
+                style={{ animationDelay: `${0.3 + index * 0.1}s` }}
               >
                 <div className="text-4xl mb-3">{item.icon}</div>
                 <h3 className="text-lg font-semibold text-white mb-2">{item.title}</h3>
@@ -183,11 +165,73 @@ export default function DashboardPage() {
                 <span className="inline-block px-3 py-1 bg-primary-500/20 text-primary-400 rounded-full text-xs font-medium">
                   Скоро
                 </span>
-              </motion.div>
+              </div>
             ))}
           </div>
-        </motion.div>
+        </div>
       </main>
+
+      <style jsx>{`
+        @keyframes fade-in {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes slide-in-left {
+          from {
+            opacity: 0;
+            transform: translateX(-20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        @keyframes slide-in-right {
+          from {
+            opacity: 0;
+            transform: translateX(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        @keyframes fade-in-up {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .animate-fade-in {
+          animation: fade-in 0.5s ease-out;
+        }
+
+        .animate-slide-in-left {
+          animation: slide-in-left 0.5s ease-out 0.1s backwards;
+        }
+
+        .animate-slide-in-right {
+          animation: slide-in-right 0.5s ease-out 0.2s backwards;
+        }
+
+        .animate-fade-in-up {
+          animation: fade-in-up 0.5s ease-out backwards;
+        }
+      `}</style>
     </div>
   )
 }
