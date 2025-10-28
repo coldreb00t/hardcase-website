@@ -97,7 +97,7 @@ export const getCurrentUser = async () => {
 /**
  * Get current user profile
  */
-export const getCurrentProfile = async () => {
+export const getCurrentProfile = async (): Promise<Database['public']['Tables']['profiles']['Row'] | null> => {
   const user = await getCurrentUser()
   if (!user) return null
 
