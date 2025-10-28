@@ -24,6 +24,23 @@ export default function AdminDashboardPage() {
   const [users, setUsers] = useState<Profile[]>([])
   const [loadingUsers, setLoadingUsers] = useState(false)
 
+  // Role change modal
+  const [showRoleModal, setShowRoleModal] = useState(false)
+  const [selectedUser, setSelectedUser] = useState<Profile | null>(null)
+  const [newRole, setNewRole] = useState<'client' | 'trainer' | 'admin'>('client')
+  const [updatingRole, setUpdatingRole] = useState(false)
+
+  // Create trainer modal
+  const [showCreateModal, setShowCreateModal] = useState(false)
+  const [createForm, setCreateForm] = useState({
+    email: '',
+    password: '',
+    full_name: '',
+    role: 'trainer' as 'trainer' | 'admin'
+  })
+  const [creatingUser, setCreatingUser] = useState(false)
+  const [createError, setCreateError] = useState<string | null>(null)
+
   useEffect(() => {
     checkUser()
   }, [])
@@ -88,6 +105,125 @@ export default function AdminDashboardPage() {
     const { supabase } = await import('@/lib/supabase')
     await supabase.auth.signOut()
     router.push('/')
+  }
+
+  const openRoleModal = (user: Profile) => {
+    setSelectedUser(user)
+    setNewRole(user.role as 'client' | 'trainer' | 'admin')
+    setShowRoleModal(true)
+  }
+
+  const closeRoleModal = () => {
+    setShowRoleModal(false)
+    setSelectedUser(null)
+    setNewRole('client')
+  }
+
+  const handleUpdateRole = async () => {
+    if (!selectedUser) return
+
+    setUpdatingRole(true)
+    try {
+      const { supabase } = await import('@/lib/supabase')
+
+      const { error } = await supabase
+        .from('profiles')
+        // @ts-ignore - Admin can update any profile role
+        .update({ role: newRole })
+        .eq('id', selectedUser.id)
+
+      if (error) throw error
+
+      console.log(`[Admin] Updated role for ${selectedUser.full_name} to ${newRole}`)
+
+      // Reload users
+      await loadUsers()
+      closeRoleModal()
+    } catch (error) {
+      console.error('Error updating role:', error)
+      alert('Ошибка при изменении роли')
+    } finally {
+      setUpdatingRole(false)
+    }
+  }
+
+  const openCreateModal = () => {
+    setCreateForm({
+      email: '',
+      password: '',
+      full_name: '',
+      role: 'trainer'
+    })
+    setCreateError(null)
+    setShowCreateModal(true)
+  }
+
+  const closeCreateModal = () => {
+    setShowCreateModal(false)
+    setCreateForm({
+      email: '',
+      password: '',
+      full_name: '',
+      role: 'trainer'
+    })
+    setCreateError(null)
+  }
+
+  const handleCreateUser = async () => {
+    setCreateError(null)
+
+    // Validation
+    if (!createForm.email || !createForm.password || !createForm.full_name) {
+      setCreateError('Заполните все поля')
+      return
+    }
+
+    if (createForm.password.length < 6) {
+      setCreateError('Пароль должен быть не менее 6 символов')
+      return
+    }
+
+    setCreatingUser(true)
+    try {
+      const { supabase } = await import('@/lib/supabase')
+
+      // Create user via Supabase Admin API
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email: createForm.email,
+        password: createForm.password,
+        options: {
+          data: {
+            full_name: createForm.full_name
+          }
+        }
+      })
+
+      if (authError) throw authError
+
+      if (!authData.user) {
+        throw new Error('User creation failed')
+      }
+
+      // Update profile role (trigger creates profile with 'client' role by default)
+      const { error: updateError } = await supabase
+        .from('profiles')
+        // @ts-ignore - Admin creating user with specific role
+        .update({ role: createForm.role })
+        .eq('user_id', authData.user.id)
+
+      if (updateError) throw updateError
+
+      console.log(`[Admin] Created ${createForm.role}: ${createForm.email}`)
+
+      // Reload users
+      await loadUsers()
+      closeCreateModal()
+    } catch (error: any) {
+      console.error('Error creating user:', error)
+      setCreateError(error.message || 'Ошибка при создании пользователя')
+    } finally {
+      setCreatingUser(false)
+    }
   }
 
   const getRoleBadgeColor = (role: string) => {
@@ -203,9 +339,12 @@ export default function AdminDashboardPage() {
                   <h3 className="text-xl font-semibold text-white mb-1">Управление пользователями</h3>
                   <p className="text-gray-400 text-sm">Просмотр и изменение ролей пользователей</p>
                 </div>
-                <button className="flex items-center gap-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-all">
+                <button
+                  onClick={openCreateModal}
+                  className="flex items-center gap-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-all"
+                >
                   <UserPlus size={20} />
-                  <span>Создать тренера</span>
+                  <span>Создать пользователя</span>
                 </button>
               </div>
             </div>
@@ -257,7 +396,10 @@ export default function AdminDashboardPage() {
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                          <button className="text-primary-400 hover:text-primary-300 transition-colors inline-flex items-center gap-1">
+                          <button
+                            onClick={() => openRoleModal(user)}
+                            className="text-primary-400 hover:text-primary-300 transition-colors inline-flex items-center gap-1"
+                          >
                             <Edit size={16} />
                             Изменить роль
                           </button>
@@ -308,6 +450,147 @@ export default function AdminDashboardPage() {
           </div>
         </div>
       </main>
+
+      {/* Role Change Modal */}
+      {showRoleModal && selectedUser && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-800 rounded-2xl p-6 max-w-md w-full border border-gray-700 shadow-2xl">
+            <h3 className="text-xl font-bold text-white mb-4">Изменить роль пользователя</h3>
+
+            <div className="mb-4">
+              <p className="text-gray-400 text-sm mb-2">Пользователь:</p>
+              <p className="text-white font-medium">{selectedUser.full_name}</p>
+            </div>
+
+            <div className="mb-6">
+              <label className="block text-gray-400 text-sm mb-2">Новая роль:</label>
+              <select
+                value={newRole}
+                onChange={(e) => setNewRole(e.target.value as 'client' | 'trainer' | 'admin')}
+                className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+              >
+                <option value="client">Клиент</option>
+                <option value="trainer">Тренер</option>
+                <option value="admin">Администратор</option>
+              </select>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={closeRoleModal}
+                disabled={updatingRole}
+                className="flex-1 px-4 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-all disabled:opacity-50"
+              >
+                Отмена
+              </button>
+              <button
+                onClick={handleUpdateRole}
+                disabled={updatingRole || newRole === selectedUser.role}
+                className="flex-1 px-4 py-3 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {updatingRole ? (
+                  <>
+                    <Loader2 size={18} className="animate-spin" />
+                    <span>Сохранение...</span>
+                  </>
+                ) : (
+                  <span>Сохранить</span>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Create User Modal */}
+      {showCreateModal && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-800 rounded-2xl p-6 max-w-md w-full border border-gray-700 shadow-2xl">
+            <h3 className="text-xl font-bold text-white mb-4">Создать нового пользователя</h3>
+
+            {createError && (
+              <div className="mb-4 p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-red-400 text-sm">
+                {createError}
+              </div>
+            )}
+
+            <div className="space-y-4 mb-6">
+              <div>
+                <label className="block text-gray-400 text-sm mb-2">Полное имя:</label>
+                <input
+                  type="text"
+                  value={createForm.full_name}
+                  onChange={(e) => setCreateForm({ ...createForm, full_name: e.target.value })}
+                  placeholder="Иван Иванов"
+                  className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-gray-400 text-sm mb-2">Email:</label>
+                <input
+                  type="email"
+                  value={createForm.email}
+                  onChange={(e) => setCreateForm({ ...createForm, email: e.target.value })}
+                  placeholder="user@example.com"
+                  className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-gray-400 text-sm mb-2">Пароль:</label>
+                <input
+                  type="password"
+                  value={createForm.password}
+                  onChange={(e) => setCreateForm({ ...createForm, password: e.target.value })}
+                  placeholder="Минимум 6 символов"
+                  className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-gray-400 text-sm mb-2">Роль:</label>
+                <select
+                  value={createForm.role}
+                  onChange={(e) => setCreateForm({ ...createForm, role: e.target.value as 'trainer' | 'admin' })}
+                  className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+                >
+                  <option value="trainer">Тренер</option>
+                  <option value="admin">Администратор</option>
+                </select>
+                <p className="text-gray-500 text-xs mt-1">Клиенты регистрируются самостоятельно</p>
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={closeCreateModal}
+                disabled={creatingUser}
+                className="flex-1 px-4 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-all disabled:opacity-50"
+              >
+                Отмена
+              </button>
+              <button
+                onClick={handleCreateUser}
+                disabled={creatingUser}
+                className="flex-1 px-4 py-3 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {creatingUser ? (
+                  <>
+                    <Loader2 size={18} className="animate-spin" />
+                    <span>Создание...</span>
+                  </>
+                ) : (
+                  <>
+                    <UserPlus size={18} />
+                    <span>Создать</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <style jsx>{`
         @keyframes fade-in {
