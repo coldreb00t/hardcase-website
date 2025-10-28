@@ -108,7 +108,10 @@ export default function DashboardPage() {
                 <div>
                   <p className="text-gray-400 text-sm">Роль</p>
                   <p className="text-white font-medium">
-                    {profile?.role === 'client' ? 'Клиент' : 'Тренер'}
+                    {profile?.role === 'client' && 'Клиент'}
+                    {profile?.role === 'trainer' && 'Тренер'}
+                    {profile?.role === 'admin' && 'Администратор'}
+                    {!profile?.role && 'Не указано'}
                   </p>
                 </div>
                 {profile?.gender && (
