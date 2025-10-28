@@ -32,8 +32,14 @@ export default function LoginPage() {
         console.log('[Login] Attempting sign in with:', email)
         const result = await signIn(email, password)
         console.log('[Login] Sign in successful:', result.user?.email)
-        console.log('[Login] Redirecting to /dashboard')
-        router.push('/dashboard')
+
+        // Wait for session to be established in browser storage
+        await new Promise(resolve => setTimeout(resolve, 100))
+
+        console.log('[Login] Session established, redirecting to /dashboard')
+        // Use window.location for full page reload to ensure session is properly loaded
+        window.location.href = '/dashboard'
+        return // Prevent further execution
       } else {
         // Registration
         console.log('[Login] Attempting registration for:', email)

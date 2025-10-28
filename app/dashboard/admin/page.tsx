@@ -30,10 +30,14 @@ export default function AdminDashboardPage() {
 
   const checkUser = async () => {
     try {
+      console.log('[Admin Dashboard] Checking user access...')
       const { getCurrentUser, getCurrentProfile } = await import('@/lib/supabase')
 
       const user = await getCurrentUser()
+      console.log('[Admin Dashboard] User:', user ? `Found (${user.email})` : 'Not found')
+
       if (!user) {
+        console.log('[Admin Dashboard] No user, redirecting to /login')
         router.push('/login')
         return
       }
@@ -41,18 +45,20 @@ export default function AdminDashboardPage() {
       setEmail(user.email || '')
 
       const userProfile = await getCurrentProfile()
+      console.log('[Admin Dashboard] Profile:', userProfile ? `Found (role: ${userProfile.role})` : 'Not found')
 
       // Security check: ensure user has 'admin' role
       if (userProfile?.role !== 'admin') {
-        console.warn('Access denied: Not an admin')
+        console.warn('[Admin Dashboard] Access denied: User role is', userProfile?.role, 'expected admin')
         router.push('/dashboard') // Will redirect to correct dashboard
         return
       }
 
+      console.log('[Admin Dashboard] Access granted! Loading admin panel...')
       setProfile(userProfile)
       loadUsers() // Load all users
     } catch (error) {
-      console.error('Error loading user:', error)
+      console.error('[Admin Dashboard] Error loading user:', error)
       router.push('/login')
     } finally {
       setLoading(false)

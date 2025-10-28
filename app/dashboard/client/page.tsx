@@ -28,10 +28,14 @@ export default function ClientDashboardPage() {
 
   const checkUser = async () => {
     try {
+      console.log('[Client Dashboard] Checking user access...')
       const { getCurrentUser, getCurrentProfile } = await import('@/lib/supabase')
 
       const user = await getCurrentUser()
+      console.log('[Client Dashboard] User:', user ? `Found (${user.email})` : 'Not found')
+
       if (!user) {
+        console.log('[Client Dashboard] No user, redirecting to /login')
         router.push('/login')
         return
       }
@@ -39,17 +43,19 @@ export default function ClientDashboardPage() {
       setEmail(user.email || '')
 
       const userProfile = await getCurrentProfile()
+      console.log('[Client Dashboard] Profile:', userProfile ? `Found (role: ${userProfile.role})` : 'Not found')
 
       // Security check: ensure user has 'client' role
       if (userProfile?.role !== 'client') {
-        console.warn('Access denied: Not a client')
+        console.warn('[Client Dashboard] Access denied: User role is', userProfile?.role, 'expected client')
         router.push('/dashboard') // Will redirect to correct dashboard
         return
       }
 
+      console.log('[Client Dashboard] Access granted! Loading client dashboard...')
       setProfile(userProfile)
     } catch (error) {
-      console.error('Error loading user:', error)
+      console.error('[Client Dashboard] Error loading user:', error)
       router.push('/login')
     } finally {
       setLoading(false)

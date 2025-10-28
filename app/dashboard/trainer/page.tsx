@@ -28,10 +28,14 @@ export default function TrainerDashboardPage() {
 
   const checkUser = async () => {
     try {
+      console.log('[Trainer Dashboard] Checking user access...')
       const { getCurrentUser, getCurrentProfile } = await import('@/lib/supabase')
 
       const user = await getCurrentUser()
+      console.log('[Trainer Dashboard] User:', user ? `Found (${user.email})` : 'Not found')
+
       if (!user) {
+        console.log('[Trainer Dashboard] No user, redirecting to /login')
         router.push('/login')
         return
       }
@@ -39,17 +43,19 @@ export default function TrainerDashboardPage() {
       setEmail(user.email || '')
 
       const userProfile = await getCurrentProfile()
+      console.log('[Trainer Dashboard] Profile:', userProfile ? `Found (role: ${userProfile.role})` : 'Not found')
 
       // Security check: ensure user has 'trainer' role
       if (userProfile?.role !== 'trainer') {
-        console.warn('Access denied: Not a trainer')
+        console.warn('[Trainer Dashboard] Access denied: User role is', userProfile?.role, 'expected trainer')
         router.push('/dashboard') // Will redirect to correct dashboard
         return
       }
 
+      console.log('[Trainer Dashboard] Access granted! Loading trainer dashboard...')
       setProfile(userProfile)
     } catch (error) {
-      console.error('Error loading user:', error)
+      console.error('[Trainer Dashboard] Error loading user:', error)
       router.push('/login')
     } finally {
       setLoading(false)
