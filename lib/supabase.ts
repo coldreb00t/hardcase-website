@@ -58,11 +58,19 @@ function getSupabaseClient(): SupabaseClient<Database> {
     supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-anon-key'
   }
 
+  // Check if we have existing session in localStorage before creating client
+  if (isBrowser) {
+    const storageKeys = Object.keys(localStorage).filter(k => k.includes('supabase'))
+    console.log('[Supabase] Existing keys in localStorage:', storageKeys.length > 0 ? storageKeys.length + ' found' : 'None')
+  }
+
   supabaseInstance = createClient<Database>(supabaseUrl, supabaseAnonKey, {
     auth: {
       persistSession: true,
       autoRefreshToken: true,
       detectSessionInUrl: true,
+      storage: typeof window !== 'undefined' ? window.localStorage : undefined,
+      storageKey: 'sb-waatdpjvzacdfnebskhf-auth-token', // Explicit storage key for static export
     },
     realtime: {
       params: {
@@ -70,6 +78,8 @@ function getSupabaseClient(): SupabaseClient<Database> {
       },
     },
   })
+
+  console.log('[Supabase] Client created successfully')
 
   return supabaseInstance
 }
@@ -88,9 +98,12 @@ export const supabase = new Proxy({} as SupabaseClient<Database>, {
  * Get current user session
  */
 export const getCurrentUser = async () => {
+  console.log('[supabase] Getting current user session...')
   const {
     data: { session },
   } = await supabase.auth.getSession()
+  console.log('[supabase] Session:', session ? `Found (${session.user?.email})` : 'Not found')
+  console.log('[supabase] Session expires at:', session?.expires_at ? new Date(session.expires_at * 1000).toLocaleString() : 'N/A')
   return session?.user ?? null
 }
 
@@ -143,12 +156,26 @@ export const signUp = async (email: string, password: string, fullName: string) 
  * Sign in with email and password
  */
 export const signIn = async (email: string, password: string) => {
+  console.log('[signIn] Attempting sign in...')
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   })
 
-  if (error) throw error
+  if (error) {
+    console.error('[signIn] Error:', error)
+    throw error
+  }
+
+  console.log('[signIn] Success! Session:', data.session ? 'Created' : 'Not created')
+  console.log('[signIn] User:', data.user?.email)
+
+  // Check if session was saved to localStorage
+  if (typeof window !== 'undefined') {
+    const storageKeys = Object.keys(localStorage).filter(k => k.includes('supabase'))
+    console.log('[signIn] Supabase keys in localStorage:', storageKeys.length > 0 ? storageKeys : 'None found')
+  }
+
   return data
 }
 
