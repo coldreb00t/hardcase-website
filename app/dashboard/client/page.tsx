@@ -2,10 +2,13 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { User, Mail, Calendar, LogOut, Loader2 } from 'lucide-react'
+import { User, Mail, Calendar, LogOut, Loader2, Dumbbell, Apple, TrendingUp, Activity, Target, Camera } from 'lucide-react'
 import type { Database } from '@/supabase/types/database.types'
 
 type Profile = Database['public']['Tables']['profiles']['Row']
+type WorkoutProgram = Database['public']['Tables']['workout_programs']['Row']
+type NutritionTarget = Database['public']['Tables']['nutrition_targets']['Row']
+type ClientMeasurement = Database['public']['Tables']['client_measurements']['Row']
 
 /**
  * Client Dashboard
@@ -21,6 +24,12 @@ export default function ClientDashboardPage() {
   const [loading, setLoading] = useState(true)
   const [profile, setProfile] = useState<Profile | null>(null)
   const [email, setEmail] = useState<string>('')
+
+  // Data states
+  const [workoutPrograms, setWorkoutPrograms] = useState<WorkoutProgram[]>([])
+  const [nutritionTarget, setNutritionTarget] = useState<NutritionTarget | null>(null)
+  const [latestMeasurement, setLatestMeasurement] = useState<ClientMeasurement | null>(null)
+  const [loadingData, setLoadingData] = useState(false)
 
   useEffect(() => {
     checkUser()
@@ -54,11 +63,58 @@ export default function ClientDashboardPage() {
 
       console.log('[Client Dashboard] Access granted! Loading client dashboard...')
       setProfile(userProfile)
+
+      // Load dashboard data
+      await loadData(userProfile.id)
     } catch (error) {
       console.error('[Client Dashboard] Error loading user:', error)
       router.push('/login')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const loadData = async (profileId: string) => {
+    setLoadingData(true)
+    try {
+      const { supabase } = await import('@/lib/supabase')
+
+      // Load workout programs
+      const { data: programs } = await supabase
+        .from('workout_programs')
+        .select('*')
+        .eq('client_id', profileId)
+        .eq('status', 'active')
+        .order('created_at', { ascending: false })
+
+      if (programs) setWorkoutPrograms(programs)
+
+      // Load nutrition target
+      const { data: target } = await supabase
+        .from('nutrition_targets')
+        .select('*')
+        .eq('client_id', profileId)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single()
+
+      if (target) setNutritionTarget(target)
+
+      // Load latest measurement
+      const { data: measurement } = await supabase
+        .from('client_measurements')
+        .select('*')
+        .eq('client_id', profileId)
+        .order('measured_at', { ascending: false })
+        .limit(1)
+        .single()
+
+      if (measurement) setLatestMeasurement(measurement)
+
+    } catch (error) {
+      console.error('[Client Dashboard] Error loading data:', error)
+    } finally {
+      setLoadingData(false)
     }
   }
 
@@ -165,26 +221,132 @@ export default function ClientDashboardPage() {
             </div>
           </div>
 
-          {/* Coming Soon Sections */}
+          {/* Dashboard Sections */}
           <div className="grid md:grid-cols-3 gap-6">
-            {[
-              { title: 'Мои тренировки', icon: '💪', description: 'Программы и планы' },
-              { title: 'Питание', icon: '🥗', description: 'Рацион и калории' },
-              { title: 'Прогресс', icon: '📊', description: 'Статистика и фото' },
-            ].map((item, index) => (
-              <div
-                key={item.title}
-                className="bg-gray-800/30 backdrop-blur-lg rounded-2xl p-6 border border-gray-700/30 text-center animate-fade-in-up"
-                style={{ animationDelay: `${0.3 + index * 0.1}s` }}
-              >
-                <div className="text-4xl mb-3">{item.icon}</div>
-                <h3 className="text-lg font-semibold text-white mb-2">{item.title}</h3>
-                <p className="text-gray-400 text-sm mb-4">{item.description}</p>
-                <span className="inline-block px-3 py-1 bg-primary-500/20 text-primary-400 rounded-full text-xs font-medium">
-                  Скоро
-                </span>
+            {/* Workout Programs */}
+            <div className="bg-gray-800/50 backdrop-blur-lg rounded-2xl p-6 border border-gray-700/50 animate-fade-in-up">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <Dumbbell className="text-primary-500" size={24} />
+                  <h3 className="text-lg font-semibold text-white">Мои тренировки</h3>
+                </div>
               </div>
-            ))}
+              {loadingData ? (
+                <div className="flex justify-center py-8">
+                  <Loader2 className="w-6 h-6 text-primary-500 animate-spin" />
+                </div>
+              ) : workoutPrograms.length > 0 ? (
+                <div className="space-y-3">
+                  {workoutPrograms.map((program) => (
+                    <div key={program.id} className="bg-gray-900/50 rounded-lg p-4">
+                      <h4 className="text-white font-medium mb-1">{program.title}</h4>
+                      <p className="text-gray-400 text-sm">
+                        {program.start_date ? new Date(program.start_date).toLocaleDateString('ru-RU') : 'Дата не указана'}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <Activity className="w-12 h-12 text-gray-600 mx-auto mb-3" />
+                  <p className="text-gray-400 text-sm">Нет активных программ</p>
+                  <p className="text-gray-500 text-xs mt-1">Тренер назначит вам программу</p>
+                </div>
+              )}
+            </div>
+
+            {/* Nutrition */}
+            <div className="bg-gray-800/50 backdrop-blur-lg rounded-2xl p-6 border border-gray-700/50 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <Apple className="text-green-500" size={24} />
+                  <h3 className="text-lg font-semibold text-white">Питание</h3>
+                </div>
+              </div>
+              {loadingData ? (
+                <div className="flex justify-center py-8">
+                  <Loader2 className="w-6 h-6 text-primary-500 animate-spin" />
+                </div>
+              ) : nutritionTarget ? (
+                <div className="space-y-3">
+                  <div className="bg-gray-900/50 rounded-lg p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-gray-400 text-sm">Калории</span>
+                      <span className="text-white font-bold">{nutritionTarget.calories} ккал</span>
+                    </div>
+                    <div className="grid grid-cols-3 gap-2 text-center text-xs">
+                      <div>
+                        <p className="text-gray-500">Белки</p>
+                        <p className="text-white font-medium">{nutritionTarget.protein_grams}г</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-500">Жиры</p>
+                        <p className="text-white font-medium">{nutritionTarget.fats_grams}г</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-500">Углеводы</p>
+                        <p className="text-white font-medium">{nutritionTarget.carbs_grams}г</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <Target className="w-12 h-12 text-gray-600 mx-auto mb-3" />
+                  <p className="text-gray-400 text-sm">Цели питания не заданы</p>
+                  <p className="text-gray-500 text-xs mt-1">Тренер установит ваши макросы</p>
+                </div>
+              )}
+            </div>
+
+            {/* Progress */}
+            <div className="bg-gray-800/50 backdrop-blur-lg rounded-2xl p-6 border border-gray-700/50 animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <TrendingUp className="text-blue-500" size={24} />
+                  <h3 className="text-lg font-semibold text-white">Прогресс</h3>
+                </div>
+              </div>
+              {loadingData ? (
+                <div className="flex justify-center py-8">
+                  <Loader2 className="w-6 h-6 text-primary-500 animate-spin" />
+                </div>
+              ) : latestMeasurement ? (
+                <div className="space-y-3">
+                  <div className="bg-gray-900/50 rounded-lg p-4">
+                    <p className="text-gray-400 text-xs mb-3">
+                      {new Date(latestMeasurement.measured_at).toLocaleDateString('ru-RU')}
+                    </p>
+                    <div className="space-y-2">
+                      {latestMeasurement.weight && (
+                        <div className="flex justify-between">
+                          <span className="text-gray-400 text-sm">Вес</span>
+                          <span className="text-white font-medium">{latestMeasurement.weight} кг</span>
+                        </div>
+                      )}
+                      {latestMeasurement.body_fat_percentage && (
+                        <div className="flex justify-between">
+                          <span className="text-gray-400 text-sm">Жир</span>
+                          <span className="text-white font-medium">{latestMeasurement.body_fat_percentage}%</span>
+                        </div>
+                      )}
+                      {latestMeasurement.muscle_mass && (
+                        <div className="flex justify-between">
+                          <span className="text-gray-400 text-sm">Мышцы</span>
+                          <span className="text-white font-medium">{latestMeasurement.muscle_mass} кг</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center py-8">
+                  <Camera className="w-12 h-12 text-gray-600 mx-auto mb-3" />
+                  <p className="text-gray-400 text-sm">Нет замеров</p>
+                  <p className="text-gray-500 text-xs mt-1">Тренер добавит первые замеры</p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </main>
