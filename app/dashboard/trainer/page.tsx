@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Users, Dumbbell, Apple, MessageSquare, LogOut, Loader2, UserPlus, Calendar, TrendingUp } from 'lucide-react'
+import { Users, Dumbbell, Apple, MessageSquare, LogOut, Loader2, Calendar, TrendingUp } from 'lucide-react'
 import type { Database } from '@/supabase/types/database.types'
 
 type Profile = Database['public']['Tables']['profiles']['Row']
@@ -10,6 +10,7 @@ type TrainerClientRelationship = Database['public']['Tables']['trainer_client_re
 
 type ClientWithProfile = TrainerClientRelationship & {
   client: Profile
+  is_primary: boolean
 }
 
 /**
@@ -29,7 +30,6 @@ export default function TrainerDashboardPage() {
 
   // Data states
   const [clients, setClients] = useState<ClientWithProfile[]>([])
-  const [allClients, setAllClients] = useState<Profile[]>([]) // All clients for adding
   const [stats, setStats] = useState({
     totalClients: 0,
     activeClients: 0,
@@ -39,13 +39,11 @@ export default function TrainerDashboardPage() {
   const [loadingData, setLoadingData] = useState(false)
 
   // Modal states
-  const [showAddClientModal, setShowAddClientModal] = useState(false)
   const [showCreateProgramModal, setShowCreateProgramModal] = useState(false)
   const [showCreateNutritionModal, setShowCreateNutritionModal] = useState(false)
   const [selectedClient, setSelectedClient] = useState<ClientWithProfile | null>(null)
 
   // Form states
-  const [addClientForm, setAddClientForm] = useState({ clientId: '' })
   const [programForm, setProgramForm] = useState({
     clientId: '',
     title: '',
@@ -148,53 +146,10 @@ export default function TrainerDashboardPage() {
         totalNutritionPlans: nutritionCount || 0
       })
 
-      // Load all clients for the "Add Client" dropdown
-      const { data: allClientsData } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('role', 'client')
-        .order('full_name', { ascending: true })
-
-      if (allClientsData) setAllClients(allClientsData)
-
     } catch (error) {
       console.error('[Trainer Dashboard] Error loading data:', error)
     } finally {
       setLoadingData(false)
-    }
-  }
-
-  const handleAddClient = async () => {
-    setFormError(null)
-    if (!addClientForm.clientId) {
-      setFormError('Выберите клиента')
-      return
-    }
-
-    setSubmitting(true)
-    try {
-      const { supabase } = await import('@/lib/supabase')
-
-      const { error } = await supabase
-        .from('trainer_client_relationships')
-        // @ts-ignore - Trainer adding client relationship
-        .insert({
-          trainer_id: profile!.id,
-          client_id: addClientForm.clientId,
-          status: 'active'
-        })
-
-      if (error) throw error
-
-      console.log('[Trainer] Client added successfully')
-      await loadTrainerData(profile!.id)
-      setShowAddClientModal(false)
-      setAddClientForm({ clientId: '' })
-    } catch (error: any) {
-      console.error('[Trainer] Error adding client:', error)
-      setFormError(error.message || 'Ошибка при добавлении клиента')
-    } finally {
-      setSubmitting(false)
     }
   }
 
@@ -384,21 +339,12 @@ export default function TrainerDashboardPage() {
           {/* Clients List */}
           <div className="bg-gray-800/50 backdrop-blur-lg rounded-2xl border border-gray-700/50 overflow-hidden">
             <div className="p-6 border-b border-gray-700/50">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <Users className="text-primary-500" size={24} />
-                  <div>
-                    <h3 className="text-xl font-semibold text-white">Мои клиенты</h3>
-                    <p className="text-gray-400 text-sm">Управление списком клиентов</p>
-                  </div>
+              <div className="flex items-center gap-3">
+                <Users className="text-primary-500" size={24} />
+                <div>
+                  <h3 className="text-xl font-semibold text-white">Мои клиенты</h3>
+                  <p className="text-gray-400 text-sm">Клиентов назначает администратор</p>
                 </div>
-                <button
-                  onClick={() => setShowAddClientModal(true)}
-                  className="flex items-center gap-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-all"
-                >
-                  <UserPlus size={20} />
-                  <span>Добавить клиента</span>
-                </button>
               </div>
             </div>
 
@@ -411,7 +357,7 @@ export default function TrainerDashboardPage() {
               <div className="p-12 text-center">
                 <Users className="w-12 h-12 text-gray-600 mx-auto mb-3" />
                 <p className="text-gray-400">Пока нет клиентов</p>
-                <p className="text-gray-500 text-sm mt-1">Добавьте первого клиента чтобы начать работу</p>
+                <p className="text-gray-500 text-sm mt-1">Администратор назначит вам клиентов</p>
               </div>
             ) : (
               <div className="divide-y divide-gray-700/50">
@@ -423,7 +369,18 @@ export default function TrainerDashboardPage() {
                           <Users className="text-primary-500" size={24} />
                         </div>
                         <div>
-                          <h4 className="text-white font-medium">{relationship.client.full_name}</h4>
+                          <div className="flex items-center gap-2">
+                            <h4 className="text-white font-medium">{relationship.client.full_name}</h4>
+                            {relationship.is_primary ? (
+                              <span className="text-xs px-2 py-1 rounded-full bg-primary-500/20 text-primary-400 font-medium">
+                                Основной
+                              </span>
+                            ) : (
+                              <span className="text-xs px-2 py-1 rounded-full bg-gray-500/20 text-gray-400">
+                                Дополнительный
+                              </span>
+                            )}
+                          </div>
                           <div className="flex items-center gap-4 mt-1">
                             <span className={`text-xs px-2 py-1 rounded-full ${
                               relationship.status === 'active'
@@ -443,13 +400,15 @@ export default function TrainerDashboardPage() {
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <button
-                          onClick={() => openCreateProgramModal(relationship)}
-                          className="px-3 py-2 bg-green-500/20 text-green-400 hover:bg-green-500/30 rounded-lg transition-all text-sm flex items-center gap-1"
-                        >
-                          <Dumbbell size={16} />
-                          Программа
-                        </button>
+                        {relationship.is_primary && (
+                          <button
+                            onClick={() => openCreateProgramModal(relationship)}
+                            className="px-3 py-2 bg-green-500/20 text-green-400 hover:bg-green-500/30 rounded-lg transition-all text-sm flex items-center gap-1"
+                          >
+                            <Dumbbell size={16} />
+                            Программа
+                          </button>
+                        )}
                         <button
                           onClick={() => openCreateNutritionModal(relationship)}
                           className="px-3 py-2 bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500/30 rounded-lg transition-all text-sm flex items-center gap-1"
@@ -466,71 +425,6 @@ export default function TrainerDashboardPage() {
           </div>
         </div>
       </main>
-
-      {/* Add Client Modal */}
-      {showAddClientModal && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-800 rounded-2xl p-6 max-w-md w-full border border-gray-700 shadow-2xl">
-            <h3 className="text-xl font-bold text-white mb-4">Добавить клиента</h3>
-
-            {formError && (
-              <div className="mb-4 p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-red-400 text-sm">
-                {formError}
-              </div>
-            )}
-
-            <div className="space-y-4 mb-6">
-              <div>
-                <label className="block text-gray-400 text-sm mb-2">Выберите клиента:</label>
-                <select
-                  value={addClientForm.clientId}
-                  onChange={(e) => setAddClientForm({ clientId: e.target.value })}
-                  className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
-                >
-                  <option value="">-- Выберите клиента --</option>
-                  {allClients
-                    .filter(client => !clients.some(c => c.client_id === client.id))
-                    .map(client => (
-                      <option key={client.id} value={client.id}>
-                        {client.full_name}
-                      </option>
-                    ))}
-                </select>
-                <p className="text-gray-500 text-xs mt-1">
-                  Показаны только клиенты, которые еще не добавлены
-                </p>
-              </div>
-            </div>
-
-            <div className="flex gap-3">
-              <button
-                onClick={() => setShowAddClientModal(false)}
-                disabled={submitting}
-                className="flex-1 px-4 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-all disabled:opacity-50"
-              >
-                Отмена
-              </button>
-              <button
-                onClick={handleAddClient}
-                disabled={submitting}
-                className="flex-1 px-4 py-3 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2"
-              >
-                {submitting ? (
-                  <>
-                    <Loader2 size={18} className="animate-spin" />
-                    <span>Добавление...</span>
-                  </>
-                ) : (
-                  <>
-                    <UserPlus size={18} />
-                    <span>Добавить</span>
-                  </>
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Create Program Modal */}
       {showCreateProgramModal && selectedClient && (

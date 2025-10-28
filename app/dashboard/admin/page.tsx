@@ -41,6 +41,16 @@ export default function AdminDashboardPage() {
   const [creatingUser, setCreatingUser] = useState(false)
   const [createError, setCreateError] = useState<string | null>(null)
 
+  // Assign trainer modal
+  const [showAssignTrainerModal, setShowAssignTrainerModal] = useState(false)
+  const [assignTrainerForm, setAssignTrainerForm] = useState({
+    clientId: '',
+    trainerId: '',
+    isPrimary: false
+  })
+  const [assigningTrainer, setAssigningTrainer] = useState(false)
+  const [assignError, setAssignError] = useState<string | null>(null)
+
   useEffect(() => {
     checkUser()
   }, [])
@@ -268,6 +278,40 @@ export default function AdminDashboardPage() {
     }
   }
 
+  const handleAssignTrainer = async () => {
+    setAssignError(null)
+    if (!assignTrainerForm.clientId || !assignTrainerForm.trainerId) {
+      setAssignError('Выберите клиента и тренера')
+      return
+    }
+
+    setAssigningTrainer(true)
+    try {
+      const { supabase } = await import('@/lib/supabase')
+
+      const { error } = await supabase
+        .from('trainer_client_relationships')
+        // @ts-ignore - Admin assigning trainer to client
+        .insert({
+          trainer_id: assignTrainerForm.trainerId,
+          client_id: assignTrainerForm.clientId,
+          is_primary: assignTrainerForm.isPrimary,
+          status: 'active'
+        })
+
+      if (error) throw error
+
+      console.log('[Admin] Trainer assigned successfully')
+      setShowAssignTrainerModal(false)
+      setAssignTrainerForm({ clientId: '', trainerId: '', isPrimary: false })
+    } catch (error: any) {
+      console.error('[Admin] Error assigning trainer:', error)
+      setAssignError(error.message || 'Ошибка при назначении тренера')
+    } finally {
+      setAssigningTrainer(false)
+    }
+  }
+
   const getRoleBadgeColor = (role: string) => {
     switch (role) {
       case 'admin':
@@ -381,13 +425,22 @@ export default function AdminDashboardPage() {
                   <h3 className="text-xl font-semibold text-white mb-1">Управление пользователями</h3>
                   <p className="text-gray-400 text-sm">Просмотр и изменение ролей пользователей</p>
                 </div>
-                <button
-                  onClick={openCreateModal}
-                  className="flex items-center gap-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-all"
-                >
-                  <UserPlus size={20} />
-                  <span>Создать пользователя</span>
-                </button>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setShowAssignTrainerModal(true)}
+                    className="flex items-center gap-2 px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-all"
+                  >
+                    <Users size={20} />
+                    <span>Назначить тренера</span>
+                  </button>
+                  <button
+                    onClick={openCreateModal}
+                    className="flex items-center gap-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-all"
+                  >
+                    <UserPlus size={20} />
+                    <span>Создать пользователя</span>
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -626,6 +679,98 @@ export default function AdminDashboardPage() {
                   <>
                     <UserPlus size={18} />
                     <span>Создать</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Assign Trainer Modal */}
+      {showAssignTrainerModal && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-800 rounded-2xl p-6 max-w-md w-full border border-gray-700 shadow-2xl">
+            <h3 className="text-xl font-bold text-white mb-4">Назначить тренера клиенту</h3>
+
+            {assignError && (
+              <div className="mb-4 p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-red-400 text-sm">
+                {assignError}
+              </div>
+            )}
+
+            <div className="space-y-4 mb-6">
+              <div>
+                <label className="block text-gray-400 text-sm mb-2">Клиент: *</label>
+                <select
+                  value={assignTrainerForm.clientId}
+                  onChange={(e) => setAssignTrainerForm({ ...assignTrainerForm, clientId: e.target.value })}
+                  className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+                >
+                  <option value="">-- Выберите клиента --</option>
+                  {users.filter(u => u.role === 'client').map(client => (
+                    <option key={client.id} value={client.id}>
+                      {client.full_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-gray-400 text-sm mb-2">Тренер: *</label>
+                <select
+                  value={assignTrainerForm.trainerId}
+                  onChange={(e) => setAssignTrainerForm({ ...assignTrainerForm, trainerId: e.target.value })}
+                  className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+                >
+                  <option value="">-- Выберите тренера --</option>
+                  {users.filter(u => u.role === 'trainer').map(trainer => (
+                    <option key={trainer.id} value={trainer.id}>
+                      {trainer.full_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="flex items-center gap-3 p-4 bg-gray-700/30 rounded-lg">
+                <input
+                  type="checkbox"
+                  id="isPrimary"
+                  checked={assignTrainerForm.isPrimary}
+                  onChange={(e) => setAssignTrainerForm({ ...assignTrainerForm, isPrimary: e.target.checked })}
+                  className="w-5 h-5 text-primary-500 bg-gray-700 border-gray-600 rounded focus:ring-2 focus:ring-primary-500"
+                />
+                <label htmlFor="isPrimary" className="flex-1">
+                  <span className="text-white font-medium">Основной тренер</span>
+                  <p className="text-gray-400 text-xs mt-1">
+                    Только основной тренер может создавать и редактировать программы
+                  </p>
+                </label>
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowAssignTrainerModal(false)}
+                disabled={assigningTrainer}
+                className="flex-1 px-4 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-all disabled:opacity-50"
+              >
+                Отмена
+              </button>
+              <button
+                onClick={handleAssignTrainer}
+                disabled={assigningTrainer}
+                className="flex-1 px-4 py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {assigningTrainer ? (
+                  <>
+                    <Loader2 size={18} className="animate-spin" />
+                    <span>Назначение...</span>
+                  </>
+                ) : (
+                  <>
+                    <Users size={18} />
+                    <span>Назначить</span>
                   </>
                 )}
               </button>
