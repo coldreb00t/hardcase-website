@@ -197,7 +197,7 @@ export default function AdminDashboardPage() {
     try {
       const { supabase } = await import('@/lib/supabase')
 
-      // Create user via Supabase Admin API
+      // Create user via Supabase (note: will require email confirmation if enabled)
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: createForm.email,
         password: createForm.password,
