@@ -22,36 +22,46 @@ export default function DashboardPage() {
 
   const checkUserAndRedirect = async () => {
     try {
+      console.log('[Dashboard] Checking user and redirecting...')
       const { getCurrentUser, getCurrentProfile } = await import('@/lib/supabase')
 
       const user = await getCurrentUser()
+      console.log('[Dashboard] User:', user ? `Found (${user.email})` : 'Not found')
+
       if (!user) {
+        console.log('[Dashboard] No user, redirecting to /login')
         router.push('/login')
         return
       }
 
       const profile = await getCurrentProfile()
+      console.log('[Dashboard] Profile:', profile ? `Found (${profile.full_name}, role: ${profile.role})` : 'Not found')
+
       if (!profile) {
-        console.error('Profile not found')
+        console.error('[Dashboard] Profile not found for user')
         router.push('/login')
         return
       }
 
       // Redirect based on role
+      console.log('[Dashboard] Redirecting based on role:', profile.role)
       switch (profile.role) {
         case 'admin':
+          console.log('[Dashboard] → /dashboard/admin')
           router.push('/dashboard/admin')
           break
         case 'trainer':
+          console.log('[Dashboard] → /dashboard/trainer')
           router.push('/dashboard/trainer')
           break
         case 'client':
         default:
+          console.log('[Dashboard] → /dashboard/client')
           router.push('/dashboard/client')
           break
       }
     } catch (error) {
-      console.error('Error checking user role:', error)
+      console.error('[Dashboard] Error checking user role:', error)
       router.push('/login')
     } finally {
       setChecking(false)
