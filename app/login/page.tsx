@@ -24,25 +24,33 @@ export default function LoginPage() {
     setLoading(true)
 
     try {
+      console.log('[Login] Starting authentication...')
       // Dynamic import - load Supabase only when needed
       const { signIn, signUp } = await import('@/lib/supabase')
 
       if (mode === 'login') {
-        await signIn(email, password)
+        console.log('[Login] Attempting sign in with:', email)
+        const result = await signIn(email, password)
+        console.log('[Login] Sign in successful:', result.user?.email)
+        console.log('[Login] Redirecting to /dashboard')
         router.push('/dashboard')
       } else {
         // Registration
+        console.log('[Login] Attempting registration for:', email)
         await signUp(email, password, fullName)
 
         // Show success message
-        setError('Проверьте вашу почту для подтверждения регистрации')
+        setError('✅ Проверьте вашу почту для подтверждения регистрации')
         setTimeout(() => {
           setMode('login')
           setError(null)
         }, 3000)
       }
     } catch (err: any) {
-      setError(err.message || 'Произошла ошибка')
+      console.error('[Login] Error:', err)
+      const errorMessage = err.message || 'Произошла ошибка при входе'
+      console.error('[Login] Error message:', errorMessage)
+      setError('❌ ' + errorMessage)
     } finally {
       setLoading(false)
     }
