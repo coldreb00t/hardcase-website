@@ -126,22 +126,32 @@ export default function AdminDashboardPage() {
     try {
       const { supabase } = await import('@/lib/supabase')
 
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('profiles')
         // @ts-ignore - Admin can update any profile role
         .update({ role: newRole })
         .eq('id', selectedUser.id)
+        .select()
 
-      if (error) throw error
+      if (error) {
+        console.error('[Admin] Error updating role:', error)
+        alert(`Ошибка при изменении роли: ${error.message}\n\nВозможно, нужно применить миграцию 20250101000006_admin_update_profiles.sql`)
+        return
+      }
+
+      if (!data || data.length === 0) {
+        alert('Обновление не удалось. Проверьте RLS политики.')
+        return
+      }
 
       console.log(`[Admin] Updated role for ${selectedUser.full_name} to ${newRole}`)
 
       // Reload users
       await loadUsers()
       closeRoleModal()
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error updating role:', error)
-      alert('Ошибка при изменении роли')
+      alert(`Ошибка: ${error.message || 'Неизвестная ошибка'}`)
     } finally {
       setUpdatingRole(false)
     }
@@ -204,14 +214,46 @@ export default function AdminDashboardPage() {
         throw new Error('User creation failed')
       }
 
+      console.log('[Admin] User created, waiting for profile trigger...')
+
+      // Wait for trigger to create profile (max 5 seconds)
+      let profile = null
+      for (let i = 0; i < 10; i++) {
+        await new Promise(resolve => setTimeout(resolve, 500))
+
+        const { data } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('user_id', authData.user.id)
+          .single()
+
+        if (data) {
+          profile = data
+          console.log('[Admin] Profile created by trigger')
+          break
+        }
+      }
+
+      if (!profile) {
+        throw new Error('Profile was not created by trigger')
+      }
+
       // Update profile role (trigger creates profile with 'client' role by default)
-      const { error: updateError } = await supabase
+      const { data: updateData, error: updateError } = await supabase
         .from('profiles')
         // @ts-ignore - Admin creating user with specific role
         .update({ role: createForm.role })
         .eq('user_id', authData.user.id)
+        .select()
 
-      if (updateError) throw updateError
+      if (updateError) {
+        console.error('[Admin] Error updating role:', updateError)
+        throw new Error(`Пользователь создан, но не удалось установить роль: ${updateError.message}`)
+      }
+
+      if (!updateData || updateData.length === 0) {
+        throw new Error('Пользователь создан, но не удалось установить роль. Проверьте RLS политики.')
+      }
 
       console.log(`[Admin] Created ${createForm.role}: ${createForm.email}`)
 
