@@ -2,10 +2,15 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Users, Dumbbell, Apple, MessageSquare, LogOut, Loader2 } from 'lucide-react'
+import { Users, Dumbbell, Apple, MessageSquare, LogOut, Loader2, UserPlus, Calendar, TrendingUp } from 'lucide-react'
 import type { Database } from '@/supabase/types/database.types'
 
 type Profile = Database['public']['Tables']['profiles']['Row']
+type TrainerClientRelationship = Database['public']['Tables']['trainer_client_relationships']['Row']
+
+type ClientWithProfile = TrainerClientRelationship & {
+  client: Profile
+}
 
 /**
  * Trainer Dashboard
@@ -21,6 +26,16 @@ export default function TrainerDashboardPage() {
   const [loading, setLoading] = useState(true)
   const [profile, setProfile] = useState<Profile | null>(null)
   const [email, setEmail] = useState<string>('')
+
+  // Data states
+  const [clients, setClients] = useState<ClientWithProfile[]>([])
+  const [stats, setStats] = useState({
+    totalClients: 0,
+    activeClients: 0,
+    totalPrograms: 0,
+    totalNutritionPlans: 0
+  })
+  const [loadingData, setLoadingData] = useState(false)
 
   useEffect(() => {
     checkUser()
@@ -54,11 +69,63 @@ export default function TrainerDashboardPage() {
 
       console.log('[Trainer Dashboard] Access granted! Loading trainer dashboard...')
       setProfile(userProfile)
+
+      // Load trainer data
+      await loadTrainerData(userProfile.id)
     } catch (error) {
       console.error('[Trainer Dashboard] Error loading user:', error)
       router.push('/login')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const loadTrainerData = async (trainerId: string) => {
+    setLoadingData(true)
+    try {
+      const { supabase } = await import('@/lib/supabase')
+
+      // Load clients with their profiles
+      const { data: clientRelationships, error: clientsError } = await supabase
+        .from('trainer_client_relationships')
+        .select(`
+          *,
+          client:profiles!trainer_client_relationships_client_id_fkey(*)
+        `)
+        .eq('trainer_id', trainerId)
+        .order('created_at', { ascending: false })
+
+      if (clientsError) throw clientsError
+
+      const clientsWithProfiles = (clientRelationships || []) as unknown as ClientWithProfile[]
+      setClients(clientsWithProfiles)
+
+      // Count active clients
+      const activeClients = clientsWithProfiles.filter(c => c.status === 'active').length
+
+      // Count workout programs created by this trainer
+      const { count: programsCount } = await supabase
+        .from('workout_programs')
+        .select('*', { count: 'exact', head: true })
+        .eq('trainer_id', trainerId)
+
+      // Count nutrition plans created by this trainer
+      const { count: nutritionCount } = await supabase
+        .from('nutrition_targets')
+        .select('*', { count: 'exact', head: true })
+        .eq('trainer_id', trainerId)
+
+      setStats({
+        totalClients: clientsWithProfiles.length,
+        activeClients,
+        totalPrograms: programsCount || 0,
+        totalNutritionPlans: nutritionCount || 0
+      })
+
+    } catch (error) {
+      console.error('[Trainer Dashboard] Error loading data:', error)
+    } finally {
+      setLoadingData(false)
     }
   }
 
@@ -117,67 +184,100 @@ export default function TrainerDashboardPage() {
           <div className="grid md:grid-cols-4 gap-6">
             <div className="bg-gray-800/50 backdrop-blur-lg rounded-2xl p-6 border border-gray-700/50">
               <Users className="text-primary-500 mb-3" size={32} />
-              <div className="text-3xl font-bold text-white mb-1">0</div>
+              <div className="text-3xl font-bold text-white mb-1">
+                {loadingData ? <Loader2 className="w-8 h-8 animate-spin" /> : stats.activeClients}
+              </div>
               <p className="text-gray-400 text-sm">Активных клиентов</p>
             </div>
             <div className="bg-gray-800/50 backdrop-blur-lg rounded-2xl p-6 border border-gray-700/50">
               <Dumbbell className="text-green-500 mb-3" size={32} />
-              <div className="text-3xl font-bold text-white mb-1">0</div>
+              <div className="text-3xl font-bold text-white mb-1">
+                {loadingData ? <Loader2 className="w-8 h-8 animate-spin" /> : stats.totalPrograms}
+              </div>
               <p className="text-gray-400 text-sm">Программ тренировок</p>
             </div>
             <div className="bg-gray-800/50 backdrop-blur-lg rounded-2xl p-6 border border-gray-700/50">
               <Apple className="text-yellow-500 mb-3" size={32} />
-              <div className="text-3xl font-bold text-white mb-1">0</div>
+              <div className="text-3xl font-bold text-white mb-1">
+                {loadingData ? <Loader2 className="w-8 h-8 animate-spin" /> : stats.totalNutritionPlans}
+              </div>
               <p className="text-gray-400 text-sm">Планов питания</p>
             </div>
             <div className="bg-gray-800/50 backdrop-blur-lg rounded-2xl p-6 border border-gray-700/50">
-              <MessageSquare className="text-blue-500 mb-3" size={32} />
-              <div className="text-3xl font-bold text-white mb-1">0</div>
-              <p className="text-gray-400 text-sm">Сообщений</p>
+              <Users className="text-blue-500 mb-3" size={32} />
+              <div className="text-3xl font-bold text-white mb-1">
+                {loadingData ? <Loader2 className="w-8 h-8 animate-spin" /> : stats.totalClients}
+              </div>
+              <p className="text-gray-400 text-sm">Всего клиентов</p>
             </div>
           </div>
 
-          {/* Feature Sections */}
-          <div className="grid md:grid-cols-2 gap-6">
-            {[
-              {
-                title: 'Мои клиенты',
-                icon: '👥',
-                description: 'Управление списком клиентов и их прогрессом',
-                color: 'from-blue-500 to-blue-600'
-              },
-              {
-                title: 'Программы тренировок',
-                icon: '💪',
-                description: 'Создание и назначение программ тренировок',
-                color: 'from-green-500 to-green-600'
-              },
-              {
-                title: 'Планы питания',
-                icon: '🥗',
-                description: 'Расчет КБЖУ и назначение планов питания',
-                color: 'from-yellow-500 to-yellow-600'
-              },
-              {
-                title: 'Прогресс клиентов',
-                icon: '📊',
-                description: 'Просмотр замеров, фото и создание отчетов',
-                color: 'from-purple-500 to-purple-600'
-              },
-            ].map((item, index) => (
-              <div
-                key={item.title}
-                className={`bg-gradient-to-r ${item.color} rounded-2xl p-6 text-white shadow-lg animate-fade-in-up cursor-pointer hover:scale-105 transition-transform`}
-                style={{ animationDelay: `${0.2 + index * 0.1}s` }}
-              >
-                <div className="text-4xl mb-3">{item.icon}</div>
-                <h3 className="text-xl font-bold mb-2">{item.title}</h3>
-                <p className="text-white/80 text-sm mb-4">{item.description}</p>
-                <span className="inline-block px-3 py-1 bg-white/20 rounded-full text-xs font-medium">
-                  Скоро
-                </span>
+          {/* Clients List */}
+          <div className="bg-gray-800/50 backdrop-blur-lg rounded-2xl border border-gray-700/50 overflow-hidden">
+            <div className="p-6 border-b border-gray-700/50">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Users className="text-primary-500" size={24} />
+                  <div>
+                    <h3 className="text-xl font-semibold text-white">Мои клиенты</h3>
+                    <p className="text-gray-400 text-sm">Управление списком клиентов</p>
+                  </div>
+                </div>
+                <button className="flex items-center gap-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-all">
+                  <UserPlus size={20} />
+                  <span>Добавить клиента</span>
+                </button>
               </div>
-            ))}
+            </div>
+
+            {loadingData ? (
+              <div className="p-12 text-center">
+                <Loader2 className="w-8 h-8 text-primary-500 animate-spin mx-auto mb-3" />
+                <p className="text-gray-400">Загрузка клиентов...</p>
+              </div>
+            ) : clients.length === 0 ? (
+              <div className="p-12 text-center">
+                <Users className="w-12 h-12 text-gray-600 mx-auto mb-3" />
+                <p className="text-gray-400">Пока нет клиентов</p>
+                <p className="text-gray-500 text-sm mt-1">Добавьте первого клиента чтобы начать работу</p>
+              </div>
+            ) : (
+              <div className="divide-y divide-gray-700/50">
+                {clients.map((relationship) => (
+                  <div key={relationship.id} className="p-6 hover:bg-gray-700/20 transition-colors">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 bg-primary-500/20 rounded-full flex items-center justify-center">
+                          <Users className="text-primary-500" size={24} />
+                        </div>
+                        <div>
+                          <h4 className="text-white font-medium">{relationship.client.full_name}</h4>
+                          <div className="flex items-center gap-4 mt-1">
+                            <span className={`text-xs px-2 py-1 rounded-full ${
+                              relationship.status === 'active'
+                                ? 'bg-green-500/20 text-green-400'
+                                : relationship.status === 'paused'
+                                ? 'bg-yellow-500/20 text-yellow-400'
+                                : 'bg-gray-500/20 text-gray-400'
+                            }`}>
+                              {relationship.status === 'active' ? 'Активен' :
+                               relationship.status === 'paused' ? 'Пауза' : 'Завершен'}
+                            </span>
+                            <span className="text-gray-400 text-xs flex items-center gap-1">
+                              <Calendar size={12} />
+                              С {new Date(relationship.started_at).toLocaleDateString('ru-RU')}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <button className="px-4 py-2 text-primary-400 hover:text-primary-300 transition-colors">
+                        Подробнее →
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </main>
