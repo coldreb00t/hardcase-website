@@ -29,6 +29,7 @@ export default function TrainerDashboardPage() {
 
   // Data states
   const [clients, setClients] = useState<ClientWithProfile[]>([])
+  const [allClients, setAllClients] = useState<Profile[]>([]) // All clients for adding
   const [stats, setStats] = useState({
     totalClients: 0,
     activeClients: 0,
@@ -36,6 +37,31 @@ export default function TrainerDashboardPage() {
     totalNutritionPlans: 0
   })
   const [loadingData, setLoadingData] = useState(false)
+
+  // Modal states
+  const [showAddClientModal, setShowAddClientModal] = useState(false)
+  const [showCreateProgramModal, setShowCreateProgramModal] = useState(false)
+  const [showCreateNutritionModal, setShowCreateNutritionModal] = useState(false)
+  const [selectedClient, setSelectedClient] = useState<ClientWithProfile | null>(null)
+
+  // Form states
+  const [addClientForm, setAddClientForm] = useState({ clientId: '' })
+  const [programForm, setProgramForm] = useState({
+    clientId: '',
+    title: '',
+    description: '',
+    startDate: new Date().toISOString().split('T')[0]
+  })
+  const [nutritionForm, setNutritionForm] = useState({
+    clientId: '',
+    calories: '',
+    protein: '',
+    fats: '',
+    carbs: ''
+  })
+
+  const [submitting, setSubmitting] = useState(false)
+  const [formError, setFormError] = useState<string | null>(null)
 
   useEffect(() => {
     checkUser()
@@ -122,11 +148,154 @@ export default function TrainerDashboardPage() {
         totalNutritionPlans: nutritionCount || 0
       })
 
+      // Load all clients for the "Add Client" dropdown
+      const { data: allClientsData } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('role', 'client')
+        .order('full_name', { ascending: true })
+
+      if (allClientsData) setAllClients(allClientsData)
+
     } catch (error) {
       console.error('[Trainer Dashboard] Error loading data:', error)
     } finally {
       setLoadingData(false)
     }
+  }
+
+  const handleAddClient = async () => {
+    setFormError(null)
+    if (!addClientForm.clientId) {
+      setFormError('Выберите клиента')
+      return
+    }
+
+    setSubmitting(true)
+    try {
+      const { supabase } = await import('@/lib/supabase')
+
+      const { error } = await supabase
+        .from('trainer_client_relationships')
+        // @ts-ignore - Trainer adding client relationship
+        .insert({
+          trainer_id: profile!.id,
+          client_id: addClientForm.clientId,
+          status: 'active'
+        })
+
+      if (error) throw error
+
+      console.log('[Trainer] Client added successfully')
+      await loadTrainerData(profile!.id)
+      setShowAddClientModal(false)
+      setAddClientForm({ clientId: '' })
+    } catch (error: any) {
+      console.error('[Trainer] Error adding client:', error)
+      setFormError(error.message || 'Ошибка при добавлении клиента')
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  const handleCreateProgram = async () => {
+    setFormError(null)
+    if (!programForm.clientId || !programForm.title) {
+      setFormError('Заполните все обязательные поля')
+      return
+    }
+
+    setSubmitting(true)
+    try {
+      const { supabase } = await import('@/lib/supabase')
+
+      const { error } = await supabase
+        .from('workout_programs')
+        // @ts-ignore - Trainer creating workout program
+        .insert({
+          client_id: programForm.clientId,
+          trainer_id: profile!.id,
+          title: programForm.title,
+          description: programForm.description || null,
+          start_date: programForm.startDate,
+          status: 'active'
+        })
+
+      if (error) throw error
+
+      console.log('[Trainer] Program created successfully')
+      await loadTrainerData(profile!.id)
+      setShowCreateProgramModal(false)
+      setProgramForm({
+        clientId: '',
+        title: '',
+        description: '',
+        startDate: new Date().toISOString().split('T')[0]
+      })
+    } catch (error: any) {
+      console.error('[Trainer] Error creating program:', error)
+      setFormError(error.message || 'Ошибка при создании программы')
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  const handleCreateNutrition = async () => {
+    setFormError(null)
+    if (!nutritionForm.clientId || !nutritionForm.calories || !nutritionForm.protein || !nutritionForm.fats || !nutritionForm.carbs) {
+      setFormError('Заполните все поля')
+      return
+    }
+
+    setSubmitting(true)
+    try {
+      const { supabase } = await import('@/lib/supabase')
+
+      const { error } = await supabase
+        .from('nutrition_targets')
+        // @ts-ignore - Trainer creating nutrition plan
+        .insert({
+          client_id: nutritionForm.clientId,
+          trainer_id: profile!.id,
+          calories: parseInt(nutritionForm.calories),
+          protein_grams: parseInt(nutritionForm.protein),
+          fats_grams: parseInt(nutritionForm.fats),
+          carbs_grams: parseInt(nutritionForm.carbs),
+          valid_from: new Date().toISOString().split('T')[0]
+        })
+
+      if (error) throw error
+
+      console.log('[Trainer] Nutrition plan created successfully')
+      await loadTrainerData(profile!.id)
+      setShowCreateNutritionModal(false)
+      setNutritionForm({
+        clientId: '',
+        calories: '',
+        protein: '',
+        fats: '',
+        carbs: ''
+      })
+    } catch (error: any) {
+      console.error('[Trainer] Error creating nutrition plan:', error)
+      setFormError(error.message || 'Ошибка при создании плана питания')
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  const openCreateProgramModal = (client: ClientWithProfile) => {
+    setSelectedClient(client)
+    setProgramForm({ ...programForm, clientId: client.client_id })
+    setFormError(null)
+    setShowCreateProgramModal(true)
+  }
+
+  const openCreateNutritionModal = (client: ClientWithProfile) => {
+    setSelectedClient(client)
+    setNutritionForm({ ...nutritionForm, clientId: client.client_id })
+    setFormError(null)
+    setShowCreateNutritionModal(true)
   }
 
   const handleLogout = async () => {
@@ -223,7 +392,10 @@ export default function TrainerDashboardPage() {
                     <p className="text-gray-400 text-sm">Управление списком клиентов</p>
                   </div>
                 </div>
-                <button className="flex items-center gap-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-all">
+                <button
+                  onClick={() => setShowAddClientModal(true)}
+                  className="flex items-center gap-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-all"
+                >
                   <UserPlus size={20} />
                   <span>Добавить клиента</span>
                 </button>
@@ -270,9 +442,22 @@ export default function TrainerDashboardPage() {
                           </div>
                         </div>
                       </div>
-                      <button className="px-4 py-2 text-primary-400 hover:text-primary-300 transition-colors">
-                        Подробнее →
-                      </button>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => openCreateProgramModal(relationship)}
+                          className="px-3 py-2 bg-green-500/20 text-green-400 hover:bg-green-500/30 rounded-lg transition-all text-sm flex items-center gap-1"
+                        >
+                          <Dumbbell size={16} />
+                          Программа
+                        </button>
+                        <button
+                          onClick={() => openCreateNutritionModal(relationship)}
+                          className="px-3 py-2 bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500/30 rounded-lg transition-all text-sm flex items-center gap-1"
+                        >
+                          <Apple size={16} />
+                          Питание
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -281,6 +466,245 @@ export default function TrainerDashboardPage() {
           </div>
         </div>
       </main>
+
+      {/* Add Client Modal */}
+      {showAddClientModal && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-800 rounded-2xl p-6 max-w-md w-full border border-gray-700 shadow-2xl">
+            <h3 className="text-xl font-bold text-white mb-4">Добавить клиента</h3>
+
+            {formError && (
+              <div className="mb-4 p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-red-400 text-sm">
+                {formError}
+              </div>
+            )}
+
+            <div className="space-y-4 mb-6">
+              <div>
+                <label className="block text-gray-400 text-sm mb-2">Выберите клиента:</label>
+                <select
+                  value={addClientForm.clientId}
+                  onChange={(e) => setAddClientForm({ clientId: e.target.value })}
+                  className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+                >
+                  <option value="">-- Выберите клиента --</option>
+                  {allClients
+                    .filter(client => !clients.some(c => c.client_id === client.id))
+                    .map(client => (
+                      <option key={client.id} value={client.id}>
+                        {client.full_name}
+                      </option>
+                    ))}
+                </select>
+                <p className="text-gray-500 text-xs mt-1">
+                  Показаны только клиенты, которые еще не добавлены
+                </p>
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowAddClientModal(false)}
+                disabled={submitting}
+                className="flex-1 px-4 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-all disabled:opacity-50"
+              >
+                Отмена
+              </button>
+              <button
+                onClick={handleAddClient}
+                disabled={submitting}
+                className="flex-1 px-4 py-3 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {submitting ? (
+                  <>
+                    <Loader2 size={18} className="animate-spin" />
+                    <span>Добавление...</span>
+                  </>
+                ) : (
+                  <>
+                    <UserPlus size={18} />
+                    <span>Добавить</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Create Program Modal */}
+      {showCreateProgramModal && selectedClient && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-800 rounded-2xl p-6 max-w-md w-full border border-gray-700 shadow-2xl">
+            <h3 className="text-xl font-bold text-white mb-4">Создать программу тренировок</h3>
+
+            <div className="mb-4">
+              <p className="text-gray-400 text-sm">Клиент:</p>
+              <p className="text-white font-medium">{selectedClient.client.full_name}</p>
+            </div>
+
+            {formError && (
+              <div className="mb-4 p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-red-400 text-sm">
+                {formError}
+              </div>
+            )}
+
+            <div className="space-y-4 mb-6">
+              <div>
+                <label className="block text-gray-400 text-sm mb-2">Название программы: *</label>
+                <input
+                  type="text"
+                  value={programForm.title}
+                  onChange={(e) => setProgramForm({ ...programForm, title: e.target.value })}
+                  placeholder="Например: Набор массы - 12 недель"
+                  className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-gray-400 text-sm mb-2">Описание:</label>
+                <textarea
+                  value={programForm.description}
+                  onChange={(e) => setProgramForm({ ...programForm, description: e.target.value })}
+                  placeholder="Краткое описание программы..."
+                  rows={3}
+                  className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-gray-400 text-sm mb-2">Дата начала:</label>
+                <input
+                  type="date"
+                  value={programForm.startDate}
+                  onChange={(e) => setProgramForm({ ...programForm, startDate: e.target.value })}
+                  className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+                />
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowCreateProgramModal(false)}
+                disabled={submitting}
+                className="flex-1 px-4 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-all disabled:opacity-50"
+              >
+                Отмена
+              </button>
+              <button
+                onClick={handleCreateProgram}
+                disabled={submitting}
+                className="flex-1 px-4 py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {submitting ? (
+                  <>
+                    <Loader2 size={18} className="animate-spin" />
+                    <span>Создание...</span>
+                  </>
+                ) : (
+                  <>
+                    <Dumbbell size={18} />
+                    <span>Создать</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Create Nutrition Plan Modal */}
+      {showCreateNutritionModal && selectedClient && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-800 rounded-2xl p-6 max-w-md w-full border border-gray-700 shadow-2xl">
+            <h3 className="text-xl font-bold text-white mb-4">Создать план питания</h3>
+
+            <div className="mb-4">
+              <p className="text-gray-400 text-sm">Клиент:</p>
+              <p className="text-white font-medium">{selectedClient.client.full_name}</p>
+            </div>
+
+            {formError && (
+              <div className="mb-4 p-3 bg-red-500/20 border border-red-500/50 rounded-lg text-red-400 text-sm">
+                {formError}
+              </div>
+            )}
+
+            <div className="space-y-4 mb-6">
+              <div>
+                <label className="block text-gray-400 text-sm mb-2">Калории в день: *</label>
+                <input
+                  type="number"
+                  value={nutritionForm.calories}
+                  onChange={(e) => setNutritionForm({ ...nutritionForm, calories: e.target.value })}
+                  placeholder="2000"
+                  className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                />
+              </div>
+
+              <div className="grid grid-cols-3 gap-3">
+                <div>
+                  <label className="block text-gray-400 text-xs mb-2">Белки (г): *</label>
+                  <input
+                    type="number"
+                    value={nutritionForm.protein}
+                    onChange={(e) => setNutritionForm({ ...nutritionForm, protein: e.target.value })}
+                    placeholder="150"
+                    className="w-full px-3 py-2 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-400 text-xs mb-2">Жиры (г): *</label>
+                  <input
+                    type="number"
+                    value={nutritionForm.fats}
+                    onChange={(e) => setNutritionForm({ ...nutritionForm, fats: e.target.value })}
+                    placeholder="60"
+                    className="w-full px-3 py-2 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-400 text-xs mb-2">Углеводы (г): *</label>
+                  <input
+                    type="number"
+                    value={nutritionForm.carbs}
+                    onChange={(e) => setNutritionForm({ ...nutritionForm, carbs: e.target.value })}
+                    placeholder="200"
+                    className="w-full px-3 py-2 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowCreateNutritionModal(false)}
+                disabled={submitting}
+                className="flex-1 px-4 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-all disabled:opacity-50"
+              >
+                Отмена
+              </button>
+              <button
+                onClick={handleCreateNutrition}
+                disabled={submitting}
+                className="flex-1 px-4 py-3 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {submitting ? (
+                  <>
+                    <Loader2 size={18} className="animate-spin" />
+                    <span>Создание...</span>
+                  </>
+                ) : (
+                  <>
+                    <Apple size={18} />
+                    <span>Создать</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <style jsx>{`
         @keyframes fade-in {
