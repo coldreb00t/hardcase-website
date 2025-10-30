@@ -35,36 +35,77 @@ export default function ChatBox({
 
   useEffect(() => {
     loadMessages()
+    
     // Set up real-time subscription
     const setupRealtimeSubscription = async () => {
       const { supabase } = await import('@/lib/supabase')
 
+      // Подписка на входящие сообщения от собеседника
       const channel = supabase
-        .channel('messages')
+        .channel(`messages-${currentUserId}-${otherUserId}`)
         .on(
           'postgres_changes',
           {
-            event: '*',
+            event: 'INSERT',
             schema: 'public',
             table: 'messages',
-            filter: `sender_id=eq.${otherUserId},receiver_id=eq.${currentUserId}`
+            filter: `sender_id=eq.${otherUserId}`
           },
           (payload) => {
-            console.log('[Chat] New message received:', payload)
-            if (payload.eventType === 'INSERT') {
-              setMessages((prev) => [...prev, payload.new as Message])
+            console.log('[Chat] Realtime event received:', payload)
+            const newMessage = payload.new as Message
+            
+            // Проверяем, что сообщение действительно нам
+            if (newMessage.receiver_id === currentUserId) {
+              console.log('[Chat] ✅ New message for us:', newMessage)
+              setMessages((prev) => [...prev, newMessage])
               markMessagesAsRead()
+            } else {
+              console.log('[Chat] ⚠️ Message not for us, ignoring')
             }
           }
         )
-        .subscribe()
+        .on(
+          'postgres_changes',
+          {
+            event: 'UPDATE',
+            schema: 'public',
+            table: 'messages',
+            filter: `sender_id=eq.${currentUserId}`
+          },
+          (payload) => {
+            // Обновление статуса прочитанности наших сообщений
+            const updated = payload.new as Message
+            if (updated.receiver_id === otherUserId) {
+              console.log('[Chat] Message read status updated:', updated)
+              setMessages((prev) =>
+                prev.map((msg) => (msg.id === updated.id ? updated : msg))
+              )
+            }
+          }
+        )
+        .subscribe((status) => {
+          console.log('[Realtime] Subscription status:', status)
+          if (status === 'SUBSCRIBED') {
+            console.log('[Realtime] ✅ Successfully subscribed to messages')
+          } else if (status === 'CHANNEL_ERROR') {
+            console.error('[Realtime] ❌ Channel error')
+          } else if (status === 'TIMED_OUT') {
+            console.error('[Realtime] ❌ Connection timed out')
+          }
+        })
 
       return () => {
+        console.log('[Realtime] Unsubscribing from messages channel')
         supabase.removeChannel(channel)
       }
     }
 
-    setupRealtimeSubscription()
+    const cleanup = setupRealtimeSubscription()
+    
+    return () => {
+      cleanup.then((cleanupFn) => cleanupFn())
+    }
   }, [currentUserId, otherUserId])
 
   useEffect(() => {

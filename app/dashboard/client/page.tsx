@@ -122,26 +122,28 @@ export default function ClientDashboardPage() {
       if (programs) setWorkoutPrograms(programs)
 
       // Load nutrition target
-      const { data: target } = await supabase
+      const { data: targets } = await supabase
         .from('nutrition_targets')
         .select('*')
         .eq('client_id', profileId)
         .order('created_at', { ascending: false })
         .limit(1)
-        .single()
 
-      if (target) setNutritionTarget(target)
+      if (targets && targets.length > 0) {
+        setNutritionTarget(targets[0])
+      }
 
       // Load latest measurement
-      const { data: measurement } = await supabase
+      const { data: measurements } = await supabase
         .from('client_measurements')
         .select('*')
         .eq('client_id', profileId)
         .order('measured_at', { ascending: false })
         .limit(1)
-        .single()
 
-      if (measurement) setLatestMeasurement(measurement)
+      if (measurements && measurements.length > 0) {
+        setLatestMeasurement(measurements[0])
+      }
 
     } catch (error) {
       console.error('[Client Dashboard] Error loading data:', error)
