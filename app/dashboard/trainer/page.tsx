@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Users, Dumbbell, Apple, MessageSquare, LogOut, Loader2, Calendar, TrendingUp, MessageCircle } from 'lucide-react'
 import type { Database } from '@/supabase/types/database.types'
 import ChatBox from '@/components/ChatBox'
+import ProgramConstructor from '@/components/ProgramConstructor'
 
 type Profile = Database['public']['Tables']['profiles']['Row']
 type TrainerClientRelationship = Database['public']['Tables']['trainer_client_relationships']['Row']
@@ -157,10 +158,10 @@ export default function TrainerDashboardPage() {
     }
   }
 
-  const handleCreateProgram = async () => {
+  const handleSaveProgram = async (programData: any) => {
     setFormError(null)
-    if (!programForm.clientId || !programForm.title) {
-      setFormError('Заполните все обязательные поля')
+    if (!programForm.title) {
+      setFormError('Укажите название программы')
       return
     }
 
@@ -177,7 +178,8 @@ export default function TrainerDashboardPage() {
           title: programForm.title,
           description: programForm.description || null,
           start_date: programForm.startDate,
-          status: 'active'
+          status: 'active',
+          program_data: programData
         })
 
       if (error) throw error
@@ -470,13 +472,16 @@ export default function TrainerDashboardPage() {
 
       {/* Create Program Modal */}
       {showCreateProgramModal && selectedClient && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-800 rounded-2xl p-6 max-w-md w-full border border-gray-700 shadow-2xl">
-            <h3 className="text-xl font-bold text-white mb-4">Создать программу тренировок</h3>
-
-            <div className="mb-4">
-              <p className="text-gray-400 text-sm">Клиент:</p>
-              <p className="text-white font-medium">{selectedClient.client.full_name}</p>
+        <div className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-y-auto">
+          <div className="bg-gray-800 rounded-2xl p-6 max-w-5xl w-full border border-gray-700 shadow-2xl my-8">
+            <div className="mb-6">
+              <h3 className="text-2xl font-bold text-white mb-2">Создать программу тренировок</h3>
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-gray-400 text-sm">Клиент:</p>
+                  <p className="text-white font-medium">{selectedClient.client.full_name}</p>
+                </div>
+              </div>
             </div>
 
             {formError && (
@@ -486,64 +491,45 @@ export default function TrainerDashboardPage() {
             )}
 
             <div className="space-y-4 mb-6">
-              <div>
-                <label className="block text-gray-400 text-sm mb-2">Название программы: *</label>
-                <input
-                  type="text"
-                  value={programForm.title}
-                  onChange={(e) => setProgramForm({ ...programForm, title: e.target.value })}
-                  placeholder="Например: Набор массы - 12 недель"
-                  className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
-                />
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-gray-400 text-sm mb-2">Название программы: *</label>
+                  <input
+                    type="text"
+                    value={programForm.title}
+                    onChange={(e) => setProgramForm({ ...programForm, title: e.target.value })}
+                    placeholder="Например: Набор массы - 12 недель"
+                    className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-400 text-sm mb-2">Дата начала:</label>
+                  <input
+                    type="date"
+                    value={programForm.startDate}
+                    onChange={(e) => setProgramForm({ ...programForm, startDate: e.target.value })}
+                    className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  />
+                </div>
               </div>
 
               <div>
-                <label className="block text-gray-400 text-sm mb-2">Описание:</label>
+                <label className="block text-gray-400 text-sm mb-2">Краткое описание:</label>
                 <textarea
                   value={programForm.description}
                   onChange={(e) => setProgramForm({ ...programForm, description: e.target.value })}
                   placeholder="Краткое описание программы..."
-                  rows={3}
+                  rows={2}
                   className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500"
-                />
-              </div>
-
-              <div>
-                <label className="block text-gray-400 text-sm mb-2">Дата начала:</label>
-                <input
-                  type="date"
-                  value={programForm.startDate}
-                  onChange={(e) => setProgramForm({ ...programForm, startDate: e.target.value })}
-                  className="w-full px-4 py-3 bg-gray-700/50 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
                 />
               </div>
             </div>
 
-            <div className="flex gap-3">
-              <button
-                onClick={() => setShowCreateProgramModal(false)}
-                disabled={submitting}
-                className="flex-1 px-4 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-all disabled:opacity-50"
-              >
-                Отмена
-              </button>
-              <button
-                onClick={handleCreateProgram}
-                disabled={submitting}
-                className="flex-1 px-4 py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-all disabled:opacity-50 flex items-center justify-center gap-2"
-              >
-                {submitting ? (
-                  <>
-                    <Loader2 size={18} className="animate-spin" />
-                    <span>Создание...</span>
-                  </>
-                ) : (
-                  <>
-                    <Dumbbell size={18} />
-                    <span>Создать</span>
-                  </>
-                )}
-              </button>
+            <div className="border-t border-gray-700 pt-6">
+              <ProgramConstructor
+                onSave={handleSaveProgram}
+                onCancel={() => setShowCreateProgramModal(false)}
+              />
             </div>
           </div>
         </div>
