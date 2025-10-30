@@ -34,15 +34,15 @@ export default function ChatBox({
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   // Функция прокрутки к последнему сообщению
-  const scrollToBottom = useRef((instant = false) => {
+  const scrollToBottom = (instant = false) => {
     // Небольшая задержка, чтобы DOM успел обновиться
     setTimeout(() => {
-      messagesEndRef.current?.scrollIntoView({ 
+      messagesEndRef.current?.scrollIntoView({
         behavior: instant ? 'auto' : 'smooth',
         block: 'end'
       })
     }, 100)
-  })
+  }
 
   useEffect(() => {
     loadMessages()
@@ -73,7 +73,7 @@ export default function ChatBox({
               markMessagesAsRead()
               
               // Прокрутка к новому сообщению (плавно)
-              scrollToBottom.current()
+              scrollToBottom()
             } else {
               console.log('[Chat] ⚠️ Message not for us, ignoring')
             }
@@ -124,7 +124,7 @@ export default function ChatBox({
 
   useEffect(() => {
     // Прокрутка к последнему сообщению при изменении списка
-    scrollToBottom.current()
+    scrollToBottom()
   }, [messages])
 
   const loadMessages = async () => {
@@ -144,9 +144,9 @@ export default function ChatBox({
 
       // Mark messages as read
       await markMessagesAsRead()
-      
+
       // Прокрутка к последнему сообщению (мгновенно при первой загрузке)
-      scrollToBottom.current(true)
+      scrollToBottom(true)
     } catch (error) {
       console.error('[Chat] Error loading messages:', error)
     } finally {
