@@ -33,6 +33,17 @@ export default function ChatBox({
   const [sending, setSending] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
+  // Функция прокрутки к последнему сообщению
+  const scrollToBottom = useRef((instant = false) => {
+    // Небольшая задержка, чтобы DOM успел обновиться
+    setTimeout(() => {
+      messagesEndRef.current?.scrollIntoView({ 
+        behavior: instant ? 'auto' : 'smooth',
+        block: 'end'
+      })
+    }, 100)
+  })
+
   useEffect(() => {
     loadMessages()
     
@@ -60,6 +71,9 @@ export default function ChatBox({
               console.log('[Chat] ✅ New message for us:', newMessage)
               setMessages((prev) => [...prev, newMessage])
               markMessagesAsRead()
+              
+              // Прокрутка к новому сообщению (плавно)
+              scrollToBottom.current()
             } else {
               console.log('[Chat] ⚠️ Message not for us, ignoring')
             }
@@ -109,12 +123,9 @@ export default function ChatBox({
   }, [currentUserId, otherUserId])
 
   useEffect(() => {
-    scrollToBottom()
+    // Прокрутка к последнему сообщению при изменении списка
+    scrollToBottom.current()
   }, [messages])
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }
 
   const loadMessages = async () => {
     setLoading(true)
@@ -133,6 +144,9 @@ export default function ChatBox({
 
       // Mark messages as read
       await markMessagesAsRead()
+      
+      // Прокрутка к последнему сообщению (мгновенно при первой загрузке)
+      scrollToBottom.current(true)
     } catch (error) {
       console.error('[Chat] Error loading messages:', error)
     } finally {
@@ -181,6 +195,9 @@ export default function ChatBox({
 
       setMessages((prev) => [...prev, data])
       setNewMessage('')
+      
+      // Прокрутка к новому сообщению (плавно)
+      scrollToBottom()
     } catch (error) {
       console.error('[Chat] Error sending message:', error)
     } finally {
