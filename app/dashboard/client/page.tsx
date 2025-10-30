@@ -342,23 +342,44 @@ export default function ClientDashboardPage() {
                     return (
                       <div key={program.id} className="bg-gray-900/50 rounded-lg p-4">
                         <h4 className="text-white font-medium mb-2">{program.title}</h4>
-                        <p className="text-gray-400 text-xs mb-3">
-                          {program.start_date ? new Date(program.start_date).toLocaleDateString('ru-RU') : 'Дата не указана'}
-                        </p>
                         
-                        {todayWorkout && (
-                          <div className="mb-3 p-3 bg-primary-500/10 border border-primary-500/30 rounded-lg">
-                            <p className="text-primary-400 text-xs font-medium mb-1">Сегодня:</p>
-                            <p className="text-white text-sm font-medium">{todayWorkout.title}</p>
-                            <p className="text-gray-400 text-xs">{todayWorkout.exercises?.length || 0} упражнений</p>
+                        {todayWorkout ? (
+                          <div className="space-y-3">
+                            <div className="flex items-center justify-between">
+                              <p className="text-primary-400 text-sm font-medium">Сегодня: {todayWorkout.title}</p>
+                            </div>
+                            
+                            <div className="space-y-2">
+                              {todayWorkout.exercises?.map((ex: any, idx: number) => (
+                                <div key={idx} className="bg-gray-800/50 rounded-lg p-3">
+                                  <p className="text-white text-sm font-medium mb-1">{idx + 1}. {ex.name}</p>
+                                  <div className="grid grid-cols-3 gap-2 text-xs">
+                                    <div>
+                                      <span className="text-gray-400">Подходы: </span>
+                                      <span className="text-white">{ex.sets}</span>
+                                    </div>
+                                    <div>
+                                      <span className="text-gray-400">Повт: </span>
+                                      <span className="text-white">{ex.reps}</span>
+                                    </div>
+                                    <div>
+                                      <span className="text-gray-400">Вес: </span>
+                                      <span className="text-white">{ex.weight_kg}кг</span>
+                                    </div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
                           </div>
+                        ) : (
+                          <p className="text-gray-400 text-sm mb-3">Сегодня тренировки нет</p>
                         )}
                         
                         <button
                           onClick={() => setSelectedProgram(program)}
-                          className="w-full px-3 py-2 bg-primary-500/20 hover:bg-primary-500/30 text-primary-300 rounded-lg transition-all text-sm font-medium"
+                          className="w-full mt-3 px-3 py-2 bg-primary-500/20 hover:bg-primary-500/30 text-primary-300 rounded-lg transition-all text-sm font-medium"
                         >
-                          📋 Посмотреть программу
+                          📋 Посмотреть всю программу
                         </button>
                       </div>
                     )
