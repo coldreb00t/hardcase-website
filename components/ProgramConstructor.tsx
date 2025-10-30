@@ -7,6 +7,7 @@ interface Exercise {
   name: string
   sets: number
   reps: string
+  weight_kg: number
   rest_seconds: number
   notes: string
   video_url: string
@@ -117,6 +118,7 @@ export default function ProgramConstructor({
       name: '',
       sets: 3,
       reps: '10-12',
+      weight_kg: 0,
       rest_seconds: 90,
       notes: '',
       video_url: '',
@@ -304,7 +306,7 @@ export default function ProgramConstructor({
                             className="w-full px-3 py-2 bg-gray-700/50 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm"
                           />
 
-                          <div className="grid grid-cols-3 gap-2">
+                          <div className="grid grid-cols-4 gap-2">
                             <div>
                               <label className="block text-gray-500 text-xs mb-1">
                                 Подходы
@@ -339,6 +341,26 @@ export default function ProgramConstructor({
                                   )
                                 }
                                 placeholder="8-12"
+                                className="w-full px-2 py-1 bg-gray-700/50 border border-gray-600 rounded text-white text-sm focus:outline-none focus:ring-1 focus:ring-primary-500"
+                              />
+                            </div>
+                            <div>
+                              <label className="block text-gray-500 text-xs mb-1">
+                                Вес (кг)
+                              </label>
+                              <input
+                                type="number"
+                                step="0.5"
+                                value={exercise.weight_kg}
+                                onChange={(e) =>
+                                  updateExercise(
+                                    workoutIndex,
+                                    exerciseIndex,
+                                    'weight_kg',
+                                    parseFloat(e.target.value) || 0
+                                  )
+                                }
+                                placeholder="80"
                                 className="w-full px-2 py-1 bg-gray-700/50 border border-gray-600 rounded text-white text-sm focus:outline-none focus:ring-1 focus:ring-primary-500"
                               />
                             </div>
