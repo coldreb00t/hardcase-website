@@ -328,20 +328,41 @@ export default function ClientDashboardPage() {
                 </div>
               ) : workoutPrograms.length > 0 ? (
                 <div className="space-y-3">
-                  {workoutPrograms.map((program) => (
-                    <div key={program.id} className="bg-gray-900/50 rounded-lg p-4">
-                      <h4 className="text-white font-medium mb-2">{program.title}</h4>
-                      <p className="text-gray-400 text-xs mb-3">
-                        {program.start_date ? new Date(program.start_date).toLocaleDateString('ru-RU') : 'Дата не указана'}
-                      </p>
-                      <button
-                        onClick={() => setSelectedProgram(program)}
-                        className="w-full px-3 py-2 bg-primary-500/20 hover:bg-primary-500/30 text-primary-300 rounded-lg transition-all text-sm font-medium"
-                      >
-                        📋 Посмотреть программу
-                      </button>
-                    </div>
-                  ))}
+                  {workoutPrograms.map((program) => {
+                    const programData = program.program_data as any
+                    const today = new Date().getDay()
+                    const daysMap = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота']
+                    const todayName = daysMap[today]
+                    
+                    let todayWorkout = null
+                    if (programData?.weeks?.[0]?.workouts) {
+                      todayWorkout = programData.weeks[0].workouts.find((w: any) => w.day === todayName)
+                    }
+
+                    return (
+                      <div key={program.id} className="bg-gray-900/50 rounded-lg p-4">
+                        <h4 className="text-white font-medium mb-2">{program.title}</h4>
+                        <p className="text-gray-400 text-xs mb-3">
+                          {program.start_date ? new Date(program.start_date).toLocaleDateString('ru-RU') : 'Дата не указана'}
+                        </p>
+                        
+                        {todayWorkout && (
+                          <div className="mb-3 p-3 bg-primary-500/10 border border-primary-500/30 rounded-lg">
+                            <p className="text-primary-400 text-xs font-medium mb-1">Сегодня:</p>
+                            <p className="text-white text-sm font-medium">{todayWorkout.title}</p>
+                            <p className="text-gray-400 text-xs">{todayWorkout.exercises?.length || 0} упражнений</p>
+                          </div>
+                        )}
+                        
+                        <button
+                          onClick={() => setSelectedProgram(program)}
+                          className="w-full px-3 py-2 bg-primary-500/20 hover:bg-primary-500/30 text-primary-300 rounded-lg transition-all text-sm font-medium"
+                        >
+                          📋 Посмотреть программу
+                        </button>
+                      </div>
+                    )
+                  })}
                 </div>
               ) : (
                 <div className="text-center py-8">
