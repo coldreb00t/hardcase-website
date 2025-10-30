@@ -10,7 +10,7 @@ interface Exercise {
   name: string
   sets: number
   reps: string
-  weight_kg: number
+  weights: number[] // Вес для каждого подхода
   rest_seconds: number
   notes: string
   video_url: string
@@ -201,23 +201,11 @@ export default function ClientWorkoutView({ program }: ClientWorkoutViewProps) {
                     </div>
 
                     {/* Exercise Details Grid */}
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-3">
-                      <div className="bg-gray-800/50 rounded-lg p-3">
-                        <p className="text-gray-400 text-xs mb-1">Подходы</p>
-                        <p className="text-white font-bold text-lg">
-                          {exercise.sets}
-                        </p>
-                      </div>
+                    <div className="grid grid-cols-2 gap-3 mb-3">
                       <div className="bg-gray-800/50 rounded-lg p-3">
                         <p className="text-gray-400 text-xs mb-1">Повторения</p>
                         <p className="text-white font-bold text-lg">
                           {exercise.reps}
-                        </p>
-                      </div>
-                      <div className="bg-gray-800/50 rounded-lg p-3">
-                        <p className="text-gray-400 text-xs mb-1">Вес</p>
-                        <p className="text-white font-bold text-lg">
-                          {exercise.weight_kg} кг
                         </p>
                       </div>
                       <div className="bg-gray-800/50 rounded-lg p-3 flex items-center gap-2">
@@ -230,6 +218,21 @@ export default function ClientWorkoutView({ program }: ClientWorkoutViewProps) {
                         </div>
                       </div>
                     </div>
+
+                    {/* Weights for each set */}
+                    {exercise.weights && exercise.weights.length > 0 && (
+                      <div className="bg-gray-800/50 rounded-lg p-3 mb-3">
+                        <p className="text-gray-400 text-xs mb-2">Вес для каждого подхода:</p>
+                        <div className="grid grid-cols-4 gap-2">
+                          {exercise.weights.map((weight, setIdx) => (
+                            <div key={setIdx} className="bg-gray-700/50 rounded p-2 text-center">
+                              <p className="text-gray-400 text-xs mb-1">Подход {setIdx + 1}</p>
+                              <p className="text-white font-bold">{weight} кг</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
 
                     {/* Notes */}
                     {exercise.notes && (

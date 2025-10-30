@@ -7,7 +7,7 @@ interface Exercise {
   name: string
   sets: number
   reps: string
-  weight_kg: number
+  weights: number[] // Вес для каждого подхода
   rest_seconds: number
   notes: string
   video_url: string
@@ -118,7 +118,7 @@ export default function ProgramConstructor({
       name: '',
       sets: 3,
       reps: '10-12',
-      weight_kg: 0,
+      weights: [0, 0, 0], // По умолчанию 3 подхода
       rest_seconds: 90,
       notes: '',
       video_url: '',
@@ -344,25 +344,40 @@ export default function ProgramConstructor({
                                 className="w-full px-2 py-1 bg-gray-700/50 border border-gray-600 rounded text-white text-sm focus:outline-none focus:ring-1 focus:ring-primary-500"
                               />
                             </div>
-                            <div>
+                            <div className="col-span-2">
                               <label className="block text-gray-500 text-xs mb-1">
-                                Вес (кг)
+                                Вес для каждого подхода (кг)
                               </label>
-                              <input
-                                type="number"
-                                step="0.5"
-                                value={exercise.weight_kg}
-                                onChange={(e) =>
-                                  updateExercise(
-                                    workoutIndex,
-                                    exerciseIndex,
-                                    'weight_kg',
-                                    parseFloat(e.target.value) || 0
-                                  )
-                                }
-                                placeholder="80"
-                                className="w-full px-2 py-1 bg-gray-700/50 border border-gray-600 rounded text-white text-sm focus:outline-none focus:ring-1 focus:ring-primary-500"
-                              />
+                              <div className="grid grid-cols-4 gap-2">
+                                {Array.from({ length: exercise.sets }).map((_, setIdx) => (
+                                  <div key={setIdx}>
+                                    <label className="block text-gray-600 text-xs mb-1">
+                                      Подход {setIdx + 1}
+                                    </label>
+                                    <input
+                                      type="number"
+                                      step="0.5"
+                                      value={exercise.weights[setIdx] || 0}
+                                      onChange={(e) => {
+                                        const newWeights = [...exercise.weights]
+                                        // Расширяем массив если нужно
+                                        while (newWeights.length < exercise.sets) {
+                                          newWeights.push(0)
+                                        }
+                                        newWeights[setIdx] = parseFloat(e.target.value) || 0
+                                        updateExercise(
+                                          workoutIndex,
+                                          exerciseIndex,
+                                          'weights',
+                                          newWeights
+                                        )
+                                      }}
+                                      placeholder="80"
+                                      className="w-full px-2 py-1 bg-gray-700/50 border border-gray-600 rounded text-white text-sm focus:outline-none focus:ring-1 focus:ring-primary-500"
+                                    />
+                                  </div>
+                                ))}
+                              </div>
                             </div>
                             <div>
                               <label className="block text-gray-500 text-xs mb-1">

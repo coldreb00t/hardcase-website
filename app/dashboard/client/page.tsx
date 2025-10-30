@@ -352,20 +352,22 @@ export default function ClientDashboardPage() {
                             <div className="space-y-2">
                               {todayWorkout.exercises?.map((ex: any, idx: number) => (
                                 <div key={idx} className="bg-gray-800/50 rounded-lg p-3">
-                                  <p className="text-white text-sm font-medium mb-1">{idx + 1}. {ex.name}</p>
-                                  <div className="grid grid-cols-3 gap-2 text-xs">
-                                    <div>
-                                      <span className="text-gray-400">Подходы: </span>
-                                      <span className="text-white">{ex.sets}</span>
-                                    </div>
-                                    <div>
-                                      <span className="text-gray-400">Повт: </span>
+                                  <p className="text-white text-sm font-medium mb-2">{idx + 1}. {ex.name}</p>
+                                  <div className="space-y-1">
+                                    <div className="flex gap-2 text-xs">
+                                      <span className="text-gray-400">Повт:</span>
                                       <span className="text-white">{ex.reps}</span>
                                     </div>
-                                    <div>
-                                      <span className="text-gray-400">Вес: </span>
-                                      <span className="text-white">{ex.weight_kg}кг</span>
-                                    </div>
+                                    {ex.weights && ex.weights.length > 0 && (
+                                      <div className="flex flex-wrap gap-2 text-xs">
+                                        {ex.weights.map((weight: number, setIdx: number) => (
+                                          <div key={setIdx} className="bg-gray-700/50 px-2 py-1 rounded">
+                                            <span className="text-gray-400">Подход {setIdx + 1}: </span>
+                                            <span className="text-white font-medium">{weight}кг</span>
+                                          </div>
+                                        ))}
+                                      </div>
+                                    )}
                                   </div>
                                 </div>
                               ))}
@@ -615,3 +617,4 @@ export default function ClientDashboardPage() {
     </div>
   )
 }
+
