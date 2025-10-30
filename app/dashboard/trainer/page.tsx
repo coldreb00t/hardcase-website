@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Users, Dumbbell, Apple, MessageSquare, LogOut, Loader2, Calendar, TrendingUp } from 'lucide-react'
+import { Users, Dumbbell, Apple, MessageSquare, LogOut, Loader2, Calendar, TrendingUp, MessageCircle } from 'lucide-react'
 import type { Database } from '@/supabase/types/database.types'
+import ChatBox from '@/components/ChatBox'
 
 type Profile = Database['public']['Tables']['profiles']['Row']
 type TrainerClientRelationship = Database['public']['Tables']['trainer_client_relationships']['Row']
@@ -42,6 +43,9 @@ export default function TrainerDashboardPage() {
   const [showCreateProgramModal, setShowCreateProgramModal] = useState(false)
   const [showCreateNutritionModal, setShowCreateNutritionModal] = useState(false)
   const [selectedClient, setSelectedClient] = useState<ClientWithProfile | null>(null)
+
+  // Chat state
+  const [chatClient, setChatClient] = useState<ClientWithProfile | null>(null)
 
   // Form states
   const [programForm, setProgramForm] = useState({
@@ -416,6 +420,13 @@ export default function TrainerDashboardPage() {
                           <Apple size={16} />
                           Питание
                         </button>
+                        <button
+                          onClick={() => setChatClient(relationship)}
+                          className="px-3 py-2 bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 rounded-lg transition-all text-sm flex items-center gap-1"
+                        >
+                          <MessageCircle size={16} />
+                          Чат
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -423,6 +434,37 @@ export default function TrainerDashboardPage() {
               </div>
             )}
           </div>
+
+          {/* Chat Section */}
+          {chatClient && profile && (
+            <div className="bg-gray-800/50 backdrop-blur-lg rounded-2xl border border-gray-700/50 overflow-hidden">
+              <div className="p-6 border-b border-gray-700/50">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <MessageCircle className="text-blue-500" size={24} />
+                    <div>
+                      <h3 className="text-xl font-semibold text-white">Чат с клиентом</h3>
+                      <p className="text-gray-400 text-sm">{chatClient.client.full_name}</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => setChatClient(null)}
+                    className="px-3 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-all text-sm"
+                  >
+                    Закрыть
+                  </button>
+                </div>
+              </div>
+              <div className="h-[600px]">
+                <ChatBox
+                  currentUserId={profile.id}
+                  otherUserId={chatClient.client_id}
+                  otherUserName={chatClient.client.full_name}
+                  currentUserName={profile.full_name}
+                />
+              </div>
+            </div>
+          )}
         </div>
       </main>
 

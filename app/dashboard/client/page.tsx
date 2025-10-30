@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { User, Mail, Calendar, LogOut, Loader2, Dumbbell, Apple, TrendingUp, Activity, Target, Camera, Users } from 'lucide-react'
+import { User, Mail, Calendar, LogOut, Loader2, Dumbbell, Apple, TrendingUp, Activity, Target, Camera, Users, MessageCircle } from 'lucide-react'
 import type { Database } from '@/supabase/types/database.types'
+import ChatBox from '@/components/ChatBox'
 
 type Profile = Database['public']['Tables']['profiles']['Row']
 type WorkoutProgram = Database['public']['Tables']['workout_programs']['Row']
@@ -37,10 +38,19 @@ export default function ClientDashboardPage() {
   const [nutritionTarget, setNutritionTarget] = useState<NutritionTarget | null>(null)
   const [latestMeasurement, setLatestMeasurement] = useState<ClientMeasurement | null>(null)
   const [loadingData, setLoadingData] = useState(false)
+  const [selectedTrainer, setSelectedTrainer] = useState<TrainerWithProfile | null>(null)
 
   useEffect(() => {
     checkUser()
   }, [])
+
+  // Auto-select primary trainer for chat
+  useEffect(() => {
+    if (trainers.length > 0 && !selectedTrainer) {
+      const primaryTrainer = trainers.find(t => t.is_primary) || trainers[0]
+      setSelectedTrainer(primaryTrainer)
+    }
+  }, [trainers, selectedTrainer])
 
   const checkUser = async () => {
     try {
@@ -425,6 +435,47 @@ export default function ClientDashboardPage() {
               )}
             </div>
           </div>
+
+          {/* Chat Section */}
+          {selectedTrainer && profile && (
+            <div className="bg-gray-800/50 backdrop-blur-lg rounded-2xl border border-gray-700/50 overflow-hidden">
+              <div className="p-6 border-b border-gray-700/50">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <MessageCircle className="text-green-500" size={24} />
+                    <div>
+                      <h3 className="text-xl font-semibold text-white">Сообщения</h3>
+                      <p className="text-gray-400 text-sm">Общение с тренером</p>
+                    </div>
+                  </div>
+                  {trainers.length > 1 && (
+                    <select
+                      value={selectedTrainer.trainer_id}
+                      onChange={(e) => {
+                        const trainer = trainers.find(t => t.trainer_id === e.target.value)
+                        if (trainer) setSelectedTrainer(trainer)
+                      }}
+                      className="px-3 py-2 bg-gray-700/50 border border-gray-600 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    >
+                      {trainers.map((trainer) => (
+                        <option key={trainer.trainer_id} value={trainer.trainer_id}>
+                          {trainer.trainer.full_name} {trainer.is_primary ? '(Основной)' : ''}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                </div>
+              </div>
+              <div className="h-[600px]">
+                <ChatBox
+                  currentUserId={profile.id}
+                  otherUserId={selectedTrainer.trainer_id}
+                  otherUserName={selectedTrainer.trainer.full_name}
+                  currentUserName={profile.full_name}
+                />
+              </div>
+            </div>
+          )}
         </div>
       </main>
 
