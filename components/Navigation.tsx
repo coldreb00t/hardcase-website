@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, User } from 'lucide-react'
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
@@ -62,6 +62,17 @@ export default function Navigation() {
               </motion.a>
             ))}
             <motion.a
+              href="/login"
+              className={`p-2 rounded-full transition-colors ${
+                scrolled ? 'text-gray-700 hover:text-primary-500 hover:bg-gray-100' : 'text-white hover:text-primary-300 hover:bg-white/10'
+              }`}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              title="Вход в личный кабинет"
+            >
+              <User size={24} />
+            </motion.a>
+            <motion.a
               href="#contact"
               className="bg-primary-500 text-white px-6 py-3 rounded-full font-semibold hover:bg-primary-600 transition-colors"
               whileHover={{ scale: 1.05 }}
@@ -105,6 +116,14 @@ export default function Navigation() {
                   {item.name}
                 </a>
               ))}
+              <a
+                href="/login"
+                onClick={() => setIsOpen(false)}
+                className="flex items-center gap-2 text-gray-700 hover:text-primary-500 font-medium py-2"
+              >
+                <User size={20} />
+                Личный кабинет
+              </a>
               <a
                 href="#contact"
                 onClick={() => setIsOpen(false)}

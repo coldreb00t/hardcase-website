@@ -11,20 +11,39 @@ export default function HeroSection() {
     const video = videoRef.current
     if (!video) return
 
-    // Простой обработчик для попытки запуска при взаимодействии (fallback для Low Power Mode)
+    // Показываем видео с плавным появлением после загрузки
+    const handleCanPlay = () => {
+      video.style.opacity = '1'
+      video.play().catch(() => {
+        console.log('📱 Требуется взаимодействие пользователя')
+      })
+    }
+
+    // Загружаем видео в фоне
+    video.addEventListener('canplay', handleCanPlay, { once: true })
+
+    // Начинаем загрузку через небольшую задержку, чтобы не блокировать первый рендер
+    setTimeout(() => {
+      video.load()
+    }, 100)
+
+    // Fallback: play on first interaction
     const playOnInteraction = () => {
       if (video.paused) {
+        if (video.readyState < 3) {
+          video.load()
+        }
         video.play().catch(() => {
           console.log('📱 Требуется взаимодействие пользователя')
         })
       }
     }
 
-    // Слушаем первое взаимодействие для запуска видео (если автоплей не сработал)
     document.addEventListener('touchstart', playOnInteraction, { once: true, passive: true })
     document.addEventListener('click', playOnInteraction, { once: true })
 
     return () => {
+      video.removeEventListener('canplay', handleCanPlay)
       document.removeEventListener('touchstart', playOnInteraction)
       document.removeEventListener('click', playOnInteraction)
     }
@@ -32,19 +51,17 @@ export default function HeroSection() {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Hero Background Video */}
-      <div className="absolute inset-0">
-        {/* Background Video - статические source теги для iOS автоплея */}
+      {/* Hero Background - gradient фон для мгновенного рендеринга */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+        {/* Background Video - загружается в фоне, не блокируя контент */}
         <video
           ref={videoRef}
-          className="absolute inset-0 w-full h-full object-cover"
-          autoPlay
+          className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-1000"
           muted
           playsInline
           loop
-          preload="auto"
+          preload="none"
         >
-          {/* Используем десктопную версию для всех - object-cover правильно адаптирует */}
           <source src="/videos/hero-background.webm" type="video/webm" />
           <source src="/videos/hero-background.mp4" type="video/mp4" />
         </video>

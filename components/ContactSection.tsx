@@ -213,9 +213,6 @@ export default function ContactSection() {
           transition={{ duration: 0.6 }}
           className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 p-8 md:p-12 rounded-3xl text-center text-white relative overflow-hidden"
         >
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-0 left-0 w-full h-full bg-[url('/grid.svg')]"></div>
-          </div>
           <div className="relative z-10">
             <h3 className="text-3xl md:text-4xl font-bold mb-4">
               HARDCASE — это инвестиция в ваше здоровье, которая окупается качеством жизни,<br />

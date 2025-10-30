@@ -5,9 +5,9 @@ import HeroSection from '@/components/HeroSection'
 import SocialProofSection from '@/components/SocialProofSection'
 import TransformationsSection from '@/components/TransformationsSection'
 import TeamSection from '@/components/TeamSection'
+import ServicesSection from '@/components/ServicesSection'
 import HowItWorksSection from '@/components/HowItWorksSection'
 import AdvantagesSection from '@/components/AdvantagesSection'
-import ServicesSection from '@/components/ServicesSection'
 import DemoCTASection from '@/components/DemoCTASection'
 import ContactSection from '@/components/ContactSection'
 import Footer from '@/components/Footer'
@@ -29,4 +29,3 @@ export default function Home() {
     </main>
   )
 }
-

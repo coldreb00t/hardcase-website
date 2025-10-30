@@ -53,9 +53,24 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  // Runtime configuration for static export
+  // These values are embedded in HTML at build time
+  // Safe to commit: ANON_KEY is a public key, security is via RLS in Supabase
+  const supabaseUrl = (process.env.NEXT_PUBLIC_SUPABASE_URL?.trim()) || 'https://waatdpjvzacdfnebskhf.supabase.co'
+  const supabaseKey = (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim()) || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndhYXRkcGp2emFjZGZuZWJza2hmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE0NDQ0NzEsImV4cCI6MjA3NzAyMDQ3MX0.-h6DXM8Ck6O7AksK-kcnwm7OXEro6dlobv0DVFx9ndw'
+
+  const envConfigScript = `
+    window.__ENV__ = {
+      NEXT_PUBLIC_SUPABASE_URL: '${supabaseUrl}',
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: '${supabaseKey}'
+    };
+  `
+
   return (
     <html lang="ru">
       <head>
+        {/* Inline runtime config - loaded before any React hydration */}
+        <script dangerouslySetInnerHTML={{ __html: envConfigScript }} />
         <StructuredData />
       </head>
       <body>{children}</body>
