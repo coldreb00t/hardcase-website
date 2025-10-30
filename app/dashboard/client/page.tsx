@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { User, Mail, Calendar, LogOut, Loader2, Dumbbell, Apple, TrendingUp, Activity, Target, Camera, Users, MessageCircle } from 'lucide-react'
 import type { Database } from '@/supabase/types/database.types'
 import ChatBox from '@/components/ChatBox'
+import ClientWorkoutView from '@/components/ClientWorkoutView'
 
 type Profile = Database['public']['Tables']['profiles']['Row']
 type WorkoutProgram = Database['public']['Tables']['workout_programs']['Row']
@@ -39,6 +40,7 @@ export default function ClientDashboardPage() {
   const [latestMeasurement, setLatestMeasurement] = useState<ClientMeasurement | null>(null)
   const [loadingData, setLoadingData] = useState(false)
   const [selectedTrainer, setSelectedTrainer] = useState<TrainerWithProfile | null>(null)
+  const [selectedProgram, setSelectedProgram] = useState<WorkoutProgram | null>(null)
 
   useEffect(() => {
     checkUser()
@@ -328,10 +330,16 @@ export default function ClientDashboardPage() {
                 <div className="space-y-3">
                   {workoutPrograms.map((program) => (
                     <div key={program.id} className="bg-gray-900/50 rounded-lg p-4">
-                      <h4 className="text-white font-medium mb-1">{program.title}</h4>
-                      <p className="text-gray-400 text-sm">
+                      <h4 className="text-white font-medium mb-2">{program.title}</h4>
+                      <p className="text-gray-400 text-xs mb-3">
                         {program.start_date ? new Date(program.start_date).toLocaleDateString('ru-RU') : 'Дата не указана'}
                       </p>
+                      <button
+                        onClick={() => setSelectedProgram(program)}
+                        className="w-full px-3 py-2 bg-primary-500/20 hover:bg-primary-500/30 text-primary-300 rounded-lg transition-all text-sm font-medium"
+                      >
+                        📋 Посмотреть программу
+                      </button>
                     </div>
                   ))}
                 </div>
@@ -542,6 +550,26 @@ export default function ClientDashboardPage() {
           animation: fade-in-up 0.5s ease-out backwards;
         }
       `}</style>
+
+      {/* Workout Program Modal */}
+      {selectedProgram && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-start justify-center z-50 p-4 overflow-y-auto">
+          <div className="bg-gray-900 rounded-2xl max-w-5xl w-full border border-gray-700 shadow-2xl my-8">
+            <div className="sticky top-0 bg-gray-800 rounded-t-2xl px-6 py-4 border-b border-gray-700 flex items-center justify-between z-10">
+              <h2 className="text-2xl font-bold text-white">Программа тренировок</h2>
+              <button
+                onClick={() => setSelectedProgram(null)}
+                className="p-2 text-gray-400 hover:bg-gray-700 rounded-lg transition-all"
+              >
+                <LogOut size={24} />
+              </button>
+            </div>
+            <div className="p-6">
+              <ClientWorkoutView program={selectedProgram} />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
