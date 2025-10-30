@@ -2,13 +2,19 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { User, Mail, Calendar, LogOut, Loader2, Dumbbell, Apple, TrendingUp, Activity, Target, Camera } from 'lucide-react'
+import { User, Mail, Calendar, LogOut, Loader2, Dumbbell, Apple, TrendingUp, Activity, Target, Camera, Users } from 'lucide-react'
 import type { Database } from '@/supabase/types/database.types'
 
 type Profile = Database['public']['Tables']['profiles']['Row']
 type WorkoutProgram = Database['public']['Tables']['workout_programs']['Row']
 type NutritionTarget = Database['public']['Tables']['nutrition_targets']['Row']
 type ClientMeasurement = Database['public']['Tables']['client_measurements']['Row']
+type TrainerClientRelationship = Database['public']['Tables']['trainer_client_relationships']['Row']
+
+type TrainerWithProfile = TrainerClientRelationship & {
+  trainer: Profile
+  is_primary: boolean
+}
 
 /**
  * Client Dashboard
@@ -26,6 +32,7 @@ export default function ClientDashboardPage() {
   const [email, setEmail] = useState<string>('')
 
   // Data states
+  const [trainers, setTrainers] = useState<TrainerWithProfile[]>([])
   const [workoutPrograms, setWorkoutPrograms] = useState<WorkoutProgram[]>([])
   const [nutritionTarget, setNutritionTarget] = useState<NutritionTarget | null>(null)
   const [latestMeasurement, setLatestMeasurement] = useState<ClientMeasurement | null>(null)
@@ -78,6 +85,21 @@ export default function ClientDashboardPage() {
     setLoadingData(true)
     try {
       const { supabase } = await import('@/lib/supabase')
+
+      // Load trainers assigned to this client
+      const { data: trainerRelationships } = await supabase
+        .from('trainer_client_relationships')
+        .select(`
+          *,
+          trainer:profiles!trainer_client_relationships_trainer_id_fkey(*)
+        `)
+        .eq('client_id', profileId)
+        .eq('status', 'active')
+        .order('is_primary', { ascending: false })
+
+      if (trainerRelationships) {
+        setTrainers(trainerRelationships as unknown as TrainerWithProfile[])
+      }
 
       // Load workout programs
       const { data: programs } = await supabase
@@ -219,6 +241,61 @@ export default function ClientDashboardPage() {
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Trainers Section */}
+          <div className="bg-gray-800/50 backdrop-blur-lg rounded-2xl border border-gray-700/50 overflow-hidden">
+            <div className="p-6 border-b border-gray-700/50">
+              <div className="flex items-center gap-3">
+                <Users className="text-purple-500" size={24} />
+                <div>
+                  <h3 className="text-xl font-semibold text-white">Мои тренеры</h3>
+                  <p className="text-gray-400 text-sm">Специалисты, работающие с вами</p>
+                </div>
+              </div>
+            </div>
+
+            {loadingData ? (
+              <div className="p-12 text-center">
+                <Loader2 className="w-8 h-8 text-primary-500 animate-spin mx-auto mb-3" />
+                <p className="text-gray-400">Загрузка...</p>
+              </div>
+            ) : trainers.length === 0 ? (
+              <div className="p-12 text-center">
+                <Users className="w-12 h-12 text-gray-600 mx-auto mb-3" />
+                <p className="text-gray-400">Пока нет назначенных тренеров</p>
+                <p className="text-gray-500 text-sm mt-1">Администратор назначит вам тренера</p>
+              </div>
+            ) : (
+              <div className="divide-y divide-gray-700/50">
+                {trainers.map((relationship) => (
+                  <div key={relationship.id} className="p-6 hover:bg-gray-700/20 transition-colors">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center">
+                        <User className="text-purple-500" size={24} />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <h4 className="text-white font-medium">{relationship.trainer.full_name}</h4>
+                          {relationship.is_primary ? (
+                            <span className="text-xs px-2 py-1 rounded-full bg-primary-500/20 text-primary-400 font-medium">
+                              Основной тренер
+                            </span>
+                          ) : (
+                            <span className="text-xs px-2 py-1 rounded-full bg-gray-500/20 text-gray-400">
+                              Дополнительный тренер
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-gray-400 text-xs mt-1">
+                          С {new Date(relationship.started_at).toLocaleDateString('ru-RU')}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Dashboard Sections */}
