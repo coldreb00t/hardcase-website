@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Award, Trophy, Star, TrendingUp } from 'lucide-react'
+import { Trophy, Star } from 'lucide-react'
 
 export default function TeamSection() {
   const team = [
@@ -37,14 +37,6 @@ export default function TeamSection() {
     },
   ]
 
-  const highlights = [
-    'Успешно проводила реабилитацию спортсменов из регби клуба ЦСКА',
-    'Тренинги для Лиги по Тэг-регби',
-    'Профилактика спортивных травм',
-    'Оптимизация восстановительных процессов',
-    'Приверженность принципам доказательной медицины на основе научных исследований',
-  ]
-
   return (
     <section id="team" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -64,7 +56,7 @@ export default function TeamSection() {
         </motion.div>
 
         {/* Team Members */}
-        <div className="grid md:grid-cols-2 gap-8 mb-16">
+        <div className="grid md:grid-cols-2 gap-8">
           {team.map((member, index) => (
             <motion.div
               key={member.name}
@@ -108,39 +100,6 @@ export default function TeamSection() {
             </motion.div>
           ))}
         </div>
-
-        {/* Highlights */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="bg-gradient-to-r from-primary-500 to-primary-600 p-8 md:p-12 rounded-3xl text-white"
-        >
-          <div className="flex items-center mb-6">
-            <TrendingUp className="mr-3" size={36} />
-            <h3 className="text-2xl md:text-3xl font-bold">Наши достижения</h3>
-          </div>
-          <div className="grid md:grid-cols-2 gap-4">
-            {highlights.map((highlight, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: index * 0.1 }}
-                className={`flex items-start bg-white/10 backdrop-blur-sm p-4 rounded-xl ${
-                  index === highlights.length - 1 && highlights.length % 2 !== 0
-                    ? 'md:col-span-2 md:max-w-2xl md:mx-auto'
-                    : ''
-                }`}
-              >
-                <Award className="mr-3 mt-1 flex-shrink-0" size={20} />
-                <span className="text-white/90">{highlight}</span>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
       </div>
     </section>
   )
