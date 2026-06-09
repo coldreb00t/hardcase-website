@@ -1,39 +1,39 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Lightbulb, Award, Users, BookOpen, Globe, TrendingUp, Target, Shield } from 'lucide-react'
+import { Lightbulb, Award, Users, BookOpen, Globe } from 'lucide-react'
 
 export default function AdvantagesSection() {
   const advantages = [
     {
       number: '01',
       icon: Lightbulb,
-      title: 'Инновационный подход',
-      description: 'Комплексная методология с гарантированными результатами, основанная на анализе больших данных и персонализированных алгоритмах',
+      title: 'Силовая реабилитация',
+      description: 'Возврат не к покою, а к нагрузке: восстанавливаем силу и уверенность, а не просто снимаем боль',
     },
     {
       number: '02',
       icon: Award,
       title: 'Международная сертификация',
-      description: 'Команда экспертов с престижными сертификатами FISAF, Europe Active, FPA и многолетним опытом в ведущих международных фитнес-центрах',
+      description: 'Команда с сертификатами FISAF, Europe Active, FPA и многолетним опытом работы с травмами и реабилитацией',
     },
     {
       number: '03',
       icon: Users,
       title: 'Персонализация',
-      description: 'Индивидуальные программы для клиентов всех возрастных категорий с визуальным и количественным контролем прогресса',
+      description: 'Индивидуальные программы под конкретную травму, вид спорта и цели — с контролем прогресса',
     },
     {
       number: '04',
       icon: BookOpen,
-      title: 'Научная обоснованность',
-      description: 'Строгое соблюдение стандартов доказательной медицины, включая рекомендации Harvard Medical School и других авторитетных институтов',
+      title: 'Доказательный подход',
+      description: 'Опираемся на принципы доказательной медицины и современные данные о восстановлении после травм',
     },
     {
       number: '05',
       icon: Globe,
-      title: 'Глобальная доступность',
-      description: 'Возможность получения услуг премиум-класса в любой точке мира благодаря цифровым технологиям',
+      title: 'Работа онлайн',
+      description: 'Сопровождение по видеосвязи — продолжаем работу независимо от твоего города',
     },
   ]
 
@@ -48,11 +48,10 @@ export default function AdvantagesSection() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Уникальные <span className="text-primary-500">преимущества</span>
+            Почему <span className="text-primary-500">Hardcase</span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Наш подход обеспечивает надежные результаты благодаря сочетанию передовых методик, персонального внимания и постоянного
-            мониторинга прогресса каждого клиента
+            Доказательный подход, персональное внимание и контроль нагрузки на каждом этапе восстановления
           </p>
         </motion.div>
 
