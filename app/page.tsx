@@ -2,6 +2,7 @@
 
 import Navigation from '@/components/Navigation'
 import HeroSection from '@/components/HeroSection'
+import ApproachSection from '@/components/ApproachSection'
 import WedgeSection from '@/components/WedgeSection'
 import HowItWorksSection from '@/components/HowItWorksSection'
 import TransformationsSection from '@/components/TransformationsSection'
@@ -18,6 +19,7 @@ export default function Home() {
     <main className="min-h-screen overflow-x-hidden">
       <Navigation />
       <HeroSection />
+      <ApproachSection />
       <WedgeSection />
       <TeamSection />
       <SocialProofSection />
