@@ -4,26 +4,29 @@ import { motion } from 'framer-motion'
 import { Quote } from 'lucide-react'
 
 export default function TransformationsSection() {
-  // Плейсхолдеры. Владелец вписывает реальные истории с согласия клиентов.
-  // Отзывы не выдумываем — пока стоят маркеры [ИМЯ], [ВИД СПОРТА], [ТРАВМА], [РЕЗУЛЬТАТ].
+  // Реальные клиенты (с согласия). Поле result/story — опционально:
+  // показываются только если заполнены. Исход не выдумываем — впишет владелец.
   const stories = [
     {
-      name: '[ИМЯ]',
-      sport: '[ВИД СПОРТА]',
-      injury: '[ТРАВМА]',
-      result: '[РЕЗУЛЬТАТ]',
+      name: 'Алла Разумная',
+      sport: 'Регби, клуб «ЦСКА»',
+      injury: 'Разрыв ПКС',
+      result: '',
+      story: '',
     },
     {
-      name: '[ИМЯ]',
-      sport: '[ВИД СПОРТА]',
-      injury: '[ТРАВМА]',
-      result: '[РЕЗУЛЬТАТ]',
+      name: 'Карина Голополосова',
+      sport: 'Бег',
+      injury: 'Разрыв ПКС',
+      result: '',
+      story: '',
     },
     {
-      name: '[ИМЯ]',
-      sport: '[ВИД СПОРТА]',
-      injury: '[ТРАВМА]',
-      result: '[РЕЗУЛЬТАТ]',
+      name: 'Егор',
+      sport: 'Тэг-регби',
+      injury: 'Разрыв ПКС',
+      result: '',
+      story: '',
     },
   ]
 
@@ -68,17 +71,19 @@ export default function TransformationsSection() {
 
               {/* Контент */}
               <div className="p-6 flex flex-col flex-grow">
-                <div className="mb-4">
+                <div className={story.result ? 'mb-4' : ''}>
                   <div className="text-xs uppercase tracking-wide text-gray-400 mb-1">Травма</div>
                   <div className="text-gray-900 font-semibold">{story.injury}</div>
                 </div>
-                <div className="mb-6">
-                  <div className="text-xs uppercase tracking-wide text-gray-400 mb-1">Результат</div>
-                  <div className="text-gray-900 font-semibold">{story.result}</div>
-                </div>
-                <p className="text-gray-500 text-sm leading-relaxed italic mt-auto">
-                  Здесь будет короткая история клиента с его согласия.
-                </p>
+                {story.result && (
+                  <div className="mb-2">
+                    <div className="text-xs uppercase tracking-wide text-gray-400 mb-1">Результат</div>
+                    <div className="text-gray-900 font-semibold">{story.result}</div>
+                  </div>
+                )}
+                {story.story && (
+                  <p className="text-gray-500 text-sm leading-relaxed italic mt-4">{story.story}</p>
+                )}
               </div>
             </motion.div>
           ))}
