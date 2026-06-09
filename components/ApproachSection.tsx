@@ -1,12 +1,25 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { ShieldCheck, Activity, Video } from 'lucide-react'
 
 export default function ApproachSection() {
   const highlights = [
-    'Реабилитация и силовой тренинг с применением доказательных методов',
-    'Контроль тренировок, нагрузки и восстановления на основе точных данных',
-    'Работа онлайн по видеосвязи — сопровождение независимо от города',
+    {
+      icon: ShieldCheck,
+      title: 'Доказательный подход',
+      description: 'Реабилитация и силовой тренинг на основе доказательных методов, а не «терпи и не нагружай».',
+    },
+    {
+      icon: Activity,
+      title: 'Контроль нагрузки',
+      description: 'Ведём тренировки, нагрузку и восстановление по этапам и на основе точных данных.',
+    },
+    {
+      icon: Video,
+      title: 'Работа онлайн',
+      description: 'Сопровождение по видеосвязи — занимаемся независимо от твоего города.',
+    },
   ]
 
   return (
@@ -17,34 +30,35 @@ export default function ApproachSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="bg-gradient-to-br from-primary-500 via-orange-500 to-primary-600 p-8 md:p-12 rounded-3xl text-white"
+          className="text-center mb-16"
         >
-          <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center">
-            Возврат к нагрузке через грамотное сопровождение
+          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+            <span className="text-gray-900">Hardcase — это</span> <span className="text-primary-500">онлайн силовая реабилитация</span>
           </h2>
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div>
-              <p className="text-lg text-white/90 leading-relaxed">
-                Hardcase — это силовая реабилитация: возвращаем активных людей к тренировкам после травм и боли.
-                Опираемся на доказательные методы и ведём по этапам, а не держим в покое.
-              </p>
-            </div>
-            <div className="space-y-4">
-              {highlights.map((highlight, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: index * 0.1 }}
-                  className="bg-white/10 backdrop-blur-sm p-4 rounded-xl"
-                >
-                  <p className="text-white/95">{highlight}</p>
-                </motion.div>
-              ))}
-            </div>
-          </div>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Возвращаем активных людей к тренировкам после травм и боли — онлайн, по этапам и на доказательных методах,
+            а не «терпи и забудь про спорт».
+          </p>
         </motion.div>
+
+        <div className="grid md:grid-cols-3 gap-8">
+          {highlights.map((item, index) => (
+            <motion.div
+              key={item.title}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              className="bg-white p-8 rounded-3xl shadow-lg hover:shadow-2xl transition-shadow border-t-4 border-primary-500"
+            >
+              <div className="inline-flex p-4 rounded-2xl bg-primary-100 mb-6">
+                <item.icon className="text-primary-600" size={32} />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-3">{item.title}</h3>
+              <p className="text-gray-600 leading-relaxed">{item.description}</p>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </section>
   )
