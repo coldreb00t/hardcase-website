@@ -63,7 +63,7 @@ export default function PricingSection() {
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-6 lg:gap-8 items-stretch">
+        <div className="grid md:grid-cols-3 gap-6 lg:gap-8 items-start">
           {plans.map((plan, index) => (
             <motion.div
               key={plan.name}
@@ -80,9 +80,9 @@ export default function PricingSection() {
                 <div className="text-sm text-gray-500 mt-1">{plan.period}</div>
               </div>
 
-              <p className="text-gray-600 mb-6">{plan.audience}</p>
+              <p className="text-gray-600 mb-6 min-h-[3.5rem]">{plan.audience}</p>
 
-              <div className="border-t border-gray-100 pt-6 mt-auto">
+              <div className="border-t border-gray-100 pt-6">
                 <div className="text-sm font-semibold text-gray-900 mb-4">Что входит</div>
                 <ul className="space-y-3">
                   {plan.includes.map((item, i) => (
