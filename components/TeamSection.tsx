@@ -81,9 +81,9 @@ export default function TeamSection() {
                 <Trophy className="text-primary-500 mr-3" size={32} />
                 <h3 className="text-2xl font-bold text-gray-900">{member.name}</h3>
               </div>
-              {member.tagline && (
-                <p className="text-center text-primary-600 font-semibold mb-6">{member.tagline}</p>
-              )}
+              <p className="text-center text-primary-600 font-semibold mb-6 min-h-[3.5rem] flex items-center justify-center">
+                {member.tagline || ' '}
+              </p>
               <ul className="space-y-3">
                 {member.achievements.map((achievement, i) => (
                   <li key={i} className="flex items-start">

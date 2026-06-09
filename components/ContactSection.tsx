@@ -125,7 +125,7 @@ export default function ContactSection() {
                 whileTap={{ scale: 0.97 }}
                 className="inline-flex items-center bg-gradient-to-r from-primary-500 to-orange-500 text-white px-10 py-5 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl transition-all duration-300"
               >
-                Разобрать мой случай
+                Разобрать мой случай — бесплатно
                 <ArrowRight className="ml-3" size={22} />
               </motion.a>
             </div>
