@@ -9,9 +9,14 @@
 export const RAZBOR_URL =
   process.env.NEXT_PUBLIC_RAZBOR_URL || '#razbor-placeholder'
 
-// TODO(owner): прямая ссылка на PDF протокола первых недель после травмы колена
-export const PROTOCOL_URL =
-  process.env.NEXT_PUBLIC_PROTOCOL_URL || '#protocol-placeholder'
+// Ссылки на PDF бесплатных протоколов первых недель после травмы (колено/плечо/спина).
+// TODO(owner): впиши прямые ссылки на PDF. Колено («у нас есть») — задать первым.
+export const PROTOCOL_KNEE_URL =
+  process.env.NEXT_PUBLIC_PROTOCOL_URL || process.env.NEXT_PUBLIC_PROTOCOL_KNEE_URL || '#protocol-knee'
+export const PROTOCOL_SHOULDER_URL =
+  process.env.NEXT_PUBLIC_PROTOCOL_SHOULDER_URL || '#protocol-shoulder'
+export const PROTOCOL_BACK_URL =
+  process.env.NEXT_PUBLIC_PROTOCOL_BACK_URL || '#protocol-back'
 
 // Реквизиты оператора персональных данных — для Политики и Условий.
 // Оператор — САМОЗАНЯТЫЙ (плательщик НПД), т.е. физлицо: ФИО + статус + ИНН физлица.
