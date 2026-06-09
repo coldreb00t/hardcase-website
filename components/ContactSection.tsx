@@ -40,7 +40,7 @@ export default function ContactSection() {
             Разберём <span className="text-primary-500">твой случай</span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Бесплатно и ни к чему не обязывает. Посмотрим твою травму и скажем, что реально поможет вернуться к тренировкам.
+            Ни к чему не обязывает. Посмотрим твою травму и скажем, что реально поможет вернуться к тренировкам.
           </p>
         </motion.div>
 
@@ -125,7 +125,7 @@ export default function ContactSection() {
                 whileTap={{ scale: 0.97 }}
                 className="inline-flex items-center bg-gradient-to-r from-primary-500 to-orange-500 text-white px-10 py-5 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl transition-all duration-300"
               >
-                Разобрать мой случай — бесплатно
+                Разобрать мой случай
                 <ArrowRight className="ml-3" size={22} />
               </motion.a>
             </div>

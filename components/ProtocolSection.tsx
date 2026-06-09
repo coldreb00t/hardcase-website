@@ -34,10 +34,10 @@ export default function ProtocolSection() {
           className="text-center mb-12"
         >
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Бесплатные <span className="text-primary-500">протоколы</span> первых недель
+            <span className="text-primary-500">Протоколы</span> первых недель
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Бесплатно, без условий. Что делать сразу после травмы, чтобы не потерять время и не навредить.
+            Без условий и регистрации. Что делать сразу после травмы, чтобы не потерять время и не навредить.
           </p>
         </motion.div>
 

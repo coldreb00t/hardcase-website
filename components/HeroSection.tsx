@@ -107,7 +107,7 @@ export default function HeroSection() {
               whileHover={{ scale: 1.05, boxShadow: '0 20px 60px rgba(251, 146, 60, 0.4)' }}
               whileTap={{ scale: 0.95 }}
             >
-              Разобрать мой случай — бесплатно
+              Разобрать мой случай
             </motion.a>
             <motion.a
               href="#how-it-works"

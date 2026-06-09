@@ -8,8 +8,8 @@ export default function HowItWorksSection() {
     {
       number: '01',
       icon: Gift,
-      title: 'Бесплатно и без обязательств',
-      description: 'Разбор ни к чему не обязывает. Не продаём абонемент на встрече — сначала разбираемся в твоём случае.',
+      title: 'Без обязательств',
+      description: 'Разбор бесплатный и ни к чему не обязывает. Не продаём абонемент на встрече — сначала разбираемся в твоём случае.',
     },
     {
       number: '02',
@@ -21,7 +21,7 @@ export default function HowItWorksSection() {
       number: '03',
       icon: Compass,
       title: 'Говорим как есть',
-      description: 'Если нужно сначала к врачу — скажем. Если достаточно бесплатного протокола — тоже скажем. Без навязывания.',
+      description: 'Если нужно сначала к врачу — скажем. Если достаточно протокола — тоже скажем. Без навязывания.',
     },
   ]
 
@@ -46,10 +46,10 @@ export default function HowItWorksSection() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Как работает <span className="text-primary-400">бесплатный разбор</span>
+            Как проходит <span className="text-primary-400">разбор</span>
           </h2>
           <p className="text-xl text-white/90 max-w-3xl mx-auto">
-            Честно: бесплатно, ни к чему не обязывает. Смотрим твой случай и говорим, что реально поможет.
+            Честно и без обязательств. Смотрим твой случай и говорим, что реально поможет.
           </p>
         </motion.div>
 

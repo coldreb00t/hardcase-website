@@ -79,7 +79,7 @@ export default function NutritionPage() {
               href={RAZBOR_URL}
               className="inline-block bg-gradient-to-r from-primary-500 to-orange-500 text-white px-10 py-5 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
             >
-              Разобрать мой случай — бесплатно
+              Разобрать мой случай
             </a>
           </div>
         </div>
