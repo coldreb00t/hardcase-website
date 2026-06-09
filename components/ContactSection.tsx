@@ -56,7 +56,7 @@ export default function ContactSection() {
             <div className="bg-gradient-to-br from-primary-500 to-orange-600 p-8 rounded-3xl text-white">
               <h3 className="text-2xl font-bold mb-4">Как с нами связаться</h3>
               <p className="text-white/90 mb-6 leading-relaxed">
-                Напиши нам — разберём твой случай и честно скажем, поможем ли мы или сначала нужно к врачу.
+                Напиши нам — честно скажем, поможем ли мы или сначала нужно к врачу.
               </p>
 
               <div className="space-y-4">
@@ -88,7 +88,7 @@ export default function ContactSection() {
             </div>
 
             <div className="bg-gray-50 p-6 rounded-2xl border-2 border-primary-100">
-              <h4 className="font-bold text-gray-900 mb-3 text-lg">Что будет на разборе:</h4>
+              <h4 className="font-bold text-gray-900 mb-3 text-lg">Что тебя ждёт:</h4>
               <ul className="space-y-2 text-gray-700">
                 <li className="flex items-start">
                   <CheckCircle className="text-primary-500 mr-2 mt-0.5 flex-shrink-0" size={18} />
@@ -115,9 +115,9 @@ export default function ContactSection() {
             className="flex flex-col h-full"
           >
             <div className="bg-white p-8 rounded-3xl shadow-lg border-2 border-gray-100 flex-1 flex flex-col items-center justify-center text-center">
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Разобрать мой случай</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Сделай первый шаг</h3>
               <p className="text-gray-600 mb-8 max-w-sm">
-                Нажми кнопку — напишешь нам пару слов о травме, и мы разберём, что делать дальше. Бесплатно.
+                Напиши пару слов о травме — и мы скажем, что делать дальше.
               </p>
               <motion.a
                 href={RAZBOR_URL}
@@ -128,7 +128,6 @@ export default function ContactSection() {
                 Разобрать мой случай — бесплатно
                 <ArrowRight className="ml-3" size={22} />
               </motion.a>
-              <p className="text-gray-400 text-sm mt-4">Бесплатно и ни к чему не обязывает.</p>
             </div>
           </motion.div>
         </div>

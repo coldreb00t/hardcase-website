@@ -127,24 +127,6 @@ export default function ServicesSection() {
             </div>
           </div>
         </motion.div>
-
-        {/* Additional Info */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="bg-gray-50 p-8 md:p-10 rounded-3xl border-2 border-primary-100"
-        >
-          <h3 className="text-2xl font-bold text-gray-900 mb-4 text-center">
-            Системный подход к восстановлению
-          </h3>
-          <p className="text-gray-700 text-center leading-relaxed max-w-4xl mx-auto">
-            Восстановление силы идёт по этапам и под контролем: тестирование, дозированная нагрузка, мониторинг
-            восстановления и регулярная корректировка плана. Работаем онлайн по видеосвязи — сопровождение доступно
-            независимо от города.
-          </p>
-        </motion.div>
       </div>
     </section>
   )
