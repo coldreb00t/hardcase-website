@@ -1,12 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // Static export для простого хостинга
-  output: 'export',
+  // Standalone-сборка под Docker-деплой Timeweb (Dockerfile -> node server.js)
+  output: 'standalone',
   images: {
     unoptimized: true,
   },
-  // Ensure static assets are properly exported
   trailingSlash: true,
 }
 

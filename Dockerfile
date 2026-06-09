@@ -7,7 +7,8 @@ WORKDIR /app
 
 # Копируем файлы package
 COPY package.json package-lock.json ./
-RUN npm ci --only=production
+# Полный установ (нужны devDeps: tailwind, postcss, typescript для next build)
+RUN npm ci
 
 # Этап 2: Сборка приложения
 FROM node:18-alpine AS builder
