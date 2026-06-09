@@ -2,13 +2,14 @@
 
 import { motion } from 'framer-motion'
 import { Play, CheckCircle } from 'lucide-react'
+import { RAZBOR_URL } from '@/lib/config'
 
 export default function DemoCTASection() {
   const benefits = [
-    'Бесплатная консультация',
-    'Индивидуальный план',
-    'Поддержка 24/7',
-    'Гарантия результата',
+    'Бесплатно и без обязательств',
+    'Разбираем именно твой случай',
+    'Честно говорим, что реально поможет',
+    'Без навязывания абонементов',
   ]
 
   return (
@@ -53,10 +54,10 @@ export default function DemoCTASection() {
             className="text-white"
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Начните свою <span className="text-primary-400">трансформацию</span> сегодня
+              Готов вернуться <span className="text-primary-400">в строй</span>?
             </h2>
             <p className="text-xl text-gray-300 mb-8 leading-relaxed">
-              Запишитесь на бесплатную консультацию и получите персональный план тренировок и питания
+              Разберём твой случай бесплатно и скажем, что реально поможет вернуться к тренировкам.
             </p>
 
             {/* Benefits */}
@@ -78,15 +79,15 @@ export default function DemoCTASection() {
 
             {/* CTA Button */}
             <motion.a
-              href="#contact"
+              href={RAZBOR_URL}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="inline-block bg-gradient-to-r from-primary-500 to-orange-500 text-white px-10 py-5 rounded-full font-bold text-xl shadow-2xl hover:shadow-primary-500/50 transition-all duration-300"
             >
-              Записаться бесплатно
+              Разобрать мой случай — бесплатно
             </motion.a>
             <p className="text-gray-400 text-sm mt-4">
-              * Без скрытых платежей. Первая консультация абсолютно бесплатна.
+              * Бесплатно и ни к чему не обязывает.
             </p>
           </motion.div>
         </div>

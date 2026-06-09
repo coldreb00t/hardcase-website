@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
+import { RAZBOR_URL } from '@/lib/config'
 
 export default function HeroSection() {
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -85,22 +86,22 @@ export default function HeroSection() {
             advanced recovery training
           </motion.p>
 
-          <motion.h2
-            className="text-2xl sm:text-3xl md:text-4xl font-semibold text-white/90 mb-8"
+          <motion.h1
+            className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 max-w-4xl mx-auto leading-tight px-4"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.8 }}
           >
-            Эксперты в силовом тренинге
-          </motion.h2>
+            Реабилитация заканчивается не на «не болит», а на силе
+          </motion.h1>
 
           <motion.p
-            className="text-xl sm:text-2xl text-white/90 max-w-md sm:max-w-2xl md:max-w-3xl mx-auto mb-12 font-light leading-relaxed px-4"
+            className="text-lg sm:text-xl text-white/90 max-w-md sm:max-w-2xl md:max-w-3xl mx-auto mb-12 font-light leading-relaxed px-4"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.8 }}
           >
-            Превращаем цели в результаты через науку, опыт и силу.
+            Возвращаем активных людей к тренировкам после травм и боли. Доказательно, по этапам, без «забудь про спорт».
           </motion.p>
 
           <motion.div
@@ -110,20 +111,20 @@ export default function HeroSection() {
             transition={{ delay: 0.8, duration: 0.8 }}
           >
             <motion.a
-              href="#contact"
+              href={RAZBOR_URL}
               className="bg-primary-500 text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-primary-600 transition-colors shadow-lg"
               whileHover={{ scale: 1.05, boxShadow: '0 20px 60px rgba(251, 146, 60, 0.4)' }}
               whileTap={{ scale: 0.95 }}
             >
-              Записаться на консультацию
+              Разобрать мой случай — бесплатно
             </motion.a>
             <motion.a
-              href="#team"
+              href="#how-it-works"
               className="border-2 border-white text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-white hover:text-gray-900 transition-colors"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Узнать больше
+              Как это работает
             </motion.a>
           </motion.div>
         </motion.div>

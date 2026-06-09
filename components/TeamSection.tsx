@@ -8,6 +8,7 @@ export default function TeamSection() {
     {
       name: 'Мария Мостовая',
       photo: '/images/team/maria.jpg',
+      tagline: 'Чемпионка мира и Европы по пауэрлифтингу, в команде Hardcase',
       achievements: [
         'Высшее образование тренера-преподавателя по физической культуре',
         'Сертификаты FISAF (персональный тренер, реабилитация)',
@@ -17,10 +18,13 @@ export default function TeamSection() {
         'Независимый специалист по комплексному сопровождению, персональным тренировкам и реабилитации (2013-2023)',
         'Ведущий специалист проекта «Hardcase» с 2023 года',
       ],
+      // Плейсхолдер — владелец впишет реальную историю Марии.
+      story: '[история Марии]',
     },
     {
       name: 'Артём Белов',
       photo: '/images/team/artem.jpg',
+      tagline: '',
       achievements: [
         'Сертифицированный персональный тренер «Europe Active»',
         'FPA Элит-тренер («Ассоциация Профессионалов Фитнеса»)',
@@ -29,6 +33,7 @@ export default function TeamSection() {
         'Независимый специалист по комплексному сопровождению, персональным тренировкам и реабилитации (2013-2023)',
         'Ведущий специалист проекта «Hardcase» с 2023 года',
       ],
+      story: '',
     },
   ]
 
@@ -80,10 +85,13 @@ export default function TeamSection() {
                 </div>
               </div>
               
-              <div className="flex items-center justify-center mb-6">
+              <div className="flex items-center justify-center mb-2">
                 <Trophy className="text-primary-500 mr-3" size={32} />
                 <h3 className="text-2xl font-bold text-gray-900">{member.name}</h3>
               </div>
+              {member.tagline && (
+                <p className="text-center text-primary-600 font-semibold mb-6">{member.tagline}</p>
+              )}
               <ul className="space-y-3">
                 {member.achievements.map((achievement, i) => (
                   <li key={i} className="flex items-start">
@@ -92,6 +100,11 @@ export default function TeamSection() {
                   </li>
                 ))}
               </ul>
+              {member.story && (
+                <div className="mt-6 bg-white/60 border-l-4 border-primary-400 p-4 rounded-r-xl">
+                  <p className="text-gray-700 italic leading-relaxed">{member.story}</p>
+                </div>
+              )}
             </motion.div>
           ))}
         </div>

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
+import { RAZBOR_URL } from '@/lib/config'
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
@@ -17,10 +18,10 @@ export default function Navigation() {
   }, [])
 
   const navItems = [
-    { name: 'Команда экспертов', href: '#team' },
+    { name: 'Кому это', href: '#wedge' },
+    { name: 'Как работает', href: '#how-it-works' },
+    { name: 'Команда', href: '#team' },
     { name: 'Услуги', href: '#services' },
-    { name: 'Технологии', href: '#technology' },
-    { name: 'Преимущества', href: '#advantages' },
     { name: 'Контакты', href: '#contact' },
   ]
 
@@ -62,12 +63,12 @@ export default function Navigation() {
               </motion.a>
             ))}
             <motion.a
-              href="#contact"
+              href={RAZBOR_URL}
               className="bg-primary-500 text-white px-6 py-3 rounded-full font-semibold hover:bg-primary-600 transition-colors"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Записаться
+              Разобрать случай
             </motion.a>
           </div>
 
@@ -106,11 +107,11 @@ export default function Navigation() {
                 </a>
               ))}
               <a
-                href="#contact"
+                href={RAZBOR_URL}
                 onClick={() => setIsOpen(false)}
                 className="block bg-primary-500 text-white text-center px-6 py-3 rounded-full font-semibold"
               >
-                Записаться
+                Разобрать случай
               </a>
             </div>
           </motion.div>
