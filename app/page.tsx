@@ -10,7 +10,6 @@ import SocialProofSection from '@/components/SocialProofSection'
 import ServicesSection from '@/components/ServicesSection'
 import AdvantagesSection from '@/components/AdvantagesSection'
 import ProtocolSection from '@/components/ProtocolSection'
-import DemoCTASection from '@/components/DemoCTASection'
 import ContactSection from '@/components/ContactSection'
 import Footer from '@/components/Footer'
 
@@ -27,7 +26,6 @@ export default function Home() {
       <ServicesSection />
       <AdvantagesSection />
       <ProtocolSection />
-      <DemoCTASection />
       <ContactSection />
       <Footer />
     </main>

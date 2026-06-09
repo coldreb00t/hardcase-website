@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion'
 import { Gift, Search, Compass } from 'lucide-react'
-import { RAZBOR_URL } from '@/lib/config'
 
 export default function HowItWorksSection() {
   const steps = [
@@ -106,22 +105,6 @@ export default function HowItWorksSection() {
             ))}
           </div>
         </div>
-
-        {/* CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          className="mt-16 text-center"
-        >
-          <a
-            href={RAZBOR_URL}
-            className="inline-block bg-gradient-to-r from-primary-500 to-orange-500 text-white px-10 py-5 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
-          >
-            Разобрать мой случай — бесплатно
-          </a>
-        </motion.div>
       </div>
     </section>
   )
