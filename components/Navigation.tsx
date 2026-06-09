@@ -3,11 +3,12 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
-import { RAZBOR_URL } from '@/lib/config'
+import { useRazbor } from '@/components/RazborModal'
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const { open } = useRazbor()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -63,14 +64,15 @@ export default function Navigation() {
                 {item.name}
               </motion.a>
             ))}
-            <motion.a
-              href={RAZBOR_URL}
+            <motion.button
+              type="button"
+              onClick={open}
               className="bg-primary-500 text-white px-6 py-3 rounded-full font-semibold hover:bg-primary-600 transition-colors"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
               Разобрать случай
-            </motion.a>
+            </motion.button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -107,13 +109,13 @@ export default function Navigation() {
                   {item.name}
                 </a>
               ))}
-              <a
-                href={RAZBOR_URL}
-                onClick={() => setIsOpen(false)}
-                className="block bg-primary-500 text-white text-center px-6 py-3 rounded-full font-semibold"
+              <button
+                type="button"
+                onClick={() => { setIsOpen(false); open() }}
+                className="block w-full bg-primary-500 text-white text-center px-6 py-3 rounded-full font-semibold"
               >
                 Разобрать случай
-              </a>
+              </button>
             </div>
           </motion.div>
         )}

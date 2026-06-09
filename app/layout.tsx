@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import StructuredData from '@/components/StructuredData'
 import CookieBanner from '@/components/CookieBanner'
+import { RazborProvider } from '@/components/RazborModal'
 
 export const metadata: Metadata = {
   title: 'Hardcase — Силовая реабилитация после травм | Возврат к тренировкам',
@@ -60,8 +61,10 @@ export default function RootLayout({
         <StructuredData />
       </head>
       <body>
-        {children}
-        <CookieBanner />
+        <RazborProvider>
+          {children}
+          <CookieBanner />
+        </RazborProvider>
       </body>
     </html>
   )

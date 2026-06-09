@@ -9,6 +9,10 @@
 export const RAZBOR_URL =
   process.env.NEXT_PUBLIC_RAZBOR_URL || '#razbor-placeholder'
 
+// Endpoint бэкенда-relay формы разбора (на сервере, шлёт заявку в Telegram)
+export const RAZBOR_API_URL =
+  process.env.NEXT_PUBLIC_RAZBOR_API_URL || 'https://api.hardcase.training/razbor'
+
 // Ссылки на PDF бесплатных протоколов первых недель после травмы (колено/плечо/спина).
 // TODO(owner): впиши прямые ссылки на PDF. Колено («у нас есть») — задать первым.
 export const PROTOCOL_KNEE_URL =

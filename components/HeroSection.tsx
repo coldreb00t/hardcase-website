@@ -3,10 +3,11 @@
 import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
-import { RAZBOR_URL } from '@/lib/config'
+import { useRazbor } from '@/components/RazborModal'
 
 export default function HeroSection() {
   const videoRef = useRef<HTMLVideoElement>(null)
+  const { open } = useRazbor()
 
   useEffect(() => {
     const video = videoRef.current
@@ -101,14 +102,15 @@ export default function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8, duration: 0.8 }}
           >
-            <motion.a
-              href={RAZBOR_URL}
+            <motion.button
+              type="button"
+              onClick={open}
               className="bg-primary-500 text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-primary-600 transition-colors shadow-lg"
               whileHover={{ scale: 1.05, boxShadow: '0 20px 60px rgba(251, 146, 60, 0.4)' }}
               whileTap={{ scale: 0.95 }}
             >
               Разобрать мой случай — бесплатно
-            </motion.a>
+            </motion.button>
             <motion.a
               href="#how-it-works"
               className="border-2 border-white text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-white hover:text-gray-900 transition-colors"

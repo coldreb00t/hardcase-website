@@ -2,9 +2,10 @@
 
 import { motion } from 'framer-motion'
 import { Mail, Phone, MapPin, CheckCircle, ArrowRight } from 'lucide-react'
-import { RAZBOR_URL } from '@/lib/config'
+import { useRazbor } from '@/components/RazborModal'
 
 export default function ContactSection() {
+  const { open } = useRazbor()
   const contactInfo = [
     {
       icon: Mail,
@@ -119,15 +120,16 @@ export default function ContactSection() {
               <p className="text-gray-600 mb-8 max-w-sm">
                 Напиши пару слов о травме — и мы скажем, что делать дальше.
               </p>
-              <motion.a
-                href={RAZBOR_URL}
+              <motion.button
+                type="button"
+                onClick={open}
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 className="inline-flex items-center bg-gradient-to-r from-primary-500 to-orange-500 text-white px-10 py-5 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl transition-all duration-300"
               >
                 Разобрать мой случай — бесплатно
                 <ArrowRight className="ml-3" size={22} />
-              </motion.a>
+              </motion.button>
             </div>
           </motion.div>
         </div>
