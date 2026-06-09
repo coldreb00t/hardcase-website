@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // Standalone-сборка под Docker-деплой Timeweb (Dockerfile -> node server.js)
-  output: 'standalone',
+  // Статический экспорт: Timeweb раздаёт папку out/ (Директория сборки = /out)
+  output: 'export',
   images: {
     unoptimized: true,
   },
