@@ -8,7 +8,6 @@ import TransformationsSection from '@/components/TransformationsSection'
 import TeamSection from '@/components/TeamSection'
 import SocialProofSection from '@/components/SocialProofSection'
 import ServicesSection from '@/components/ServicesSection'
-import AdvantagesSection from '@/components/AdvantagesSection'
 import ProtocolSection from '@/components/ProtocolSection'
 import ContactSection from '@/components/ContactSection'
 import Footer from '@/components/Footer'
@@ -24,7 +23,6 @@ export default function Home() {
       <TeamSection />
       <SocialProofSection />
       <ServicesSection />
-      <AdvantagesSection />
       <ProtocolSection />
       <ContactSection />
       <Footer />
