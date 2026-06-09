@@ -77,15 +77,6 @@ export default function HeroSection() {
             </div>
           </motion.div>
 
-          <motion.p
-            className="text-primary-400 text-lg sm:text-xl font-light tracking-wide uppercase mb-6"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.8 }}
-          >
-            advanced recovery training
-          </motion.p>
-
           <motion.h1
             className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-6 max-w-4xl mx-auto leading-tight px-4"
             initial={{ opacity: 0, y: 30 }}
