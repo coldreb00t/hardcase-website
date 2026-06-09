@@ -60,10 +60,10 @@ export default function ServicesSection() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            <span className="text-gray-900">Персонализированные</span> <span className="text-primary-500">программы и модули</span>
+            <span className="text-gray-900">Что входит в</span> <span className="text-primary-500">работу с тренером</span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Модульная система позволяет выбрать именно те услуги, которые вам нужны, и получать постоянную поддержку на всех этапах достижения целей
+            Вот из чего состоит индивидуальная работа — от оценки до возврата к твоему спорту. Полный набор входит в «Полное сопровождение»; в «С тренером» — индивидуальная программа, разбор техники по видео и чек-ины.
           </p>
         </motion.div>
 

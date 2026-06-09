@@ -19,11 +19,11 @@ export default function Home() {
       <Navigation />
       <HeroSection />
       <WedgeSection />
-      <ServicesSection />
       <TeamSection />
       <SocialProofSection />
       <TransformationsSection />
       <PricingSection />
+      <ServicesSection />
       <HowItWorksSection />
       <ProtocolSection />
       <ContactSection />
