@@ -33,14 +33,8 @@ export default function WedgeSection() {
           transition={{ duration: 0.6 }}
           className="max-w-4xl mx-auto text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-            Тебя не долечили — <span className="text-primary-500">недогрузили</span>
-          </h2>
-          <p className="text-xl text-gray-700 leading-relaxed">
-            Боль ушла, а сила и уверенность не вернулись. Покой не лечит — лечит грамотная нагрузка.
-          </p>
-          <p className="text-2xl md:text-3xl font-bold text-gray-900 mt-6">
-            Твоё тело не хрупкое.
+          <p className="text-2xl md:text-3xl font-bold text-gray-900 leading-relaxed">
+            Часто дело не в том, что тебя плохо лечили, а в том, что <span className="text-primary-500">недогрузили</span>: боль прошла, а сила — нет. И возвращает её не отдых, а <span className="text-primary-500">правильная нагрузка</span>.
           </p>
         </motion.div>
 
