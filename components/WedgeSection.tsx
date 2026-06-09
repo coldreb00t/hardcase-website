@@ -34,7 +34,7 @@ export default function WedgeSection() {
           className="max-w-4xl mx-auto text-center mb-16"
         >
           <p className="text-2xl md:text-3xl font-bold text-gray-900 leading-relaxed">
-            Часто дело не в том, что тебя плохо лечили, а в том, что <span className="text-primary-500">недогрузили</span>: боль прошла, а сила — нет. И возвращает её не отдых, а <span className="text-primary-500">правильная нагрузка</span>.
+            Часто дело не в том, что тебя плохо лечили, а в том, что <span className="text-primary-500">недогрузили</span>: боль прошла, а сила так и не вернулась. И возвращает её не отдых, а <span className="text-primary-500">правильная нагрузка</span>.
           </p>
         </motion.div>
 
