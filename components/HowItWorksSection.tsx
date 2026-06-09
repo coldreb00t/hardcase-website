@@ -55,9 +55,6 @@ export default function HowItWorksSection() {
 
         {/* Timeline Style */}
         <div className="relative">
-          {/* Connecting Line (desktop only) */}
-          <div className="hidden lg:block absolute top-24 left-0 right-0 h-1 bg-gradient-to-r from-primary-500 via-orange-500 to-primary-500"></div>
-
           <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
             {steps.map((step, index) => (
               <motion.div
@@ -90,17 +87,6 @@ export default function HowItWorksSection() {
                     <p className="text-white/80 text-sm leading-relaxed">{step.description}</p>
                   </div>
                 </div>
-
-                {/* Arrow Connector (desktop only) */}
-                {index < steps.length - 1 && (
-                  <div className="hidden lg:block absolute top-16 -right-6 z-20">
-                    <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm border-2 border-primary-400 flex items-center justify-center">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M5 12h14M12 5l7 7-7 7" stroke="#f97316" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                    </div>
-                  </div>
-                )}
               </motion.div>
             ))}
           </div>
