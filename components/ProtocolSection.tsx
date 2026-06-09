@@ -58,6 +58,7 @@ export default function ProtocolSection() {
               <p className="text-gray-600 leading-relaxed flex-grow mb-8">{protocol.description}</p>
               <motion.a
                 href={protocol.url}
+                download
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.04 }}

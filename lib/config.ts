@@ -12,11 +12,11 @@ export const RAZBOR_URL =
 // Ссылки на PDF бесплатных протоколов первых недель после травмы (колено/плечо/спина).
 // TODO(owner): впиши прямые ссылки на PDF. Колено («у нас есть») — задать первым.
 export const PROTOCOL_KNEE_URL =
-  process.env.NEXT_PUBLIC_PROTOCOL_URL || process.env.NEXT_PUBLIC_PROTOCOL_KNEE_URL || '#protocol-knee'
+  process.env.NEXT_PUBLIC_PROTOCOL_KNEE_URL || '/protocols/hardcase_protocol_koleno.pdf'
 export const PROTOCOL_SHOULDER_URL =
-  process.env.NEXT_PUBLIC_PROTOCOL_SHOULDER_URL || '#protocol-shoulder'
+  process.env.NEXT_PUBLIC_PROTOCOL_SHOULDER_URL || '/protocols/hardcase_protocol_plecho.pdf'
 export const PROTOCOL_BACK_URL =
-  process.env.NEXT_PUBLIC_PROTOCOL_BACK_URL || '#protocol-back'
+  process.env.NEXT_PUBLIC_PROTOCOL_BACK_URL || '/protocols/hardcase_protocol_spina.pdf'
 
 // Реквизиты оператора персональных данных — для Политики и Условий.
 // Оператор — САМОЗАНЯТЫЙ (плательщик НПД), т.е. физлицо: ФИО + статус + ИНН физлица.
