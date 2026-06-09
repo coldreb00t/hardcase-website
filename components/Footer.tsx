@@ -143,7 +143,7 @@ export default function Footer() {
                 className="mt-5 inline-flex items-center bg-primary-500 hover:bg-primary-600 text-white px-5 py-2.5 rounded-full text-sm font-semibold transition-colors"
               >
                 <Headphones size={16} className="mr-2" />
-                Подкаст в Яндекс.Музыке
+                Слушать на Яндекс.Музыке
               </a>
             </motion.div>
           </div>
