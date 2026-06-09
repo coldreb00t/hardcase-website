@@ -126,10 +126,10 @@ export default function Footer() {
               © {currentYear} Hardcase. Все права защищены.
             </p>
             <div className="flex items-center space-x-6">
-              <a href="#" className="text-gray-400 hover:text-primary-400 transition-colors text-sm">
+              <a href="/privacy/" className="text-gray-400 hover:text-primary-400 transition-colors text-sm">
                 Политика конфиденциальности
               </a>
-              <a href="#" className="text-gray-400 hover:text-primary-400 transition-colors text-sm">
+              <a href="/terms/" className="text-gray-400 hover:text-primary-400 transition-colors text-sm">
                 Условия использования
               </a>
             </div>
