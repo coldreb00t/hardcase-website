@@ -32,13 +32,9 @@ export default function ApproachSection() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold">
             <span className="text-gray-900">Hardcase — это</span> <span className="text-primary-500">онлайн силовая реабилитация</span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Возвращаем активных людей к тренировкам после травм и боли — онлайн, по этапам и на доказательных методах,
-            а не «терпи и забудь про спорт».
-          </p>
         </motion.div>
 
         <div className="grid md:grid-cols-3 gap-8">
