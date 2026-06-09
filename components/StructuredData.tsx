@@ -47,13 +47,6 @@ export default function StructuredData() {
       "Онлайн тренировки",
       "Расчет КБЖУ"
     ],
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "5.0",
-      "reviewCount": "127",
-      "bestRating": "5",
-      "worstRating": "1"
-    },
     "priceRange": "$$",
     "sameAs": [
       "https://www.youtube.com/@hardcasetraining",
@@ -64,31 +57,16 @@ export default function StructuredData() {
         "@type": "Person",
         "@id": "https://hardcase.training/#maria-mostovaya",
         "name": "Мария Мостовая",
-        "jobTitle": "Мастер-тренер, эксперт по реабилитации",
-        "description": "15+ лет опыта в реабилитации и силовых тренировках. Сертифицированный специалист FISAF, Harvard Medical School.",
-        "alumniOf": [
-          {
-            "@type": "Organization",
-            "name": "Harvard Medical School"
-          }
-        ],
+        "jobTitle": "Тренер, специалист по реабилитации",
+        "description": "Чемпионка мира и Европы по пауэрлифтингу. Специалист по силовой реабилитации и тренировкам. Сертификаты FISAF.",
         "hasCredential": [
           {
             "@type": "EducationalOccupationalCredential",
             "credentialCategory": "Сертификация",
-            "name": "FISAF International Master Trainer",
+            "name": "FISAF Personal Trainer / Rehabilitation",
             "recognizedBy": {
               "@type": "Organization",
               "name": "FISAF International"
-            }
-          },
-          {
-            "@type": "EducationalOccupationalCredential",
-            "credentialCategory": "Образование",
-            "name": "Sports Medicine Certificate",
-            "recognizedBy": {
-              "@type": "Organization",
-              "name": "Harvard Medical School"
             }
           }
         ],
@@ -236,7 +214,7 @@ export default function StructuredData() {
         "name": "Какие сертификаты есть у тренеров Hardcase?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Наши тренеры имеют международные сертификации: FISAF International, Harvard Medical School (Sports Medicine), Europe Active, FPA (Fitness Professionals Association). Все специалисты имеют 15+ лет опыта в реабилитации и силовых тренировках."
+          "text": "Наши тренеры имеют международные сертификации FISAF International, Europe Active и FPA (Fitness Professionals Association), а также многолетний опыт работы с травмами, реабилитацией и силовым тренингом."
         }
       },
       {
