@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Heart, Mail, Phone, Globe, Youtube, Send, Headphones } from 'lucide-react'
+import { Heart, Mail, Phone, Globe, Youtube, Send, Headphones, MapPin } from 'lucide-react'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear()
@@ -71,6 +71,10 @@ export default function Footer() {
                     <Globe size={18} className="mr-3" />
                     hardcase.training
                   </a>
+                </li>
+                <li className="flex items-center text-gray-400 text-sm">
+                  <MapPin size={18} className="mr-3" />
+                  Россия, Москва
                 </li>
               </ul>
             </motion.div>
