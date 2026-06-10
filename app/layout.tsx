@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     icon: '/images/HardCase_Logos-15.png',
   },
   verification: {
-    // Добавить после регистрации в Google Search Console
+    yandex: '88ea1dabe8b7f03f',
     // google: 'your-verification-code',
   },
 }
