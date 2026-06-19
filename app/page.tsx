@@ -5,7 +5,6 @@ import HeroSection from '@/components/HeroSection'
 import ApproachSection from '@/components/ApproachSection'
 import WedgeSection from '@/components/WedgeSection'
 import HowItWorksSection from '@/components/HowItWorksSection'
-import TransformationsSection from '@/components/TransformationsSection'
 import TeamSection from '@/components/TeamSection'
 import SocialProofSection from '@/components/SocialProofSection'
 import ServicesSection from '@/components/ServicesSection'
@@ -23,7 +22,6 @@ export default function Home() {
       <WedgeSection />
       <TeamSection />
       <SocialProofSection />
-      <TransformationsSection />
       <PricingSection />
       <ServicesSection />
       <HowItWorksSection />
