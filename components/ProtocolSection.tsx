@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { Download, FileText } from 'lucide-react'
 import { PROTOCOL_KNEE_URL, PROTOCOL_SHOULDER_URL, PROTOCOL_BACK_URL } from '@/lib/config'
+import { RAZBORY } from '@/lib/razbory'
 
 export default function ProtocolSection() {
   const protocols = [
@@ -77,6 +78,46 @@ export default function ProtocolSection() {
                 Читать на сайте →
               </a>
             </motion.div>
+          ))}
+        </div>
+
+        {/* 02.09: разборы по травмам - шесть страниц под то, что люди ищут
+            (ПКС, мениск, после операции, вывих плеча, грыжа, бег). Как блог:
+            снимок, заголовок, две строки, ссылка. */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mt-20 mb-10"
+        >
+          <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
+            <span className="text-primary-500">Разборы</span> по травмам
+          </h3>
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            Что делать при конкретной травме: этапы, ошибки, ответы на частые вопросы, источники.
+          </p>
+        </motion.div>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {RAZBORY.map((r, index) => (
+            <motion.a
+              key={r.slug}
+              href={`/protokol/${r.slug}/`}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.08 }}
+              className="bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-shadow border-2 border-primary-100 overflow-hidden flex flex-col"
+            >
+              {r.kartinka && (
+                <img src={r.kartinka} alt={r.h1} width={800} height={450} loading="lazy" className="w-full aspect-video object-cover" />
+              )}
+              <div className="p-6 flex flex-col flex-grow">
+                <h4 className="text-lg font-bold text-gray-900 mb-2">{r.h1}</h4>
+                <p className="text-gray-600 leading-relaxed flex-grow">{r.kratko}</p>
+                <span className="mt-4 text-primary-600 font-semibold">Читать →</span>
+              </div>
+            </motion.a>
           ))}
         </div>
       </div>

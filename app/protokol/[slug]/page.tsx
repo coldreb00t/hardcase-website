@@ -5,12 +5,16 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import ProtokolStranica from '@/components/ProtokolStranica'
-import { PROTOKOLY, protokolPoSlug } from '@/lib/protokoly'
+import { PROTOKOLY } from '@/lib/protokoly'
+import { RAZBORY } from '@/lib/razbory'
+
+const VSE = [...PROTOKOLY, ...RAZBORY]
+const protokolPoSlug = (slug: string) => VSE.find((p) => p.slug === slug)
 
 const SAJT = 'https://hardcase.training'
 
 export function generateStaticParams() {
-  return PROTOKOLY.map((p) => ({ slug: p.slug }))
+  return VSE.map((p) => ({ slug: p.slug }))
 }
 
 export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
@@ -49,6 +53,7 @@ export default function Page({ params }: { params: { slug: string } }) {
         description: p.description,
         inLanguage: 'ru',
         about: { '@type': 'MedicalCondition', name: `Травма ${p.travma}` },
+        ...(p.kartinka ? { image: SAJT + p.kartinka } : {}),
         author: { '@type': 'Organization', name: 'Hardcase', url: SAJT },
         publisher: { '@type': 'Organization', name: 'Hardcase', url: SAJT },
         dateModified: '2026-09-02',

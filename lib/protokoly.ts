@@ -17,12 +17,17 @@ export type Protokol = {
   title: string             // <title> страницы
   description: string       // meta description
   zaprosy: string[]         // ключевые формулировки, под которые страница
-  pdf: string
+  pdf?: string              // у протоколов первых недель есть PDF, у разборов нет
+  kratko?: string           // строка для карточки в блоке на главной
+  kartinka?: string         // иллюстрация /images/razbory/<slug>.jpg (02.09: нейросеть, как в блоге)
   vvod: string[]
   krasnyeFlagi: { vvod: string; punkty: string[]; itog: string }
-  pervyeDni: { zag: string; vvod: string; punkty: string[] }
+  pervyeDni?: { zag: string; vvod: string; punkty: string[] }
   vazhno?: { zag: string; punkty: string[] }
-  dalshe: { vvod: string; punkty: string[] }
+  dalshe?: { vvod: string; punkty: string[] }
+  kriterii?: { zag: string; punkty: string[] }
+  nedeliZag?: string        // заголовок раздела этапов; по умолчанию «Ориентир по неделям»
+  svetofor?: boolean        // светофор боли только у протоколов первых недель
   nedeli: { zag: string; tekst: string }[]
   oshibki: string[]
   istochniki: string[]
@@ -261,3 +266,6 @@ export const PROTOKOLY: Protokol[] = [
 export function protokolPoSlug(slug: string): Protokol | undefined {
   return PROTOKOLY.find((p) => p.slug === slug)
 }
+
+// Протоколы первых недель со светофором боли и PDF.
+for (const p of PROTOKOLY) { p.svetofor = true }

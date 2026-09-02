@@ -10,6 +10,7 @@ import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import { useRazbor } from '@/components/RazborModal'
 import { PROTOKOLY, SVETOFOR, type Protokol } from '@/lib/protokoly'
+import { RAZBORY } from '@/lib/razbory'
 
 const CVETA_SVETOFORA: Record<string, string> = {
   green: 'bg-green-50 border-green-200 text-green-900',
@@ -41,7 +42,8 @@ function Spisok({ punkty }: { punkty: string[] }) {
 
 export default function ProtokolStranica({ protokol }: { protokol: Protokol }) {
   const { open } = useRazbor()
-  const drugie = PROTOKOLY.filter((p) => p.slug !== protokol.slug)
+  const vse = [...PROTOKOLY, ...RAZBORY]
+  const drugie = vse.filter((p) => p.slug !== protokol.slug)
 
   return (
     <main className="min-h-screen bg-white">
@@ -58,7 +60,12 @@ export default function ProtokolStranica({ protokol }: { protokol: Protokol }) {
         <h1 className="text-3xl md:text-5xl font-bold text-gray-900 leading-tight">{protokol.h1}</h1>
         <p className="text-xl text-gray-600 mt-4">{protokol.podzagolovok}</p>
 
+        {protokol.kartinka && (
+          <img src={protokol.kartinka} alt={protokol.h1} width={1200} height={675} className="mt-6 w-full rounded-3xl shadow-lg" />
+        )}
+
         <div className="mt-6 flex flex-wrap gap-3">
+          {protokol.pdf && (
           <a
             href={protokol.pdf}
             download
@@ -66,6 +73,7 @@ export default function ProtokolStranica({ protokol }: { protokol: Protokol }) {
           >
             <Download className="mr-2" size={18} /> Скачать PDF
           </a>
+          )}
           <button
             type="button"
             onClick={open}
@@ -103,17 +111,27 @@ export default function ProtokolStranica({ protokol }: { protokol: Protokol }) {
           </Razdel>
         )}
 
-        <Razdel zag={protokol.pervyeDni.zag}>
-          <p className="text-gray-700 leading-relaxed mb-4">{protokol.pervyeDni.vvod}</p>
-          <Spisok punkty={protokol.pervyeDni.punkty} />
-        </Razdel>
+        {protokol.pervyeDni && (
+          <Razdel zag={protokol.pervyeDni.zag}>
+            <p className="text-gray-700 leading-relaxed mb-4">{protokol.pervyeDni.vvod}</p>
+            <Spisok punkty={protokol.pervyeDni.punkty} />
+          </Razdel>
+        )}
 
-        <Razdel zag="Дальше — главное">
-          <p className="text-gray-700 leading-relaxed mb-4">{protokol.dalshe.vvod}</p>
-          <Spisok punkty={protokol.dalshe.punkty} />
-        </Razdel>
+        {protokol.dalshe && (
+          <Razdel zag="Дальше — главное">
+            <p className="text-gray-700 leading-relaxed mb-4">{protokol.dalshe.vvod}</p>
+            <Spisok punkty={protokol.dalshe.punkty} />
+          </Razdel>
+        )}
 
-        <Razdel zag="Ориентир по неделям">
+        {protokol.kriterii && (
+          <Razdel zag={protokol.kriterii.zag}>
+            <Spisok punkty={protokol.kriterii.punkty} />
+          </Razdel>
+        )}
+
+        <Razdel zag={protokol.nedeliZag || 'Ориентир по неделям'}>
           <p className="text-gray-600 mb-6">Это рамка, а не жёсткий рецепт. Прогресс ведут симптомы и возможности, а не календарь.</p>
           <div className="space-y-4">
             {protokol.nedeli.map((n) => (
@@ -125,15 +143,17 @@ export default function ProtokolStranica({ protokol }: { protokol: Protokol }) {
           </div>
         </Razdel>
 
-        <Razdel zag="Светофор боли">
-          <div className="grid gap-3">
-            {SVETOFOR.map((s) => (
-              <div key={s.zag} className={`rounded-2xl border-2 p-4 ${CVETA_SVETOFORA[s.cvet]}`}>
-                <span className="font-bold">{s.zag}.</span> {s.tekst}
-              </div>
-            ))}
-          </div>
-        </Razdel>
+        {protokol.svetofor && (
+          <Razdel zag="Светофор боли">
+            <div className="grid gap-3">
+              {SVETOFOR.map((s) => (
+                <div key={s.zag} className={`rounded-2xl border-2 p-4 ${CVETA_SVETOFORA[s.cvet]}`}>
+                  <span className="font-bold">{s.zag}.</span> {s.tekst}
+                </div>
+              ))}
+            </div>
+          </Razdel>
+        )}
 
         <Razdel zag="Главные ошибки первых недель">
           <Spisok punkty={protokol.oshibki} />
@@ -187,7 +207,7 @@ export default function ProtokolStranica({ protokol }: { protokol: Protokol }) {
         </p>
 
         <section className="mt-12">
-          <h2 className="text-xl font-bold text-gray-900 mb-4">Другие протоколы</h2>
+          <h2 className="text-xl font-bold text-gray-900 mb-4">Другие протоколы и разборы</h2>
           <div className="grid sm:grid-cols-2 gap-4">
             {drugie.map((d) => (
               <Link key={d.slug} href={`/protokol/${d.slug}/`} className="rounded-2xl border-2 border-primary-100 p-5 hover:border-primary-400 transition-colors">
