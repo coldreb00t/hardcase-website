@@ -8,16 +8,19 @@ export default function ProtocolSection() {
   const protocols = [
     {
       title: 'Травма колена',
+      slug: 'koleno',
       description: 'Что делать в первые недели после травмы колена, чтобы не потерять время и не навредить.',
       url: PROTOCOL_KNEE_URL,
     },
     {
       title: 'Травма плеча',
+      slug: 'plecho',
       description: 'Первые шаги после травмы плеча: что можно, чего нельзя и с чего начать восстановление.',
       url: PROTOCOL_SHOULDER_URL,
     },
     {
       title: 'Травма спины',
+      slug: 'spina',
       description: 'Что делать в первые недели при боли в спине, чтобы безопасно вернуться к нагрузке.',
       url: PROTOCOL_BACK_URL,
     },
@@ -68,6 +71,11 @@ export default function ProtocolSection() {
                 <Download className="mr-2" size={20} />
                 Скачать
               </motion.a>
+              {/* 02.09: у каждого протокола своя страница - читать без скачивания,
+                  и это адрес под запрос для поиска. */}
+              <a href={`/protokol/${protocol.slug}/`} className="mt-4 text-primary-600 font-semibold hover:underline">
+                Читать на сайте →
+              </a>
             </motion.div>
           ))}
         </div>

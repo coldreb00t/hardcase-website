@@ -19,12 +19,12 @@ export default function Navigation() {
   }, [])
 
   const navItems = [
-    { name: 'Кому это', href: '#wedge' },
-    { name: 'Как работает', href: '#how-it-works' },
-    { name: 'Команда', href: '#team' },
-    { name: 'Услуги', href: '#services' },
-    { name: 'Цены', href: '#pricing' },
-    { name: 'Контакты', href: '#contact' },
+    { name: 'Кому это', href: '/#wedge' },
+    { name: 'Как работает', href: '/#how-it-works' },
+    { name: 'Команда', href: '/#team' },
+    { name: 'Услуги', href: '/#services' },
+    { name: 'Цены', href: '/#pricing' },
+    { name: 'Контакты', href: '/#contact' },
   ]
 
   return (
