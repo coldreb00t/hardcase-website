@@ -8,7 +8,7 @@ import type { Protokol } from '@/lib/protokoly'
 export const RAZBORY: Protokol[] = [
   {
     slug: 'pks',
-    kartinka: '/images/razbory/pks.jpg',
+    kartinka: '/images/razbory/pks-anatomiya.jpg',
     travma: 'передней крестообразной связки',
     h1: 'Разрыв передней крестообразной связки: путь обратно в спорт',
     podzagolovok: 'Сила и контроль колена решают больше, чем срок после операции',
@@ -177,7 +177,7 @@ export const RAZBORY: Protokol[] = [
   },
   {
     slug: 'vyvih-plecha',
-    kartinka: '/images/razbory/vyvih-plecha.jpg',
+    kartinka: '/images/razbory/vyvih-plecha-anatomiya.jpg',
     travma: 'плеча после вывиха',
     h1: 'После вывиха плеча: стабильность возвращает сила',
     podzagolovok: 'Повязка - на дни, работа на манжету и лопатку - на месяцы',
