@@ -68,7 +68,7 @@ export const RAZBORY: Protokol[] = [
   },
   {
     slug: 'menisk',
-    kartinka: '/images/razbory/menisk.jpg',
+    kartinka: '/images/razbory/menisk-anatomiya.jpg',
     travma: 'мениска',
     h1: 'Разрыв мениска: сила колена вместо ожидания',
     podzagolovok: 'Большинству разрывов мениска после 35 лет операция не нужна - нужна нагрузка',
@@ -234,7 +234,7 @@ export const RAZBORY: Protokol[] = [
   },
   {
     slug: 'gryzha',
-    kartinka: '/images/razbory/gryzha.jpg',
+    kartinka: '/images/razbory/gryzha-anatomiya.jpg',
     travma: 'поясницы при грыже диска',
     h1: 'Грыжа поясничного отдела: тренироваться можно, и это лечит',
     podzagolovok: 'Большинство грыж уменьшаются сами, а сила спины возвращается только под нагрузкой',
@@ -421,7 +421,7 @@ export const RAZBORY: Protokol[] = [
   },
   {
     slug: 'sheya',
-    kartinka: '/images/razbory/sheya.jpg',
+    kartinka: '/images/razbory/sheya-anatomiya.jpg',
     travma: 'шеи',
     h1: 'Болит шея: первые недели',
     podzagolovok: 'Что делать, пока болит, и как вернуть силу шее и плечевому поясу',
