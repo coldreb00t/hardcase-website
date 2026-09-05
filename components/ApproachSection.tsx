@@ -18,7 +18,7 @@ export default function ApproachSection() {
     {
       icon: Video,
       title: 'Работа онлайн',
-      description: 'Сопровождение по видеосвязи — занимаемся независимо от твоего города.',
+      description: 'Сопровождение по видеосвязи - занимаемся независимо от твоего города.',
     },
   ]
 
@@ -33,7 +33,7 @@ export default function ApproachSection() {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-bold">
-            <span className="text-gray-900">Hardcase — это</span> <span className="text-primary-500">онлайн силовая реабилитация</span>
+            <span className="text-gray-900">Hardcase - это</span> <span className="text-primary-500">онлайн силовая реабилитация</span>
           </h2>
         </motion.div>
 

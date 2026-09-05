@@ -1,7 +1,7 @@
 'use client'
 
-// Страница протокола первых недель (02.09.2026). Содержание — из PDF раздела
-// «Протоколы первых недель», оформление — в стилистике сайта (тот же
+// Страница протокола первых недель (02.09.2026). Содержание - из PDF раздела
+// «Протоколы первых недель», оформление - в стилистике сайта (тот же
 // градиент primary→orange, скругления, шрифты). Кнопка «Разобрать мой случай»
 // открывает ту же модалку, что и на главной.
 import Link from 'next/link'
@@ -79,7 +79,7 @@ export default function ProtokolStranica({ protokol }: { protokol: Protokol }) {
             onClick={open}
             className="inline-flex items-center border-2 border-primary-500 text-primary-600 px-6 py-3 rounded-full font-bold hover:bg-primary-50 transition-colors"
           >
-            Разобрать мой случай — бесплатно
+            Разобрать мой случай - бесплатно
           </button>
         </div>
 
@@ -91,7 +91,7 @@ export default function ProtokolStranica({ protokol }: { protokol: Protokol }) {
 
         <section className="mt-10 rounded-3xl border-2 border-red-200 bg-red-50 p-6 md:p-8">
           <h2 className="flex items-center text-2xl font-bold text-red-900 mb-3">
-            <AlertTriangle className="mr-3 text-red-600" size={26} /> Красные флаги — когда сразу к врачу
+            <AlertTriangle className="mr-3 text-red-600" size={26} /> Красные флаги - когда сразу к врачу
           </h2>
           <p className="text-red-900 mb-3">{protokol.krasnyeFlagi.vvod}</p>
           <ul className="space-y-1 text-red-900">
@@ -119,7 +119,7 @@ export default function ProtokolStranica({ protokol }: { protokol: Protokol }) {
         )}
 
         {protokol.dalshe && (
-          <Razdel zag="Дальше — главное">
+          <Razdel zag="Дальше - главное">
             <p className="text-gray-700 leading-relaxed mb-4">{protokol.dalshe.vvod}</p>
             <Spisok punkty={protokol.dalshe.punkty} />
           </Razdel>
@@ -185,20 +185,20 @@ export default function ProtokolStranica({ protokol }: { protokol: Protokol }) {
         <section className="mt-14 rounded-3xl bg-gradient-to-r from-primary-500 to-orange-500 text-white p-8 md:p-10">
           <h2 className="text-2xl md:text-3xl font-bold mb-3">Что дальше</h2>
           <p className="leading-relaxed mb-3">
-            Этот протокол — ваш. Пользуйтесь свободно и делитесь с теми, кому он пригодится. Ничего взамен не требуется.
+            Этот протокол - ваш. Пользуйтесь свободно и делитесь с теми, кому он пригодится. Ничего взамен не требуется.
           </p>
           <p className="leading-relaxed mb-6">
-            Но это общая карта. Ваш случай — это конкретный диагноз, ваша история и ваш спорт, и под вас протокол подбирается индивидуально.
-            Если захотите такой разбор — мы смотрим конкретный случай бесплатно, без обязательств. Захотите продолжить с нами — продолжим; нет — протокол всё равно останется у вас.
+            Но это общая карта. Ваш случай - это конкретный диагноз, ваша история и ваш спорт, и под вас протокол подбирается индивидуально.
+            Если захотите такой разбор - мы смотрим конкретный случай бесплатно, без обязательств. Захотите продолжить с нами - продолжим; нет - протокол всё равно останется у вас.
           </p>
           <button
             type="button"
             onClick={open}
             className="inline-flex items-center bg-white text-primary-600 px-7 py-4 rounded-full font-bold shadow-lg hover:shadow-xl transition-all"
           >
-            Разобрать мой случай — бесплатно
+            Разобрать мой случай - бесплатно
           </button>
-          <p className="mt-4 text-white/90 text-sm">Мы доводим до силы — не до «потерпите и поберегите».</p>
+          <p className="mt-4 text-white/90 text-sm">Мы доводим до силы - не до «потерпите и поберегите».</p>
         </section>
 
         <p className="mt-8 text-sm text-gray-500 leading-relaxed">
@@ -217,7 +217,7 @@ export default function ProtokolStranica({ protokol }: { protokol: Protokol }) {
             ))}
           </div>
           <p className="mt-6 text-gray-600">
-            Программы и цены — <Link href="/#pricing" className="text-primary-600 font-semibold hover:underline">на главной</Link>.
+            Программы и цены - <Link href="/#pricing" className="text-primary-600 font-semibold hover:underline">на главной</Link>.
           </p>
         </section>
       </article>

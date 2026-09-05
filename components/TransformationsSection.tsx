@@ -4,8 +4,8 @@ import { motion } from 'framer-motion'
 import { Quote } from 'lucide-react'
 
 export default function TransformationsSection() {
-  // Реальные клиенты (с согласия). Поле result/story — опционально:
-  // показываются только если заполнены. Исход не выдумываем — впишет владелец.
+  // Реальные клиенты (с согласия). Поле result/story - опционально:
+  // показываются только если заполнены. Исход не выдумываем - впишет владелец.
   const stories = [
     {
       name: 'Алла Разумная',
@@ -44,7 +44,7 @@ export default function TransformationsSection() {
             Реальные <span className="text-primary-500">истории</span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Возвращение к тренировкам после травмы — как это было у тех, кто прошёл путь с нами.
+            Возвращение к тренировкам после травмы - как это было у тех, кто прошёл путь с нами.
           </p>
         </motion.div>
 

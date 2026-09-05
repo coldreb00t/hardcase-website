@@ -129,7 +129,7 @@ function RazborModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
                     <CheckCircle className="text-green-600" size={48} />
                   </div>
                   <h4 className="text-2xl font-bold text-gray-900 mb-2">Спасибо!</h4>
-                  <p className="text-gray-600">Получили заявку — свяжемся с тобой и честно скажем, что поможет.</p>
+                  <p className="text-gray-600">Получили заявку - свяжемся с тобой и честно скажем, что поможет.</p>
                   <button
                     onClick={onClose}
                     className="mt-6 bg-primary-500 hover:bg-primary-600 text-white px-8 py-3 rounded-full font-semibold transition-colors"
@@ -141,7 +141,7 @@ function RazborModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void
                 <form onSubmit={submit} className="space-y-4">
                   <p className="text-gray-500 text-sm mb-2">Бесплатно и ни к чему не обязывает.</p>
 
-                  {/* Honeypot — скрыто от людей, видно ботам */}
+                  {/* Honeypot - скрыто от людей, видно ботам */}
                   <input
                     type="text"
                     name="website"

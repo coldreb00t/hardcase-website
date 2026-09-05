@@ -7,11 +7,11 @@ import { RazborProvider } from '@/components/RazborModal'
 export const metadata: Metadata = {
   metadataBase: new URL('https://hardcase.training'),
   alternates: { canonical: 'https://hardcase.training/' },
-  title: 'Hardcase — Силовая реабилитация после травм | Возврат к тренировкам',
+  title: 'Hardcase - Силовая реабилитация после травм | Возврат к тренировкам',
   description: 'Возвращаем активных людей к тренировкам после травм колена, спины, плеча. Доказательно, по этапам, без «забудь про спорт». Сертифицированные тренеры FISAF, Europe Active, FPA.',
   keywords: 'силовая реабилитация, реабилитация после травмы, возврат к тренировкам, травма колена, травма спины, травма плеча, реабилитация после операции, разрыв связок колена, восстановление спортсмена, онлайн реабилитация',
   openGraph: {
-    title: 'Hardcase — Силовая реабилитация после травм',
+    title: 'Hardcase - Силовая реабилитация после травм',
     description: 'Возвращаем активных людей к тренировкам после травм и боли. Доказательно, по этапам.',
     url: 'https://hardcase.training',
     siteName: 'Hardcase',
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Hardcase — Силовая реабилитация после травм',
+    title: 'Hardcase - Силовая реабилитация после травм',
     description: 'Возвращаем активных людей к тренировкам после травм и боли. Доказательно, по этапам.',
     images: ['https://hardcase.training/images/hardcase-logo.png'],
   },

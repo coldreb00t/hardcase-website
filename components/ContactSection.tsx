@@ -57,7 +57,7 @@ export default function ContactSection() {
             <div className="bg-gradient-to-br from-primary-500 to-orange-600 p-8 rounded-3xl text-white">
               <h3 className="text-2xl font-bold mb-4">Как с нами связаться</h3>
               <p className="text-white/90 mb-6 leading-relaxed">
-                Напиши нам — честно скажем, поможем ли мы или сначала нужно к врачу.
+                Напиши нам - честно скажем, поможем ли мы или сначала нужно к врачу.
               </p>
 
               <div className="space-y-4">
@@ -101,7 +101,7 @@ export default function ContactSection() {
                 </li>
                 <li className="flex items-start">
                   <CheckCircle className="text-primary-500 mr-2 mt-0.5 flex-shrink-0" size={18} />
-                  <span>Если нужно сначала к врачу — честно об этом скажем</span>
+                  <span>Если нужно сначала к врачу - честно об этом скажем</span>
                 </li>
               </ul>
             </div>
@@ -118,7 +118,7 @@ export default function ContactSection() {
             <div className="bg-white p-8 rounded-3xl shadow-lg border-2 border-gray-100 flex-1 flex flex-col items-center justify-center text-center">
               <h3 className="text-2xl font-bold text-gray-900 mb-4">Сделай первый шаг</h3>
               <p className="text-gray-600 mb-8 max-w-sm">
-                Напиши пару слов о травме — и мы скажем, что делать дальше.
+                Напиши пару слов о травме - и мы скажем, что делать дальше.
               </p>
               <motion.button
                 type="button"
@@ -127,7 +127,7 @@ export default function ContactSection() {
                 whileTap={{ scale: 0.97 }}
                 className="inline-flex items-center bg-gradient-to-r from-primary-500 to-orange-500 text-white px-10 py-5 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl transition-all duration-300"
               >
-                Разобрать мой случай — бесплатно
+                Разобрать мой случай - бесплатно
                 <ArrowRight className="ml-3" size={22} />
               </motion.button>
             </div>
@@ -144,7 +144,7 @@ export default function ContactSection() {
         >
           <div className="relative z-10">
             <h3 className="text-3xl md:text-4xl font-bold mb-4">
-              Покой не лечит — лечит грамотная нагрузка
+              Покой не лечит - лечит грамотная нагрузка
             </h3>
             <p className="text-xl text-white/80">
               Вернём тебя к тренировкам после травмы. По этапам, без «забудь про спорт».

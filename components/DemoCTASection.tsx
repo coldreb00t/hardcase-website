@@ -84,7 +84,7 @@ export default function DemoCTASection() {
               whileTap={{ scale: 0.95 }}
               className="inline-block bg-gradient-to-r from-primary-500 to-orange-500 text-white px-10 py-5 rounded-full font-bold text-xl shadow-2xl hover:shadow-primary-500/50 transition-all duration-300"
             >
-              Разобрать мой случай — бесплатно
+              Разобрать мой случай - бесплатно
             </motion.a>
             <p className="text-gray-400 text-sm mt-4">
               * Бесплатно и ни к чему не обязывает.

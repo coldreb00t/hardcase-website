@@ -93,7 +93,7 @@ export default function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.8 }}
           >
-            Помогаем активным людям вернуться к тренировкам после травмы или боли — по этапам, доказательно и без приговора «забудь про спорт».
+            Помогаем активным людям вернуться к тренировкам после травмы или боли - по этапам, доказательно и без приговора «забудь про спорт».
           </motion.p>
 
           <motion.div
@@ -109,7 +109,7 @@ export default function HeroSection() {
               whileHover={{ scale: 1.05, boxShadow: '0 20px 60px rgba(251, 146, 60, 0.4)' }}
               whileTap={{ scale: 0.95 }}
             >
-              Разобрать мой случай — бесплатно
+              Разобрать мой случай - бесплатно
             </motion.button>
             <motion.a
               href="#how-it-works"

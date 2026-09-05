@@ -20,7 +20,7 @@ export default function CookieBanner() {
     try {
       localStorage.setItem(STORAGE_KEY, '1')
     } catch {
-      /* localStorage недоступен — просто скрываем */
+      /* localStorage недоступен - просто скрываем */
     }
     setVisible(false)
   }
@@ -32,7 +32,7 @@ export default function CookieBanner() {
       <div className="max-w-5xl mx-auto bg-white border border-gray-200 shadow-2xl rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center gap-4">
         <p className="text-sm text-gray-600 leading-relaxed flex-1 text-center sm:text-left">
           Мы используем файлы cookie для корректной работы сайта. Продолжая пользоваться сайтом, вы соглашаетесь
-          с этим. Подробнее — в{' '}
+          с этим. Подробнее - в{' '}
           <a href="/privacy/" className="text-primary-600 hover:underline whitespace-nowrap">
             Политике обработки данных
           </a>
