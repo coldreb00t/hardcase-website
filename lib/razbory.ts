@@ -359,6 +359,7 @@ export const RAZBORY: Protokol[] = [
   },
   {
     slug: 'lfk-gryzha',
+    kartinka: '/images/razbory/lfk-gryzha.jpg',
     travma: 'поясничного отдела',
     h1: 'ЛФК при грыже поясничного отдела',
     podzagolovok: 'С чего начинают, когда добавляют вес и почему одной гимнастики мало',
@@ -420,6 +421,7 @@ export const RAZBORY: Protokol[] = [
   },
   {
     slug: 'sheya',
+    kartinka: '/images/razbory/sheya.jpg',
     travma: 'шеи',
     h1: 'Болит шея: первые недели',
     podzagolovok: 'Что делать, пока болит, и как вернуть силу шее и плечевому поясу',
@@ -481,6 +483,7 @@ export const RAZBORY: Protokol[] = [
   },
   {
     slug: 'posle-operacii-spiny',
+    kartinka: '/images/razbory/posle-operacii-spiny.jpg',
     travma: 'позвоночника',
     h1: 'После операции на позвоночнике: от выписки до штанги',
     podzagolovok: 'Хирург убрал причину боли, а прочность спине возвращает нагрузка',
