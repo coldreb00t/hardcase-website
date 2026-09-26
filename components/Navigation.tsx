@@ -25,6 +25,7 @@ export default function Navigation() {
     { name: 'Услуги', href: '/#services' },
     { name: 'Цены', href: '/#pricing' },
     { name: 'Контакты', href: '/#contact' },
+    { name: 'Еда', href: 'https://eat.hardcase.training/' },
   ]
 
   return (
